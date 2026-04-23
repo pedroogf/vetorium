@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vetorium</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+/* ===== RESET & VARS ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;
+  --bg2:#161b27;
+  --bg3:#1e2436;
+  --bg4:#252d42;
+  --border:#2a3350;
+  --border2:#323d5a;
+  --text:#e8ecf4;
+  --text2:#8892b0;
+  --text3:#4a5578;
+  --accent:#7c6af7;
+  --accent-soft:rgba(124,106,247,.15);
+  --accent-glow:rgba(124,106,247,.35);
+  --green:#2dd4a0;
+  --green-soft:rgba(45,212,160,.13);
+  --blue:#4a9eff;
+  --blue-soft:rgba(74,158,255,.13);
+  --orange:#f97316;
+  --orange-soft:rgba(249,115,22,.13);
+  --pink:#f472b6;
+  --pink-soft:rgba(244,114,182,.13);
+  --red:#f87171;
+  --sidebar:180px;
+  --topbar:60px;
+  --radius:12px;
+  --radius-sm:8px;
+  --shadow:0 4px 24px rgba(0,0,0,.4);
+  --font:'Plus Jakarta Sans',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px}
+
+/* ===== LAYOUT ===== */
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{
+  width:var(--sidebar);flex-shrink:0;
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  z-index:20;
+  transition:width .25s cubic-bezier(.4,0,.2,1);
+}
+.sidebar.collapsed{width:52px}
+.sidebar.collapsed .brand-text,
+.sidebar.collapsed .nav-item span,
+.sidebar.collapsed .sidebar-footer{display:none}
+.sidebar.collapsed .sidebar-brand{padding:12px 0;justify-content:center}
+.sidebar.collapsed .nav-item{justify-content:center;padding:10px;gap:0}
+.sidebar.collapsed #sidebar-toggle svg{transform:rotate(180deg)}
+.sidebar-brand{
+  padding:20px 16px 16px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand-text{display:flex;flex-direction:column}
+.brand-logo{
+  font-size:28px;font-weight:800;
+  color:var(--text);letter-spacing:-.5px;line-height:1;
+}
+.brand-logo span{color:var(--accent)}
+.brand-sub{font-size:9px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-top:3px}
+#sidebar-toggle{
+  width:26px;height:26px;border-radius:6px;
+  background:var(--bg3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text3);flex-shrink:0;
+  transition:all .18s;
+}
+#sidebar-toggle:hover{border-color:var(--border2);color:var(--text)}
+#sidebar-toggle svg{transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.sidebar.collapsed #sidebar-toggle{margin:0 auto}
+.sidebar-nav{flex:1;padding:12px 10px;overflow-y:auto;display:flex;flex-direction:column;gap:2px}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:var(--radius-sm);
+  cursor:pointer;transition:all .18s;
+  color:var(--text2);font-size:13px;font-weight:500;
+  border:1px solid transparent;
+  white-space:nowrap;
+}
+.nav-item svg{flex-shrink:0;opacity:.7}
+.nav-item:hover{background:var(--bg3);color:var(--text);border-color:var(--border)}
+.nav-item.active{background:var(--accent-soft);color:var(--accent);border-color:rgba(124,106,247,.3)}
+.nav-item.active svg{opacity:1}
+.sidebar-footer{
+  padding:14px 14px 18px;
+  border-top:1px solid var(--border);
+  flex-shrink:0;
+}
+.progress-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:12px}
+.progress-label{font-size:10px;color:var(--text3);display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.progress-icon{width:22px;height:22px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.progress-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px}
+.progress-bar{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;width:60%;transition:width .4s}
+.progress-pct{font-size:10px;color:var(--text2);margin-top:4px;text-align:right}
+.continue-btn{
+  margin-top:10px;width:100%;padding:8px;
+  background:var(--accent);color:#fff;
+  border:none;border-radius:var(--radius-sm);
+  font-family:var(--font);font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .18s;
+}
+.continue-btn:hover{background:#8e7df9;transform:translateY(-1px)}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* TOPBAR */
+.topbar{
+  height:var(--topbar);flex-shrink:0;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 24px;gap:16px;
+}
+.topbar-title{flex:1}
+.topbar-title h1{font-size:20px;font-weight:700;color:var(--text)}
+.topbar-title h1 span{color:var(--accent)}
+.topbar-title p{font-size:12px;color:var(--text2);margin-top:1px}
+.search-box{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:7px 12px;
+  width:220px;transition:border-color .18s;
+}
+.search-box:focus-within{border-color:var(--accent)}
+.search-box input{background:none;border:none;outline:none;color:var(--text);font-family:var(--font);font-size:13px;flex:1;min-width:0}
+.search-box input::placeholder{color:var(--text3)}
+.search-kbd{font-family:var(--mono);font-size:10px;color:var(--text3);background:var(--bg4);border:1px solid var(--border2);border-radius:4px;padding:2px 5px}
+.topbar-icons{display:flex;gap:8px}
+.icon-btn{width:34px;height:34px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s;color:var(--text2)}
+.icon-btn:hover{border-color:var(--border2);color:var(--text)}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;cursor:pointer}
+
+/* CONTENT AREA */
+.content{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:20px;min-width:0}
+.content::-webkit-scrollbar{width:6px}
+.content::-webkit-scrollbar-track{background:transparent}
+.content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* CALC CARD */
+.calc-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+}
+.calc-card-header{
+  padding:18px 20px 14px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;gap:12px;
+}
+.calc-card-header-text{flex:1}
+.calc-card-header-text h2{font-size:16px;font-weight:700;color:var(--text)}
+.calc-card-header-text p{font-size:12px;color:var(--text2);margin-top:2px}
+.header-actions{display:flex;gap:6px}
+.hbtn{width:30px;height:30px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);transition:all .18s}
+.hbtn:hover{border-color:var(--border2);color:var(--text)}
+
+.calc-body{display:grid;grid-template-columns:280px 1fr;gap:0;min-height:400px}
+
+/* LEFT INPUTS */
+.calc-inputs{padding:20px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:16px;overflow-y:auto}
+.input-section{}
+.input-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.input-label-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.input-label-dot.green{background:var(--green)}
+.input-label-dot.blue{background:var(--blue)}
+.xyz-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.xyz-input{display:flex;flex-direction:column;gap:3px}
+.xyz-input label{font-size:10px;font-weight:600;color:var(--text3);font-family:var(--mono);text-align:center}
+.xyz-input input{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:8px 6px;
+  color:var(--text);font-family:var(--mono);font-size:15px;font-weight:500;
+  text-align:center;outline:none;width:100%;
+  transition:border-color .18s,background .18s;
+}
+.xyz-input input:focus{border-color:var(--accent);background:var(--bg4)}
+
+.op-select-wrap{position:relative}
+.op-select{
+  width:100%;padding:9px 32px 9px 12px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-sm);color:var(--text);
+  font-family:var(--font);font-size:13px;font-weight:500;
+  outline:none;cursor:pointer;-webkit-appearance:none;
+  transition:border-color .18s;
+}
+.op-select:focus{border-color:var(--accent)}
+.op-select-arrow{position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text3)}
+
+.calc-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn-calc{
+  padding:10px;border-radius:var(--radius-sm);
+  font-family:var(--font);font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:6px;
+  border:none;
+}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#8e7df9;transform:translateY(-1px);box-shadow:0 4px 16px var(--accent-glow)}
+.btn-secondary{background:var(--bg3);color:var(--text2);border:1px solid var(--border)!important;}
+.btn-secondary:hover{border-color:var(--border2)!important;color:var(--text)}
+
+/* 3D VIEWER */
+.viewer-area{position:relative;background:var(--bg);overflow:hidden;display:flex;flex-direction:column}
+.viewer-toolbar{
+  display:flex;align-items:center;gap:8px;padding:10px 14px;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.view-label{font-size:11px;font-weight:600;color:var(--text2);margin-right:4px;letter-spacing:.05em}
+.vbtn{
+  padding:4px 10px;border-radius:5px;font-size:11px;font-weight:500;
+  background:var(--bg3);border:1px solid var(--border);color:var(--text2);
+  cursor:pointer;transition:all .15s;font-family:var(--font);
+}
+.vbtn:hover{border-color:var(--border2);color:var(--text)}
+.vbtn.on{background:var(--accent-soft);border-color:rgba(124,106,247,.4);color:var(--accent)}
+.vbtn-interact{
+  margin-left:auto;padding:5px 12px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-sm);font-size:11px;font-weight:500;color:var(--text2);
+  cursor:pointer;display:flex;align-items:center;gap:5px;font-family:var(--font);
+  transition:all .18s;
+}
+.vbtn-interact:hover{border-color:var(--border2);color:var(--text)}
+.canvas-host{flex:1;position:relative;min-height:0}
+.canvas-host canvas{display:block;width:100%!important;height:100%!important}
+.viewer-legend{
+  position:absolute;bottom:10px;left:12px;
+  display:flex;flex-direction:column;gap:4px;
+  pointer-events:none;
+}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);font-weight:500}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.viewer-hint{position:absolute;bottom:10px;right:12px;font-size:10px;color:var(--text3);font-family:var(--mono)}
+
+/* RIGHT PANEL */
+.right-panel{width:240px;flex-shrink:0;background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.result-panel{padding:16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.result-panel-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);display:flex;align-items:center;gap:6px;margin-bottom:14px}
+.result-main{margin-bottom:14px}
+.result-main-label{font-size:11px;color:var(--text2);margin-bottom:4px}
+.result-main-val{font-size:22px;font-weight:800;color:var(--accent);font-family:var(--mono);line-height:1.2}
+.result-rows{display:flex;flex-direction:column;gap:5px}
+.result-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 8px;background:var(--bg3);border-radius:6px;border:1px solid var(--border)}
+.result-row-key{color:var(--text2)}
+.result-row-val{font-family:var(--mono);font-weight:600;color:var(--text)}
+.result-row-val.accent{color:var(--accent)}
+.result-row-val.green{color:var(--green)}
+.result-row-val.blue{color:var(--blue)}
+.steps-panel{flex:1;padding:16px;overflow-y:auto}
+.steps-panel::-webkit-scrollbar{width:4px}
+.steps-panel::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.steps-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);display:flex;align-items:center;gap:6px;margin-bottom:12px}
+.step-list{display:flex;flex-direction:column;gap:8px}
+.step-item{display:flex;gap:8px;font-size:12px;color:var(--text2);line-height:1.5}
+.step-num{width:18px;height:18px;border-radius:50%;background:var(--accent-soft);border:1px solid rgba(124,106,247,.3);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-content{flex:1}
+.step-highlight{color:var(--accent);font-family:var(--mono);font-weight:600}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);flex-shrink:0}
+.tab{
+  padding:10px 16px;font-size:12px;font-weight:600;color:var(--text2);
+  cursor:pointer;border-bottom:2px solid transparent;transition:all .18s;
+  white-space:nowrap;
+}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* TOPIC CARDS */
+.explore-section{flex-shrink:0}
+.explore-section h2{font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px}
+.topic-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.topic-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px;
+  cursor:pointer;transition:all .2s;
+}
+.topic-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:var(--shadow)}
+.topic-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:18px}
+.topic-icon.purple{background:var(--accent-soft)}
+.topic-icon.green{background:var(--green-soft)}
+.topic-icon.orange{background:var(--orange-soft)}
+.topic-icon.blue{background:var(--blue-soft)}
+.topic-icon.pink{background:var(--pink-soft)}
+.topic-card h3{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.topic-card p{font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:10px}
+.topic-link{font-size:11px;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:3px}
+.topic-link.green{color:var(--green)}
+.topic-link.blue{color:var(--blue)}
+.topic-link.orange{color:var(--orange)}
+.topic-link.pink{color:var(--pink)}
+
+/* PAGE VIEWS */
+#pages-wrap{flex:1;position:relative;overflow:hidden;min-height:0}
+.page{display:none;position:absolute;inset:0;flex-direction:column;overflow:hidden}
+.page.active{display:flex}
+
+/* FORMULA PAGE */
+.formula-page{padding:24px;overflow-y:auto;flex:1}
+.formula-page::-webkit-scrollbar{width:6px}
+.formula-page::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.formula-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:16px}
+.formula-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+.formula-card h3{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.formula-card p{font-size:11px;color:var(--text2);margin-bottom:10px;line-height:1.5}
+.formula-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;font-family:var(--mono);font-size:12px;color:var(--accent);line-height:1.8}
+.formula-tag{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:var(--accent-soft);color:var(--accent)}
+
+/* EXERCISES PAGE */
+.exercises-page{padding:24px;overflow-y:auto;flex:1}
+.exercises-page::-webkit-scrollbar{width:6px}
+.exercises-page::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;margin-top:16px}
+.ex-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;cursor:pointer;transition:all .18s}
+.ex-card:hover{border-color:var(--border2)}
+.ex-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.ex-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em}
+.ex-badge.easy{background:var(--green-soft);color:var(--green)}
+.ex-badge.med{background:var(--orange-soft);color:var(--orange)}
+.ex-badge.hard{background:rgba(248,113,113,.13);color:var(--red)}
+.ex-card h3{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+.ex-card p{font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:12px}
+.ex-problem{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;font-family:var(--mono);font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.6}
+.ex-resolve{
+  width:100%;padding:8px;border-radius:var(--radius-sm);
+  background:var(--accent-soft);border:1px solid rgba(124,106,247,.3);
+  color:var(--accent);font-family:var(--font);font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .18s;
+}
+.ex-resolve:hover{background:var(--accent);color:#fff}
+
+/* LEARN PAGE */
+.learn-page{padding:24px;overflow-y:auto;flex:1}
+.learn-page::-webkit-scrollbar{width:6px}
+.learn-page::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.learn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:16px}
+.learn-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .18s}
+.learn-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.learn-card-top{height:80px;display:flex;align-items:center;justify-content:center;font-size:32px;position:relative;overflow:hidden}
+.learn-card-body{padding:14px}
+.learn-card h3{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.learn-card p{font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:10px}
+.learn-progress{height:3px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.learn-progress-fill{height:100%;border-radius:2px;transition:width .4s}
+
+/* ABOUT PAGE */
+.about-page{padding:24px;overflow-y:auto;flex:1;max-width:700px}
+.about-page h2{font-size:22px;font-weight:800;margin-bottom:8px}
+.about-page p{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px}
+.about-section-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;margin-top:20px}
+.feature-list{display:flex;flex-direction:column;gap:8px}
+.feature-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm)}
+.feature-icon{width:28px;height:28px;border-radius:6px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.feature-text h4{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
+.feature-text p{font-size:11px;color:var(--text2);line-height:1.5}
+
+/* NOTIFICATIONS */
+.toast{
+  position:fixed;bottom:24px;right:24px;z-index:999;
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:var(--radius);padding:12px 16px;
+  font-size:13px;color:var(--text);
+  transform:translateY(80px);opacity:0;
+  transition:all .3s;pointer-events:none;
+  box-shadow:var(--shadow);
+  display:flex;align-items:center;gap:8px;
+}
+.toast.show{transform:translateY(0);opacity:1}
+.toast-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
+
+/* RESPONSIVE */
+@media(max-width:900px){.right-panel{display:none}.topic-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.calc-body{grid-template-columns:1fr;grid-template-rows:auto 300px}.right-panel{display:none}.topic-grid{grid-template-columns:1fr 1fr}.sidebar{width:52px}.brand-sub,.nav-item span{display:none}.nav-item{justify-content:center;padding:10px}}
+
+/* ===== HOME PAGE ===== */
+.home-page{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-height:0}
+.home-page::-webkit-scrollbar{width:6px}
+.home-page::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* HERO */
+.home-hero{
+  position:relative;padding:52px 48px 48px;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:48px;flex-shrink:0;overflow:hidden;
+}
+.hero-bg-glow{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 55% 90% at 78% 50%,rgba(124,106,247,.12) 0%,transparent 65%),
+    radial-gradient(ellipse 35% 50% at 15% 85%,rgba(45,212,160,.06) 0%,transparent 55%);
+}
+.hero-bg-grid{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(42,51,80,.55) 1px,transparent 1px),linear-gradient(90deg,rgba(42,51,80,.55) 1px,transparent 1px);
+  background-size:44px 44px;
+  -webkit-mask-image:radial-gradient(ellipse 65% 100% at 78% 50%,black 0%,transparent 72%);
+  mask-image:radial-gradient(ellipse 65% 100% at 78% 50%,black 0%,transparent 72%);
+  opacity:.55;
+}
+.hero-content{flex:1;position:relative;z-index:1;min-width:0}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:5px 13px;border-radius:20px;
+  background:var(--accent-soft);border:1px solid rgba(124,106,247,.32);
+  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:22px;
+}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:hbpulse 2.2s ease-in-out infinite}
+@keyframes hbpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hero-title{font-size:42px;font-weight:800;color:var(--text);line-height:1.08;letter-spacing:-.03em;margin-bottom:16px}
+.hero-title-grad{
+  background:linear-gradient(130deg,#a78bfa 0%,var(--accent) 45%,#60a5fa 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-desc{font-size:14px;color:var(--text2);line-height:1.78;margin-bottom:30px;max-width:430px}
+.hero-ctas{display:flex;gap:10px;margin-bottom:36px;flex-wrap:wrap}
+.hero-btn-p,
+.hero-btn-s{
+  padding:11px 22px;border-radius:var(--radius);background:var(--accent);color:#fff;border:none;
+  font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;gap:7px;
+}
+.hero-btn-p:hover{background:#8e7df9;transform:translateY(-1px);box-shadow:0 6px 22px rgba(124,106,247,.45)}
+.hero-btn-s{
+  padding:11px 22px;border-radius:var(--radius);background:transparent;
+  color:var(--text2);border:1px solid var(--border2);
+  font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;
+}
+.hero-btn-s:hover{border-color:var(--accent);color:var(--accent)}
+.hero-stats{display:flex;gap:30px}
+.hero-stat-n{font-size:26px;font-weight:800;font-family:var(--mono);color:var(--text);line-height:1;display:block}
+.hero-stat-l{font-size:10px;color:var(--text3);font-weight:500;margin-top:3px;display:block;letter-spacing:.04em;text-transform:uppercase}
+
+/* 3D SVG Visual */
+.hero-visual{flex-shrink:0;width:320px;height:240px;position:relative;z-index:1}
+@media(max-width:980px){.hero-visual{display:none}}
+@media(max-width:700px){.home-hero{padding:36px 24px 32px}.hero-title{font-size:30px}}
+
+/* HOME BODY */
+.home-body{padding:38px 48px 48px;display:flex;flex-direction:column;gap:40px}
+@media(max-width:700px){.home-body{padding:28px 20px 36px}}
+.home-sh{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.home-sh h2{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);white-space:nowrap}
+.home-sh-line{flex:1;height:1px;background:var(--border)}
+
+/* FEATURE CARDS */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:1050px){.feat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.feat-grid{grid-template-columns:1fr}}
+.feat-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:22px 20px 18px;cursor:pointer;transition:all .22s;position:relative;overflow:hidden;
+}
+.feat-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,var(--fglow,rgba(124,106,247,.08)) 0%,transparent 70%);
+  opacity:0;transition:opacity .22s;
+}
+.feat-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--fc,var(--accent));transform:scaleX(0);transform-origin:left;transition:transform .22s;
+}
+.feat-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 10px 32px rgba(0,0,0,.3)}
+.feat-card:hover::before{opacity:1}
+.feat-card:hover::after{transform:scaleX(1)}
+.feat-icon{
+  width:44px;height:44px;border-radius:12px;background:var(--fi,var(--accent-soft));
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+}
+.feat-card h3{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px}
+.feat-card p{font-size:12px;color:var(--text2);line-height:1.68;margin-bottom:14px}
+.feat-link{font-size:11px;font-weight:600;color:var(--fc,var(--accent));display:flex;align-items:center;gap:4px}
+
+/* OPERATIONS CHIPS */
+.ops-grid{display:flex;flex-wrap:wrap;gap:8px}
+.op-chip{
+  padding:7px 14px;border-radius:20px;background:var(--bg2);border:1px solid var(--border);
+  font-size:11px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .18s;
+  display:flex;align-items:center;gap:7px;font-family:var(--mono);
+}
+.op-chip:hover{border-color:var(--oc,var(--accent));color:var(--oc,var(--accent));background:var(--accent-soft)}
+.op-chip-dot{width:6px;height:6px;border-radius:50%;background:var(--oc,var(--accent));flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-text">
+      <div class="brand-logo">Ve<span>tor</span></div>
+      <div class="brand-sub">Geometria Analitica</div>
+    </div>
+    <div id="sidebar-toggle" onclick="toggleSidebar()" title="Recolher menu">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-item active" onclick="navigate('home',this)">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      <span>Início</span>
+    </div>
+    <div class="nav-item" onclick="navigate('calc',this)">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
+      <span>Calculadora</span>
+    </div>
+    <div class="nav-item" onclick="navigate('learn',this)">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      <span>Aprender</span>
+    </div>
+    <div class="nav-item" onclick="navigate('exercises',this)">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span>Exercícios</span>
+    </div>
+    <div class="nav-item" onclick="navigate('viz',this)">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <span>Visualizador 3D</span>
+    </div>
+    <div class="nav-item" onclick="navigate('formulas',this)">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
+      <span>Fórmulas</span>
+    </div>
+    <div class="nav-item" onclick="navigate('about',this)">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <span>Sobre o projeto</span>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="progress-card">
+      <div class="progress-label">
+        <div class="progress-icon"><svg width="12" height="12" fill="none" stroke="var(--accent)" stroke-width="2" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+        Continue aprendendo
+      </div>
+      <div class="progress-title">Vetores no R³</div>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+      <div class="progress-pct">60%</div>
+      <button class="continue-btn" onclick="navigate('learn',document.querySelector('.nav-item:nth-child(3)'))">Continuar</button>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title">
+      <h1>Bem-vindo ao <span>Vetorium</span></h1>
+      <p>Aprenda, visualize e domine a Geometria Analítica.</p>
+    </div>
+    <div class="search-box">
+      <svg width="14" height="14" fill="none" stroke="var(--text3)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Buscar conteúdo..." id="search-input">
+      <span class="search-kbd">/</span>
+    </div>
+    <div class="topbar-icons">
+      <div class="icon-btn" id="theme-btn" title="Alternar tema">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </div>
+      <div class="avatar">U</div>
+    </div>
+  </div>
+
+  <!-- PAGES -->
+  <div id="pages-wrap">
+
+  <!-- HOME PAGE -->
+  <div id="page-home" class="page active">
+    <div class="home-page">
+
+      <!-- HERO -->
+      <div class="home-hero">
+        <div class="hero-bg-glow"></div>
+        <div class="hero-bg-grid"></div>
+
+        <!-- Text column -->
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            Vetorium — Geometria Analítica no R³
+          </div>
+          <h1 class="hero-title">
+            Calcule, visualize e<br>
+            <span class="hero-title-grad">domine vetores em 3D</span>
+          </h1>
+          <p class="hero-desc">
+            Uma plataforma completa para aprender e resolver geometria analítica —
+            com calculadora interativa, visualização 3D em tempo real e resolução
+            passo a passo de todas as operações vetoriais.
+          </p>
+          <div class="hero-ctas">
+            <button class="hero-btn-p" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
+              Abrir Calculadora
+            </button>
+            <button class="hero-btn-s" onclick="navigate('learn',document.querySelector('.nav-item:nth-child(3)'))"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>Aprender</button>
+          </div>
+          <div class="hero-stats">
+            <div>
+              <span class="hero-stat-n">3D</span>
+              <span class="hero-stat-l">Visualização</span>
+            </div>
+            <div>
+              <span class="hero-stat-n">10</span>
+              <span class="hero-stat-l">Operações</span>
+            </div>
+            
+            <div>
+              <span class="hero-stat-n">+50</span>
+              <span class="hero-stat-l">Exercícios</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D Axes visual -->
+        <div class="hero-visual">
+          <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+            <defs>
+              <filter id="hglo" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="2.5" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="hglo2" x="-80%" y="-80%" width="260%" height="260%">
+                <feGaussianBlur stdDeviation="5" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <radialGradient id="originGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#7c6af7" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#7c6af7" stop-opacity="0"/>
+              </radialGradient>
+              <!-- Arrowhead markers -->
+              <marker id="mx" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto"><path d="M0,0.5 L4.5,2.5 L0,4.5Z" fill="#ef4444"/></marker>
+              <marker id="my" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto"><path d="M0,0.5 L4.5,2.5 L0,4.5Z" fill="#22c55e"/></marker>
+              <marker id="mz" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto"><path d="M0,0.5 L4.5,2.5 L0,4.5Z" fill="#3b82f6"/></marker>
+              <marker id="ma" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto"><path d="M0,0.5 L4.5,2.5 L0,4.5Z" fill="#7c6af7"/></marker>
+              <marker id="mb" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto"><path d="M0,0.5 L4.5,2.5 L0,4.5Z" fill="#2dd4a0"/></marker>
+            </defs>
+
+            <!-- Origin: (160,152). dx=(30,-12)/unit, dy=(-30,-12)/unit, dz=(0,-44)/unit -->
+            <!-- Ground plane (XY, z=0) corners at ±2: diamond (160,200),(280,152),(160,104),(40,152) -->
+
+            <!-- Ground plane fill -->
+            <polygon points="160,200 280,152 160,104 40,152"
+              fill="rgba(22,27,39,0.55)" stroke="rgba(42,51,80,0.4)" stroke-width="1"/>
+
+            <!-- Grid lines in XY plane (opacity low) -->
+            <g stroke="#1e2a45" stroke-width="0.8" opacity="0.9">
+              <!-- Parallel to X: j=-1 to 1 (skip edges j=±2) -->
+              <line x1="130" y1="188" x2="250" y2="140"/>
+              <line x1="100" y1="176" x2="220" y2="128"/>
+              <line x1="70"  y1="164" x2="190" y2="116"/>
+              <!-- Parallel to Y: i=-1 to 1 -->
+              <line x1="190" y1="188" x2="70"  y2="140"/>
+              <line x1="220" y1="176" x2="100" y2="128"/>
+              <line x1="250" y1="164" x2="130" y2="116"/>
+            </g>
+
+            <!-- Soft glow at origin -->
+            <circle cx="160" cy="152" r="55" fill="url(#originGlow)"/>
+
+            <!-- ── Axes ── -->
+            <!-- X axis (right-back): origin → (3,0,0) → SVG (160+90,152-36)=(250,116) -->
+            <line x1="160" y1="152" x2="246" y2="118" stroke="#ef4444" stroke-width="1.8" marker-end="url(#mx)" filter="url(#hglo)"/>
+            <!-- Y axis (left-back): origin → (0,3,0) → SVG (160-90,152-36)=(70,116) -->
+            <line x1="160" y1="152" x2="74"  y2="118" stroke="#22c55e" stroke-width="1.8" marker-end="url(#my)" filter="url(#hglo)"/>
+            <!-- Z axis (up): origin → (0,0,2.5) → SVG (160,152-110)=(160,42) -->
+            <line x1="160" y1="152" x2="160" y2="46"  stroke="#3b82f6" stroke-width="1.8" marker-end="url(#mz)" filter="url(#hglo)"/>
+
+            <!-- Axis labels -->
+            <text x="254" y="120" fill="#ef4444" font-size="13" font-weight="bold" font-family="JetBrains Mono,monospace" opacity="0.9">x</text>
+            <text x="56"  y="120" fill="#22c55e" font-size="13" font-weight="bold" font-family="JetBrains Mono,monospace" opacity="0.9">y</text>
+            <text x="165" y="44"  fill="#3b82f6" font-size="13" font-weight="bold" font-family="JetBrains Mono,monospace" opacity="0.9">z</text>
+
+            <!-- ── Vector A (purple): user (1.5, 0.5, 1.5) → SVG (160+45-15, 152-18-6-66)=(190,62) ── -->
+            <line x1="160" y1="152" x2="186" y2="65" stroke="#7c6af7" stroke-width="2.2" marker-end="url(#ma)" filter="url(#hglo)"/>
+            <!-- Projection of A to XY plane: user (1.5,0.5,0) → SVG (190, 152-18-6)=(190,128) -->
+            <line x1="190" y1="68" x2="190" y2="126" stroke="#7c6af7" stroke-width="0.9" stroke-dasharray="3,3" opacity="0.35"/>
+            <circle cx="190" cy="128" r="2.5" fill="#7c6af7" opacity="0.45"/>
+            <text x="194" y="68" fill="#a78bfa" font-size="12" font-weight="bold" font-family="JetBrains Mono,monospace">A</text>
+            <circle cx="190" cy="65" r="3.5" fill="#7c6af7" opacity="0.85" filter="url(#hglo)"/>
+
+            <!-- ── Vector B (green): user (0.5, 1.5, 0.8) → SVG (160+15-45, 152-6-18-35)=(130,93) ── -->
+            <line x1="160" y1="152" x2="127" y2="96" stroke="#2dd4a0" stroke-width="2.2" marker-end="url(#mb)" filter="url(#hglo)"/>
+            <!-- Projection of B to XY plane: user (0.5,1.5,0) → SVG (130, 152-6-18)=(130,128) -->
+            <line x1="130" y1="99" x2="130" y2="126" stroke="#2dd4a0" stroke-width="0.9" stroke-dasharray="3,3" opacity="0.35"/>
+            <circle cx="130" cy="128" r="2.5" fill="#2dd4a0" opacity="0.45"/>
+            <text x="114" y="96" fill="#2dd4a0" font-size="12" font-weight="bold" font-family="JetBrains Mono,monospace">B</text>
+            <circle cx="130" cy="96" r="3.5" fill="#2dd4a0" opacity="0.85" filter="url(#hglo)"/>
+
+            <!-- Origin dot -->
+            <circle cx="160" cy="152" r="4.5" fill="#7c6af7" opacity="0.9" filter="url(#hglo2)"/>
+            <circle cx="160" cy="152" r="2.8" fill="#c4b5fd"/>
+
+            <!-- Decorative floating dots -->
+            <circle cx="272" cy="76"  r="2"   fill="#7c6af7" opacity="0.3"/>
+            <circle cx="55"  cy="68"  r="1.5" fill="#3b82f6" opacity="0.35"/>
+            <circle cx="285" cy="190" r="1.5" fill="#22c55e" opacity="0.3"/>
+            <circle cx="42"  cy="202" r="2"   fill="#f97316" opacity="0.22"/>
+            <circle cx="300" cy="120" r="1.2" fill="#f472b6" opacity="0.3"/>
+          </svg>
+        </div>
+      </div><!-- /hero -->
+
+      <!-- BODY SECTIONS -->
+      <div class="home-body">
+
+        <!-- Features -->
+        <div>
+          <div class="home-sh">
+            <h2>Funcionalidades</h2>
+            <div class="home-sh-line"></div>
+          </div>
+          <div class="feat-grid">
+
+            <!-- Calculadora -->
+            <div class="feat-card" style="--fc:#7c6af7;--fi:rgba(124,106,247,.13);--fglow:rgba(124,106,247,.1)"
+                 onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
+              <div class="feat-icon">
+                <svg width="20" height="20" fill="none" stroke="#7c6af7" stroke-width="1.8" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
+              </div>
+              <h3>Calculadora Vetorial</h3>
+              <p>Realize todas as operações com vetores no R³ — soma, subtração, produtos escalar, vetorial e misto, projeção, ângulos e muito mais.</p>
+              <div class="feat-link">Abrir calculadora <span>→</span></div>
+            </div>
+
+            <!-- Visualizador 3D -->
+            <div class="feat-card" style="--fc:#4a9eff;--fi:rgba(74,158,255,.13);--fglow:rgba(74,158,255,.09)"
+                 onclick="navigate('viz',document.querySelector('.nav-item:nth-child(5)'))">
+              <div class="feat-icon">
+                <svg width="20" height="20" fill="none" stroke="#4a9eff" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              </div>
+              <h3>Visualizador 3D</h3>
+              <p>Adicione vetores livremente e explore o espaço tridimensional com câmera interativa, eixos X Y Z, grade e labels.</p>
+              <div class="feat-link" style="color:#4a9eff">Explorar em 3D <span>→</span></div>
+            </div>
+
+            <!-- Aprender -->
+            <div class="feat-card" style="--fc:#2dd4a0;--fi:rgba(45,212,160,.13);--fglow:rgba(45,212,160,.08)"
+                 onclick="navigate('learn',document.querySelector('.nav-item:nth-child(3)'))">
+              <div class="feat-icon">
+                <svg width="20" height="20" fill="none" stroke="#2dd4a0" stroke-width="1.8" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              </div>
+              <h3>Módulos de Aprendizado</h3>
+              <p>Estude vetores, produtos, retas, planos e distâncias com teoria clara, exemplos ilustrados e progresso rastreado.</p>
+              <div class="feat-link" style="color:#2dd4a0">Ver conteúdos <span>→</span></div>
+            </div>
+
+            <!-- Exercícios -->
+            <div class="feat-card" style="--fc:#f97316;--fi:rgba(249,115,22,.13);--fglow:rgba(249,115,22,.08)"
+                 onclick="navigate('exercises',document.querySelector('.nav-item:nth-child(4)'))">
+              <div class="feat-icon">
+                <svg width="20" height="20" fill="none" stroke="#f97316" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              </div>
+              <h3>Exercícios Resolvidos</h3>
+              <p>Pratique com problemas de dificuldade variada — fácil, médio e difícil — com enunciado completo e resolução guiada.</p>
+              <div class="feat-link" style="color:#f97316">Praticar <span>→</span></div>
+            </div>
+
+            <!-- Fórmulas -->
+            <div class="feat-card" style="--fc:#f472b6;--fi:rgba(244,114,182,.13);--fglow:rgba(244,114,182,.08)"
+                 onclick="navigate('formulas',document.querySelector('.nav-item:nth-child(6)'))">
+              <div class="feat-icon">
+                <svg width="20" height="20" fill="none" stroke="#f472b6" stroke-width="1.8" viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
+              </div>
+              <h3>Referência de Fórmulas</h3>
+              <p>Todas as fórmulas essenciais organizadas por categoria — módulo, ângulo, produto vetorial, projeção e distâncias.</p>
+              <div class="feat-link" style="color:#f472b6">Ver fórmulas <span>→</span></div>
+            </div>
+
+            <!-- Passo a passo -->
+            <div class="feat-card" style="--fc:#a78bfa;--fi:rgba(167,139,250,.13);--fglow:rgba(167,139,250,.08)"
+                 onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
+              <div class="feat-icon">
+                <svg width="20" height="20" fill="none" stroke="#a78bfa" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <h3>Resolução Passo a Passo</h3>
+              <p>Cada cálculo exibe a resolução detalhada, mostrando exatamente como cada componente é obtido em etapas numeradas.</p>
+              <div class="feat-link" style="color:#a78bfa">Ver demonstração <span>→</span></div>
+            </div>
+
+          </div>
+        </div><!-- /features -->
+
+        <!-- Operations -->
+        <div>
+          <div class="home-sh">
+            <h2>Operações disponíveis</h2>
+            <div class="home-sh-line"></div>
+          </div>
+          <div class="ops-grid">
+            <div class="op-chip" style="--oc:#7c6af7" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
+              <span class="op-chip-dot"></span>A + B — Soma
+            </div>
+            <div class="op-chip" style="--oc:#7c6af7" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
+              <span class="op-chip-dot"></span>A − B — Subtração
+            </div>
+            <div class="op-chip" style="--oc:#4a9eff" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
+              <span class="op-chip-dot" style="background:#4a9eff"></span>A · B — Produto Escalar
+            </div>
+            <div class="op-chip" style="--oc:#f97316" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
+              <span class="op-chip-dot" style="background:#f97316"></span>A × B — Produto Vetorial
+            </div>
+            <div class="op-chip" style="--oc:#f472b6" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
+              <span class="op-chip-dot" style="background:#f472b6"></span>[A,B,W] — Produto Misto
+            </div>
+            <div class="op-chip" style="--oc:#2dd4a0" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
+              <span class="op-chip-dot" style="background:#2dd4a0"></span>proj_B A — Projeção
+            </div>
+            <div class="op-chip" style="--oc:#fbbf24" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
+              <span class="op-chip-dot" style="background:#fbbf24"></span>|A| — Módulo e Unitário
+            </div>
+            <div class="op-chip" style="--oc:#a78bfa" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
+              <span class="op-chip-dot" style="background:#a78bfa"></span>θ — Ângulo entre vetores
+            </div>
+            <div class="op-chip" style="--oc:#ef4444" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
+              <span class="op-chip-dot" style="background:#ef4444"></span>α β γ — Ângulos Diretores
+            </div>
+            <div class="op-chip" style="--oc:#22c55e" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
+              <span class="op-chip-dot" style="background:#22c55e"></span>M — Ponto Médio
+            </div>
+          </div>
+        </div><!-- /operations -->
+
+      </div><!-- /home-body -->
+    </div><!-- /home-page -->
+  </div>
+
+  <!-- CALC PAGE (full) -->
+  <div id="page-calc" class="page">
+    <div style="display:flex;flex-direction:column;height:100%;overflow:hidden;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;">
+        <h2 style="font-size:15px;font-weight:700;color:var(--text)">Calculadora</h2>
+        <p style="font-size:12px;color:var(--text2);margin-top:1px">Selecione a operação e configure os vetores</p>
+      </div>
+      <div style="display:flex;flex:1;overflow:hidden;min-height:0;">
+      <div class="calc-inputs" style="width:280px;flex-shrink:0;border-right:1px solid var(--border);">
+            <div class="input-section">
+              <div class="input-label"><div class="input-label-dot"></div>Vetor A</div>
+              <div class="xyz-grid">
+                <div class="xyz-input"><label>x</label><input id="ca-x" type="number" value="1" step="any"></div>
+                <div class="xyz-input"><label>y</label><input id="ca-y" type="number" value="2" step="any"></div>
+                <div class="xyz-input"><label>z</label><input id="ca-z" type="number" value="3" step="any"></div>
+              </div>
+            </div>
+            <div class="input-section">
+              <div class="input-label"><div class="input-label-dot green"></div>Vetor B</div>
+              <div class="xyz-grid">
+                <div class="xyz-input"><label>x</label><input id="cb-x" type="number" value="4" step="any"></div>
+                <div class="xyz-input"><label>y</label><input id="cb-y" type="number" value="-1" step="any"></div>
+                <div class="xyz-input"><label>z</label><input id="cb-z" type="number" value="2" step="any"></div>
+              </div>
+            </div>
+            <div class="input-section">
+              <div class="input-label"><div class="input-label-dot" style="background:var(--text3)"></div>Operação</div>
+              <div class="op-select-wrap">
+                <select id="cop-select" class="op-select">
+                  <option value="soma">Soma (A + B)</option>
+                  <option value="sub">Subtração (A − B)</option>
+                  <option value="escalar">Produto Escalar (A · B)</option>
+                  <option value="vetorial">Produto Vetorial (A × B)</option>
+                  <option value="misto">Produto Misto</option>
+                  <option value="projecao">Projeção de A sobre B</option>
+                  <option value="modulo">Módulo / Unitário</option>
+                  <option value="angulo">Ângulo entre A e B</option>
+                  <option value="angulos_dir">Ângulos Diretores de A</option>
+                  <option value="ponto_medio">Ponto Médio A-B</option>
+                </select>
+                <div class="op-select-arrow"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+              </div>
+            </div>
+            <div class="input-section" id="cw-section" style="display:none">
+              <div class="input-label"><div class="input-label-dot" style="background:var(--orange)"></div>Vetor W</div>
+              <div class="xyz-grid">
+                <div class="xyz-input"><label>x</label><input id="cw-x" type="number" value="1" step="any"></div>
+                <div class="xyz-input"><label>y</label><input id="cw-y" type="number" value="1" step="any"></div>
+                <div class="xyz-input"><label>z</label><input id="cw-z" type="number" value="1" step="any"></div>
+              </div>
+            </div>
+            <div class="calc-actions">
+              <button class="btn-calc btn-primary" onclick="calculateFull()">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="5 12 12 5 19 12"/><polyline points="5 19 12 12 19 19"/></svg>
+                Calcular
+              </button>
+              <button class="btn-calc btn-secondary" onclick="resetFull()">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.34"/></svg>
+                Limpar
+              </button>
+            </div>
+          </div>
+          <!-- 3D VIEWER -->
+          <div class="viewer-area" style="flex:1;min-width:0;">
+            <div class="viewer-toolbar">
+              <span class="view-label">3D</span>
+              <button class="vbtn on" id="cvbtn-axes" onclick="toggleFeatureC('axes',this)">Eixos</button>
+              <button class="vbtn on" id="cvbtn-grid" onclick="toggleFeatureC('grid',this)">Grade</button>
+              <button class="vbtn on" id="cvbtn-labels" onclick="toggleFeatureC('labels',this)">Labels</button>
+              <button class="vbtn on" id="cvbtn-extra" onclick="toggleFeatureC('extra',this)">Extra</button>
+              <button class="vbtn" onclick="resetCalcCam()">Reset câmera</button>
+            </div>
+            <div class="canvas-host" id="calc-canvas-host">
+              <div class="viewer-legend" id="calc-legend"></div>
+              <div class="viewer-hint">🖱 Orbitar · Scroll zoom · Dir pan</div>
+            </div>
+          </div>
+          <!-- RIGHT RESULT PANEL -->
+          <div class="right-panel">
+            <div class="result-panel">
+              <div class="result-panel-title">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Resultado
+              </div>
+              <div class="result-main">
+                <div class="result-main-label" id="c-res-label">Aguardando cálculo...</div>
+                <div class="result-main-val" id="c-res-val" style="font-size:14px;color:var(--text2)">—</div>
+              </div>
+              <div class="result-rows" id="c-res-rows"></div>
+            </div>
+            <div class="steps-panel">
+              <div class="steps-title">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                Passo a passo
+              </div>
+              <div class="step-list" id="c-step-list">
+                <div style="font-size:12px;color:var(--text3)">Configure os vetores e clique em Calcular.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISUALIZER PAGE -->
+  <div id="page-viz" class="page">
+    <div style="display:flex;flex-direction:column;height:100%;overflow:hidden;">
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;">
+        <h2 style="font-size:15px;font-weight:700">Visualizador 3D Livre</h2>
+        <p style="font-size:12px;color:var(--text2);margin-top:2px">Adicione vetores e explore o espaço tridimensional</p>
+      </div>
+      <div style="display:flex;flex:1;overflow:hidden;min-height:0;">
+        <div style="width:240px;flex-shrink:0;padding:16px;border-right:1px solid var(--border);overflow-y:auto;background:var(--bg2);">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);margin-bottom:12px">Vetores</div>
+          <div id="viz-vectors-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px"></div>
+          <button onclick="addVizVector()" style="width:100%;padding:8px;background:var(--accent-soft);border:1px dashed rgba(124,106,247,.4);border-radius:var(--radius-sm);color:var(--accent);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font)">+ Adicionar vetor</button>
+        </div>
+        <div class="viewer-area" style="flex:1;min-width:0;">
+          <div class="viewer-toolbar">
+            <span class="view-label">3D</span>
+            <button class="vbtn on" id="vzb-axes" onclick="toggleFreeFeature('axes',this)">Eixos</button>
+            <button class="vbtn on" id="vzb-grid" onclick="toggleFreeFeature('grid',this)">Grade</button>
+            <button class="vbtn on" id="vzb-labels" onclick="toggleFreeFeature('labels',this)">Labels</button>
+            <button class="vbtn" onclick="resetFreeCam()">Reset</button>
+          </div>
+          <div class="canvas-host" id="viz-canvas-host">
+            <div class="viewer-legend" id="viz-legend"></div>
+            <div class="viewer-hint">🖱 Orbitar · Scroll zoom</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMULAS PAGE -->
+  <div id="page-formulas" class="page">
+    <div class="formula-page">
+      <h2 style="font-size:15px;font-weight:700">Formulário de Geometria Analítica</h2>
+      <p style="font-size:12px;color:var(--text2);margin-top:2px">Todas as fórmulas organizadas por tema</p>
+      <div class="formula-grid">
+        <div class="formula-card"><h3>📐 Módulo<span class="formula-tag">Vetores</span></h3><p>Comprimento de um vetor no R³</p><div class="formula-box">|v⃗| = √(x² + y² + z²)</div></div>
+        <div class="formula-card"><h3>🎯 Vetor Unitário<span class="formula-tag">Vetores</span></h3><p>Vetor de módulo 1 na mesma direção</p><div class="formula-box">û = v⃗ / |v⃗|</div></div>
+        <div class="formula-card"><h3>➕ Soma / Subtração<span class="formula-tag">Vetores</span></h3><p>Operação componente a componente</p><div class="formula-box">u⃗ ± v⃗ = (x₁±x₂, y₁±y₂, z₁±z₂)</div></div>
+        <div class="formula-card"><h3>📍 Ponto Médio<span class="formula-tag">Vetores</span></h3><p>Ponto equidistante entre A e B</p><div class="formula-box">M = ((x₁+x₂)/2, (y₁+y₂)/2, (z₁+z₂)/2)</div></div>
+        <div class="formula-card"><h3>· Produto Escalar<span class="formula-tag">Produtos</span></h3><p>Resultado é um escalar</p><div class="formula-box">u⃗·v⃗ = x₁x₂ + y₁y₂ + z₁z₂<br>= |u⃗||v⃗| cosθ</div></div>
+        <div class="formula-card"><h3>× Produto Vetorial<span class="formula-tag">Produtos</span></h3><p>Resultado é um vetor perpendicular a ambos</p><div class="formula-box">u⃗×v⃗ = î(y₁z₂−z₁y₂) − ĵ(x₁z₂−z₁x₂) + k̂(x₁y₂−y₁x₂)</div></div>
+        <div class="formula-card"><h3>⬛ Produto Misto<span class="formula-tag">Produtos</span></h3><p>Volume do paralelepípedo</p><div class="formula-box">[u⃗,v⃗,w⃗] = (u⃗×v⃗)·w⃗<br>Vol = |[u⃗,v⃗,w⃗]|</div></div>
+        <div class="formula-card"><h3>↗ Projeção<span class="formula-tag">Produtos</span></h3><p>Projeção ortogonal de v⃗ sobre u⃗</p><div class="formula-box">proj_u⃗ v⃗ = (v⃗·u⃗ / |u⃗|²) · u⃗</div></div>
+        <div class="formula-card"><h3>📐 Ângulo entre Vetores<span class="formula-tag">Ângulos</span></h3><p>Ângulo formado entre dois vetores</p><div class="formula-box">cosθ = (u⃗·v⃗) / (|u⃗||v⃗|)<br>θ = arccos(...)</div></div>
+        <div class="formula-card"><h3>🧭 Ângulos Diretores<span class="formula-tag">Ângulos</span></h3><p>Ângulos com os eixos x, y, z</p><div class="formula-box">α=arccos(x/|v⃗|)  β=arccos(y/|v⃗|)<br>γ=arccos(z/|v⃗|)<br>cos²α+cos²β+cos²γ=1</div></div>
+        <div class="formula-card"><h3>⟶ Equação da Reta<span class="formula-tag">Retas</span></h3><p>Representações de uma reta no R³</p><div class="formula-box">Vetorial: P = A + t·v⃗<br>Simétrica: (x-x₀)/a = (y-y₀)/b = (z-z₀)/c</div></div>
+        <div class="formula-card"><h3>📐 Lei dos Cossenos<span class="formula-tag">Extra</span></h3><p>Relação entre lados e ângulos de um triângulo</p><div class="formula-box">a²=b²+c²-2bc·cosα<br>|v⃗−u⃗|²=|v⃗|²+|u⃗|²-2u⃗·v⃗·cosθ</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXERCISES PAGE -->
+  <div id="page-exercises" class="page">
+    <div class="exercises-page">
+      <h2 style="font-size:15px;font-weight:700">Exercícios Resolvidos</h2>
+      <p style="font-size:12px;color:var(--text2);margin-top:2px">Pratique com exercícios comentados passo a passo</p>
+      <div class="ex-grid">
+        <div class="ex-card" onclick="loadExercise(1)">
+          <div class="ex-card-top"><span></span><span class="ex-badge easy">Fácil</span></div>
+          <h3>Módulo e Vetor Unitário</h3>
+          <p>Calcule o módulo e o vetor unitário associado.</p>
+          <div class="ex-problem">Dados: v⃗ = (3, 4, 0)<br>Calcule |v⃗| e û</div>
+          <button class="ex-resolve">Resolver →</button>
+        </div>
+        <div class="ex-card" onclick="loadExercise(2)">
+          <div class="ex-card-top"><span></span><span class="ex-badge easy">Fácil</span></div>
+          <h3>Produto Escalar e Ângulo</h3>
+          <p>Calcule o produto escalar e o ângulo entre os vetores.</p>
+          <div class="ex-problem">u⃗=(1,2,3)  v⃗=(4,-1,2)<br>Calcule u⃗·v⃗ e o ângulo θ</div>
+          <button class="ex-resolve">Resolver →</button>
+        </div>
+        <div class="ex-card" onclick="loadExercise(3)">
+          <div class="ex-card-top"><span></span><span class="ex-badge med">Médio</span></div>
+          <h3>Produto Vetorial</h3>
+          <p>Calcule o produto vetorial e a área do paralelogramo.</p>
+          <div class="ex-problem">u⃗=(2,1,0)  v⃗=(0,3,1)<br>Calcule u⃗×v⃗ e a área</div>
+          <button class="ex-resolve">Resolver →</button>
+        </div>
+        <div class="ex-card" onclick="loadExercise(4)">
+          <div class="ex-card-top"><span></span><span class="ex-badge med">Médio</span></div>
+          <h3>Coplanaridade (Prod. Misto)</h3>
+          <p>Verifique se os vetores são coplanares.</p>
+          <div class="ex-problem">u⃗=(2,-1,1)  v⃗=(1,0,-1)  w⃗=(2,-1,4)<br>São coplanares?</div>
+          <button class="ex-resolve">Resolver →</button>
+        </div>
+        <div class="ex-card" onclick="loadExercise(5)">
+          <div class="ex-card-top"><span></span><span class="ex-badge med">Médio</span></div>
+          <h3>Ângulos Diretores</h3>
+          <p>Determine os ângulos diretores do vetor.</p>
+          <div class="ex-problem">v⃗=(1,-1,0)<br>Calcule α, β, γ</div>
+          <button class="ex-resolve">Resolver →</button>
+        </div>
+        <div class="ex-card" onclick="loadExercise(6)">
+          <div class="ex-card-top"><span></span><span class="ex-badge hard">Difícil</span></div>
+          <h3>Projeção e Decomposição</h3>
+          <p>Encontre a projeção e decomposição ortogonal.</p>
+          <div class="ex-problem">v⃗=(2,3,4)  u⃗=(3,-3,0)<br>Decomponha v⃗=v₁+v₂</div>
+          <button class="ex-resolve">Resolver →</button>
+        </div>
+        <div class="ex-card" onclick="loadExercise(7)">
+          <div class="ex-card-top"><span></span><span class="ex-badge hard">Difícil</span></div>
+          <h3>Equação da Reta</h3>
+          <p>Determine as equações da reta em R³.</p>
+          <div class="ex-problem">A=(2,3,-4)  v⃗=(1,-2,3)<br>Eq. vetorial, paramétrica e simétrica</div>
+          <button class="ex-resolve">Resolver →</button>
+        </div>
+        <div class="ex-card" onclick="loadExercise(8)">
+          <div class="ex-card-top"><span></span><span class="ex-badge hard">Difícil</span></div>
+          <h3>Ângulo entre Retas</h3>
+          <p>Calcule o ângulo de interseção entre retas.</p>
+          <div class="ex-problem">r₁: v⃗=(3,1,-1)  r₂: v⃗=(-2,1,3)<br>Calcule θ entre r₁ e r₂</div>
+          <button class="ex-resolve">Resolver →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEARN PAGE -->
+  <div id="page-learn" class="page">
+    <div class="learn-page">
+      <h2 style="font-size:15px;font-weight:700">Módulos de Aprendizado</h2>
+      <p style="font-size:12px;color:var(--text2);margin-top:2px">Aprenda no seu ritmo com conteúdo estruturado</p>
+      <div class="learn-grid">
+        <div class="learn-card"><div class="learn-card-top" style="background:linear-gradient(135deg,#1e1b4b,#2d1b69)">📐</div><div class="learn-card-body"><h3>Vetores no R³</h3><p>Conceito, representação, operações fundamentais e base canônica.</p><div class="learn-progress"><div class="learn-progress-fill" style="width:60%;background:var(--accent)"></div></div></div></div>
+        <div class="learn-card"><div class="learn-card-top" style="background:linear-gradient(135deg,#052e16,#14532d)">×</div><div class="learn-card-body"><h3>Produtos de Vetores</h3><p>Produto escalar, vetorial e misto com interpretações geométricas.</p><div class="learn-progress"><div class="learn-progress-fill" style="width:30%;background:var(--green)"></div></div></div></div>
+        <div class="learn-card"><div class="learn-card-top" style="background:linear-gradient(135deg,#1c1917,#292524)">∠</div><div class="learn-card-body"><h3>Ângulos e Projeções</h3><p>Ângulos diretores, ângulo entre vetores e projeção ortogonal.</p><div class="learn-progress"><div class="learn-progress-fill" style="width:0%;background:var(--blue)"></div></div></div></div>
+        <div class="learn-card"><div class="learn-card-top" style="background:linear-gradient(135deg,#1a1207,#451a03)">⟶</div><div class="learn-card-body"><h3>Retas no R³</h3><p>Equações vetorial, paramétrica, simétrica e posições relativas.</p><div class="learn-progress"><div class="learn-progress-fill" style="width:0%;background:var(--orange)"></div></div></div></div>
+        <div class="learn-card"><div class="learn-card-top" style="background:linear-gradient(135deg,#1f1033,#3b0764)">π</div><div class="learn-card-body"><h3>Planos no R³</h3><p>Equação do plano, posições relativas e interseções.</p><div class="learn-progress"><div class="learn-progress-fill" style="width:0%;background:var(--pink)"></div></div></div></div>
+        <div class="learn-card"><div class="learn-card-top" style="background:linear-gradient(135deg,#0c1a2e,#1e3a5f)">d</div><div class="learn-card-body"><h3>Distâncias</h3><p>Distância ponto-reta, ponto-plano e entre retas reversas.</p><div class="learn-progress"><div class="learn-progress-fill" style="width:0%;background:var(--blue)"></div></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT PAGE -->
+  <div id="page-about" class="page">
+    <div class="about-page">
+      <h2>Sobre o <span style="color:var(--accent)">Vetorium</span></h2>
+      <p>Uma plataforma completa para aprender, visualizar e praticar Geometria Analítica no R³, com calculadora interativa, visualizador 3D e formulário completo.</p>
+      <div class="about-section-title">Funcionalidades</div>
+      <div class="feature-list">
+        <div class="feature-item"><div class="feature-icon"><svg width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div><div class="feature-text"><h4>Calculadora Completa</h4><p>10 operações com vetores: módulo, unitário, soma, escalar, vetorial, misto, projeção, ângulos e mais.</p></div></div>
+        <div class="feature-item"><div class="feature-icon"><svg width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><div class="feature-text"><h4>Visualizador 3D Interativo</h4><p>Visualize vetores e resultados em tempo real no espaço tridimensional com órbita, zoom e pan.</p></div></div>
+        <div class="feature-item"><div class="feature-icon"><svg width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></div><div class="feature-text"><h4>Passo a Passo</h4><p>Cada cálculo é explicado com passos detalhados para facilitar o aprendizado.</p></div></div>
+        <div class="feature-item"><div class="feature-icon"><svg width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="2" viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg></div><div class="feature-text"><h4>Formulário Completo</h4><p>Todas as fórmulas de GA organizadas por tema para consulta rápida.</p></div></div>
+      </div>
+      <div class="about-section-title" style="margin-top:20px">Conteúdo baseado nas notas do Prof. Jorge Formiga — Unibanig</div>
+      <p style="margin-top:4px">© 2024 GA — Geometria Analítica. Todos os direitos reservados.</p>
+    </div>
+  </div>
+
+  </div><!-- end pages-wrap -->
+
+</div><!-- end main -->
+</div><!-- end app -->
+
+<div class="toast" id="toast"><div class="toast-dot"></div><span id="toast-msg">Calculado!</span></div>
+
+<script>
+/* ===================== NAVIGATION ===================== */
+function navigate(page, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  if(el) el.classList.add('active');
+  // init viewers on first visit
+  if(page==='viz' && !freeVW) initFreeViewer();
+  if(page==='calc' && !calcVW) { setTimeout(()=>{ calcVW=initViewer('calc-canvas-host'); },50); }
+}
+
+function toggleSidebar() {
+  const sb = document.querySelector('.sidebar');
+  sb.classList.toggle('collapsed');
+  const btn = document.getElementById('sidebar-toggle');
+  btn.title = sb.classList.contains('collapsed') ? 'Expandir menu' : 'Recolher menu';
+  // resize 3D viewers after transition
+  setTimeout(()=>{
+    if(calcVW) calcVW.onResize?.();
+    if(freeVW) freeVW.onResize?.();
+  }, 260);
+}
+
+/* ===================== MATH ===================== */
+const $=id=>document.getElementById(id);
+const vv=id=>parseFloat($(id)?.value)||0;
+const ff=n=>{const r=Math.round(n*1e9)/1e9;return r===0?0:r}
+const deg=r=>ff(r*180/Math.PI);
+const nm=(x,y,z)=>Math.sqrt(x*x+y*y+z*z);
+
+/* show toast */
+function toast(msg){$('toast-msg').textContent=msg;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2200)}
+
+/* op select visibility */
+$('cop-select').addEventListener('change', function(){
+  $('cw-section').style.display = this.value==='misto'?'block':'none';
+});
+
+/* ===================== CALCULATION ENGINE ===================== */
+function getInputs(prefix='') {
+  const ax=vv((prefix||'a')+'-x'), ay=vv((prefix||'a')+'-y'), az=vv((prefix||'a')+'-z');
+  const bx=vv((prefix||'b')+'-x'), by=vv((prefix||'b')+'-y'), bz=vv((prefix||'b')+'-z');
+  const op = $(prefix?'cop-select':'op-select').value;
+  let wx=0,wy=0,wz=0;
+  if(op==='misto'){wx=vv((prefix?'cw':'w')+'-x');wy=vv((prefix?'cw':'w')+'-y');wz=vv((prefix?'cw':'w')+'-z')}
+  return {ax,ay,az,bx,by,bz,wx,wy,wz,op};
+}
+
+function computeResult(inp) {
+  const {ax,ay,az,bx,by,bz,wx,wy,wz,op}=inp;
+  const ma=nm(ax,ay,az), mb=nm(bx,by,bz);
+  let mainLabel='', mainVal='', rows=[], steps=[], vectors=[];
+
+  // always show A and B
+  vectors.push({from:[0,0,0],to:[ax,ay,az],color:0x7c6af7,label:'A'});
+  vectors.push({from:[0,0,0],to:[bx,by,bz],color:0x2dd4a0,label:'B'});
+
+  if(op==='soma'){
+    const rx=ax+bx,ry=ay+by,rz=az+bz;
+    mainLabel='A + B ='; mainVal=`(${ff(rx)}, ${ff(ry)}, ${ff(rz)})`;
+    rows=[
+      {k:'|A|',v:`√${ff(ma*ma)} ≈ ${ff(ma)}`,c:''},
+      {k:'|B|',v:`√${ff(mb*mb)} ≈ ${ff(mb)}`,c:''},
+      {k:'|A + B|',v:`√${ff(nm(rx,ry,rz)**2)} ≈ ${ff(nm(rx,ry,rz))}`,c:''},
+      {k:'A · B',v:`${ff(ax*bx+ay*by+az*bz)}`,c:'accent'},
+    ];
+    steps=[
+      {n:'1',t:'Componentes correspondentes',h:`(${ax}+${bx}, ${ay}+${by}, ${az}+${bz})`},
+      {n:'2',t:'Soma componente a componente',h:`(${ff(rx)}, ${ff(ry)}, ${ff(rz)})`},
+      {n:'3',t:'Vetor resultante',h:`A + B = (${ff(rx)}, ${ff(ry)}, ${ff(rz)})`},
+    ];
+    vectors.push({from:[0,0,0],to:[rx,ry,rz],color:0x4a9eff,label:'A+B'});
+    vectors.push({from:[ax,ay,az],to:[rx,ry,rz],color:0x2dd4a0,label:'',dashed:true});
+    vectors.push({from:[bx,by,bz],to:[rx,ry,rz],color:0x7c6af7,label:'',dashed:true});
+  } else if(op==='sub'){
+    const rx=ax-bx,ry=ay-by,rz=az-bz;
+    mainLabel='A − B ='; mainVal=`(${ff(rx)}, ${ff(ry)}, ${ff(rz)})`;
+    rows=[{k:'|A−B|',v:ff(nm(rx,ry,rz)),c:'blue'},{k:'|A|',v:ff(ma),c:''},{k:'|B|',v:ff(mb),c:''}];
+    steps=[{n:'1',t:'Subtração componente a componente',h:`(${ax}-${bx}, ${ay}-${by}, ${az}-${bz})`},{n:'2',t:'Resultado',h:`(${ff(rx)}, ${ff(ry)}, ${ff(rz)})`}];
+    vectors.push({from:[0,0,0],to:[rx,ry,rz],color:0xf97316,label:'A−B'});
+  } else if(op==='escalar'){
+    const dot=ax*bx+ay*by+az*bz;
+    const cosT=ma>0&&mb>0?dot/(ma*mb):0;
+    const theta=Math.acos(Math.max(-1,Math.min(1,cosT)));
+    mainLabel='A · B ='; mainVal=`${ff(dot)}`;
+    rows=[{k:'|A|',v:ff(ma),c:''},{k:'|B|',v:ff(mb),c:''},{k:'cosθ',v:ff(cosT),c:'accent'},{k:'θ',v:deg(theta)+'°',c:'green'},{k:'Relação',v:Math.abs(dot)<1e-9?'⊥ Perp.':theta<Math.PI/2?'Agudo':'Obtuso',c:''}];
+    steps=[{n:'1',t:'Produto escalar',h:`${ax}·${bx} + ${ay}·${by} + ${az}·${bz} = ${ff(dot)}`},{n:'2',t:'Ângulo',h:`cosθ = ${ff(dot)}/(${ff(ma)}·${ff(mb)}) = ${ff(cosT)}`},{n:'3',t:'θ',h:`θ = arccos(${ff(cosT)}) ≈ ${deg(theta)}°`}];
+    // angle arc
+    vectors.push({type:'arc',v1:[ax,ay,az],v2:[bx,by,bz],color:0xffcc00});
+  } else if(op==='vetorial'){
+    const rx=ay*bz-az*by, ry=-(ax*bz-az*bx), rz=ax*by-ay*bx;
+    const area=nm(rx,ry,rz);
+    mainLabel='A × B ='; mainVal=`(${ff(rx)}, ${ff(ry)}, ${ff(rz)})`;
+    rows=[{k:'|A×B|',v:ff(area),c:'blue'},{k:'Área paralel.',v:ff(area),c:'accent'},{k:'Área triâng.',v:ff(area/2),c:'green'}];
+    steps=[{n:'1',t:'Sarrus: î componente',h:`î(${ay}·${bz} − ${az}·${by}) = î(${ff(rx)})`},{n:'2',t:'Sarrus: ĵ componente',h:`−ĵ(${ax}·${bz} − ${az}·${bx}) = ĵ(${ff(ry)})`},{n:'3',t:'Sarrus: k̂ componente',h:`k̂(${ax}·${by} − ${ay}·${bx}) = k̂(${ff(rz)})`},{n:'4',t:'Resultado',h:`A×B = (${ff(rx)}, ${ff(ry)}, ${ff(rz)})`}];
+    vectors.push({from:[0,0,0],to:[rx,ry,rz],color:0xffcc00,label:'A×B'});
+    vectors.push({type:'para',u:[ax,ay,az],v:[bx,by,bz],color:0x4a9eff});
+  } else if(op==='misto'){
+    const rx=ay*bz-az*by, ry=-(ax*bz-az*bx), rz=ax*by-ay*bx;
+    const misto=rx*wx+ry*wy+rz*wz, vol=Math.abs(misto);
+    const cop=Math.abs(misto)<1e-9;
+    mainLabel='[A,B,W] ='; mainVal=`${ff(misto)}`;
+    rows=[{k:'Volume',v:ff(vol),c:'accent'},{k:'Coplanares?',v:cop?'Sim ✓':'Não',c:cop?'green':''}];
+    steps=[{n:'1',t:'Produto vetorial A×B',h:`(${ff(rx)}, ${ff(ry)}, ${ff(rz)})`},{n:'2',t:'Produto escalar com W',h:`${ff(rx)}·${wx}+${ff(ry)}·${wy}+${ff(rz)}·${wz}=${ff(misto)}`},{n:'3',t:'Volume',h:`|${ff(misto)}| = ${ff(vol)}`}];
+    vectors.push({from:[0,0,0],to:[wx,wy,wz],color:0xf97316,label:'W'});
+    vectors.push({type:'box',u:[ax,ay,az],v:[bx,by,bz],w:[wx,wy,wz]});
+  } else if(op==='projecao'){
+    const mu2=bx*bx+by*by+bz*bz;
+    if(mu2<1e-12){mainLabel='Erro';mainVal='B é nulo'}
+    else{
+      const dot=ax*bx+ay*by+az*bz, k=dot/mu2;
+      const px=ff(k*bx),py=ff(k*by),pz=ff(k*bz);
+      const qx=ff(ax-k*bx),qy=ff(ay-k*by),qz=ff(az-k*bz);
+      mainLabel='proj_B A ='; mainVal=`(${px}, ${py}, ${pz})`;
+      rows=[{k:'k = A·B/|B|²',v:ff(k),c:''},{k:'|proj|',v:ff(nm(px,py,pz)),c:'blue'},{k:'A⊥ = A−proj',v:`(${qx},${qy},${qz})`,c:'accent'}];
+      steps=[{n:'1',t:'k = A·B/|B|²',h:`k = ${ff(dot)}/${ff(mu2)} = ${ff(k)}`},{n:'2',t:'Projeção A∥',h:`k·B = ${ff(k)}·(${bx},${by},${bz}) = (${px},${py},${pz})`},{n:'3',t:'Componente A⊥',h:`(${qx},${qy},${qz})`}];
+      vectors.push({from:[0,0,0],to:[px,py,pz],color:0x2dd4a0,label:'proj'});
+      vectors.push({from:[px,py,pz],to:[ax,ay,az],color:0xf97316,label:'A⊥'});
+      vectors.push({type:'dash',from:[px,py,pz],to:[ax,ay,az]});
+    }
+  } else if(op==='modulo'){
+    const ua=ax/ma, ub=ay/ma, uc=az/ma;
+    mainLabel='|A| ='; mainVal=`${ff(ma)}`;
+    rows=[{k:'|A|',v:ff(ma),c:'accent'},{k:'û',v:`(${ff(ua)},${ff(ub)},${ff(uc)})`,c:'green'},{k:'É unitário?',v:Math.abs(ma-1)<1e-9?'Sim ✓':'Não',c:''}];
+    steps=[{n:'1',t:'Módulo',h:`|A|=√(${ax}²+${ay}²+${az}²)=√${ff(ma*ma)}≈${ff(ma)}`},{n:'2',t:'Vetor unitário',h:`û=(${ff(ua)},${ff(ub)},${ff(uc)})`}];
+    vectors.push({from:[0,0,0],to:[ua,ub,uc],color:0xf97316,label:'û'});
+  } else if(op==='angulo'){
+    const dot=ax*bx+ay*by+az*bz;
+    const cosT=ma>0&&mb>0?dot/(ma*mb):0;
+    const theta=Math.acos(Math.max(-1,Math.min(1,cosT)));
+    mainLabel='θ ≈'; mainVal=deg(theta)+'°';
+    rows=[{k:'A · B',v:ff(dot),c:''},{k:'cosθ',v:ff(cosT),c:'accent'},{k:'Relação',v:Math.abs(dot)<1e-9?'⊥':deg(theta)>90?'Obtuso':'Agudo',c:''}];
+    steps=[{n:'1',t:'Produto escalar',h:`A·B=${ff(dot)}`},{n:'2',t:'cosθ',h:`${ff(dot)}/(${ff(ma)}·${ff(mb)})=${ff(cosT)}`},{n:'3',t:'θ',h:`arccos(${ff(cosT)})≈${deg(theta)}°`}];
+    vectors.push({type:'arc',v1:[ax,ay,az],v2:[bx,by,bz],color:0xffcc00});
+  } else if(op==='angulos_dir'){
+    const ua=ax/ma,ub=ay/ma,uc=az/ma;
+    const a=Math.acos(Math.max(-1,Math.min(1,ua)));
+    const b=Math.acos(Math.max(-1,Math.min(1,ub)));
+    const g=Math.acos(Math.max(-1,Math.min(1,uc)));
+    mainLabel='α, β, γ ='; mainVal=`${deg(a)}°, ${deg(b)}°, ${deg(g)}°`;
+    rows=[{k:'α (eixo x)',v:deg(a)+'°',c:'accent'},{k:'β (eixo y)',v:deg(b)+'°',c:'green'},{k:'γ (eixo z)',v:deg(g)+'°',c:'blue'},{k:'cos²α+cos²β+cos²γ',v:ff(ua*ua+ub*ub+uc*uc),c:''}];
+    steps=[{n:'1',t:'α=arccos(x/|A|)',h:`arccos(${ff(ua)})≈${deg(a)}°`},{n:'2',t:'β=arccos(y/|A|)',h:`arccos(${ff(ub)})≈${deg(b)}°`},{n:'3',t:'γ=arccos(z/|A|)',h:`arccos(${ff(uc)})≈${deg(g)}°`}];
+    vectors.push({type:'projaxes',v:[ax,ay,az]});
+  } else if(op==='ponto_medio'){
+    const mx=(ax+bx)/2,my=(ay+by)/2,mz=(az+bz)/2;
+    mainLabel='M ='; mainVal=`(${ff(mx)}, ${ff(my)}, ${ff(mz)})`;
+    rows=[{k:'|AB|',v:ff(nm(bx-ax,by-ay,bz-az)),c:''},{k:'|AM|',v:ff(nm(mx-ax,my-ay,mz-az)),c:''}];
+    steps=[{n:'1',t:'M=((x₁+x₂)/2,…)',h:`M=(${ff(mx)},${ff(my)},${ff(mz)})`}];
+    vectors.push({type:'midpoint',a:[ax,ay,az],b:[bx,by,bz],m:[mx,my,mz]});
+  }
+
+  return {mainLabel,mainVal,rows,steps,vectors};
+}
+
+function renderResult(r) {
+  $('res-main-label').textContent = r.mainLabel;
+  $('res-main-val').textContent = r.mainVal;
+  $('res-main-val').style.color = 'var(--accent)';
+  $('res-main-val').style.fontSize = r.mainVal.length>18?'13px':'22px';
+  $('result-rows').innerHTML = r.rows.map(row=>
+    `<div class="result-row"><span class="result-row-key">${row.k}</span><span class="result-row-val ${row.c}">${row.v}</span></div>`
+  ).join('');
+  $('step-list').innerHTML = r.steps.map(s=>
+    `<div class="step-item"><div class="step-num">${s.n}</div><div class="step-content">${s.t}<br><span class="step-highlight">${s.h}</span></div></div>`
+  ).join('');
+}
+
+function calculate() {
+  navigate('calc', document.querySelector('.nav-item:nth-child(2)'));
+  setTimeout(calculateFull, 100);
+}
+function calculateFull() {
+  if(!calcVW) { calcVW = initViewer('calc-canvas-host'); }
+  const ax=vv('ca-x'),ay=vv('ca-y'),az=vv('ca-z');
+  const bx=vv('cb-x'),by=vv('cb-y'),bz=vv('cb-z');
+  const op=$('cop-select').value;
+  let wx=0,wy=0,wz=0;
+  if(op==='misto'){wx=vv('cw-x');wy=vv('cw-y');wz=vv('cw-z')}
+  const r = computeResult({ax,ay,az,bx,by,bz,wx,wy,wz,op});
+  // render result in calc-page panel
+  $('c-res-label').textContent = r.mainLabel;
+  $('c-res-val').textContent = r.mainVal;
+  $('c-res-val').style.color = 'var(--accent)';
+  $('c-res-val').style.fontSize = r.mainVal.length>18?'13px':'22px';
+  $('c-res-rows').innerHTML = r.rows.map(row=>
+    `<div class="result-row"><span class="result-row-key">${row.k}</span><span class="result-row-val ${row.c}">${row.v}</span></div>`
+  ).join('');
+  $('c-step-list').innerHTML = r.steps.map(s=>
+    `<div class="step-item"><div class="step-num">${s.n}</div><div class="step-content">${s.t}<br><span class="step-highlight">${s.h}</span></div></div>`
+  ).join('');
+  renderScene(calcVW, r.vectors);
+  toast('Calculado com sucesso!');
+}
+function resetCalc() { resetFull(); }
+function resetFull() {
+  ['ca-x','ca-y','ca-z','cb-x','cb-y','cb-z'].forEach(id=>{$(id).value='0'});
+  $('cop-select').value='soma';
+  $('cw-section').style.display='none';
+  $('c-res-label').textContent='Aguardando cálculo...';
+  $('c-res-val').textContent='—';
+  $('c-res-val').style.color='var(--text2)';
+  $('c-res-rows').innerHTML='';
+  $('c-step-list').innerHTML='<div style="font-size:12px;color:var(--text3)">Configure os vetores e clique em Calcular.</div>';
+  if(calcVW) renderScene(calcVW,[]);
+}
+
+/* LOAD EXERCISE */
+function loadExercise(n) {
+  const exData = [
+    null,
+    {ax:3,ay:4,az:0,bx:0,by:0,bz:0,op:'modulo'},
+    {ax:1,ay:2,az:3,bx:4,by:-1,bz:2,op:'escalar'},
+    {ax:2,ay:1,az:0,bx:0,by:3,bz:1,op:'vetorial'},
+    {ax:2,ay:-1,az:1,bx:1,by:0,bz:-1,op:'misto',wx:2,wy:-1,wz:4},
+    {ax:1,ay:-1,az:0,bx:0,by:0,bz:0,op:'angulos_dir'},
+    {ax:2,ay:3,az:4,bx:3,by:-3,bz:0,op:'projecao'},
+    {ax:2,ay:3,az:-4,bx:1,by:-2,bz:3,op:'soma'},
+    {ax:3,ay:1,az:-1,bx:-2,by:1,bz:3,op:'angulo'},
+  ][n];
+  if(!exData) return;
+  $('ca-x').value=exData.ax; $('ca-y').value=exData.ay; $('ca-z').value=exData.az;
+  $('cb-x').value=exData.bx; $('cb-y').value=exData.by; $('cb-z').value=exData.bz;
+  $('cop-select').value=exData.op;
+  if(exData.op==='misto'&&exData.wx!==undefined){$('cw-x').value=exData.wx;$('cw-y').value=exData.wy;$('cw-z').value=exData.wz;$('cw-section').style.display='block'}
+  navigate('calc', document.querySelector('.nav-item:nth-child(2)'));
+  setTimeout(calculateFull,100);
+}
+
+/* ===================== 3D ENGINE ===================== */
+let mainVW=null, calcVW=null, freeVW=null;
+const V3=(...a)=>new THREE.Vector3(...a);
+const sv3=(x,y,z)=>V3(y,z,x);
+const sa3=([x,y,z])=>V3(y,z,x);
+const sp3=([x,y,z])=>[y,z,x];
+
+function initViewer(hostId) {
+  const host=$(hostId);
+  const W=host.clientWidth||600, H=host.clientHeight||400;
+  const scene=new THREE.Scene(); scene.background=new THREE.Color(0x0a0d14);
+  const camera=new THREE.PerspectiveCamera(45,W/H,.01,1000);
+  const renderer=new THREE.WebGLRenderer({antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(W,H);
+  host.insertBefore(renderer.domElement,host.firstChild);
+  scene.add(new THREE.AmbientLight(0xffffff,.9));
+  const dl=new THREE.DirectionalLight(0xffffff,.5); dl.position.set(5,10,5); scene.add(dl);
+
+  // axes
+  const axG=new THREE.Group();
+  [[0,0,5,'x','#ef4444'],[5,0,0,'y','#22c55e'],[0,5,0,'z','#3b82f6']].forEach(([x,y,z,n,c])=>{
+    const cl=parseInt(c.replace('#',''),16);
+    axG.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([V3(0,0,0),V3(x,y,z)]),new THREE.LineBasicMaterial({color:cl})));
+    axG.add(makeSpriteLabel(n,V3(x*1.12,y*1.12,z*1.12),c));
+  });
+  scene.add(axG);
+
+  // grid
+  const gVerts=[]; for(let i=-6;i<=6;i++){gVerts.push(i,0,-6,i,0,6,-6,0,i,6,0,i)}
+  const gg=new THREE.BufferGeometry(); gg.setAttribute('position',new THREE.Float32BufferAttribute(gVerts,3));
+  const gridG=new THREE.LineSegments(gg,new THREE.LineBasicMaterial({color:0x1e2a45,opacity:.8,transparent:true}));
+  scene.add(gridG);
+
+  const labG=new THREE.Group(); scene.add(labG);
+  const vecG=new THREE.Group(); scene.add(vecG);
+  const extG=new THREE.Group(); scene.add(extG);
+
+  let theta=.6,phi=.52,rad=14,tx=0,ty=0,tz=0;
+  function upCam(){camera.position.set(tx+rad*Math.sin(phi)*Math.sin(theta),ty+rad*Math.cos(phi),tz+rad*Math.sin(phi)*Math.cos(theta));camera.lookAt(tx,ty,tz)}
+  upCam();
+
+  let drag=false,lx=0,ly=0,rc=false;
+  renderer.domElement.addEventListener('mousedown',e=>{drag=true;lx=e.clientX;ly=e.clientY;rc=e.button===2});
+  renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());
+  window.addEventListener('mouseup',()=>drag=false);
+  window.addEventListener('mousemove',e=>{if(!drag)return;const dx=(e.clientX-lx)*.013,dy=(e.clientY-ly)*.013;lx=e.clientX;ly=e.clientY;if(rc){tx-=dx*1.8;ty+=dy*1.8}else{theta-=dx;phi=Math.max(.06,Math.min(Math.PI-.06,phi+dy))}upCam()});
+  renderer.domElement.addEventListener('wheel',e=>{rad=Math.max(1.5,Math.min(50,rad+e.deltaY*.025));upCam()},{passive:true});
+  let tch=[],ld2=0;
+  renderer.domElement.addEventListener('touchstart',e=>{tch=[...e.touches];if(e.touches.length===2)ld2=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)});
+  renderer.domElement.addEventListener('touchmove',e=>{if(e.touches.length===1&&tch.length){const dx=(e.touches[0].clientX-tch[0].clientX)*.015,dy=(e.touches[0].clientY-tch[0].clientY)*.015;theta-=dx;phi=Math.max(.06,Math.min(Math.PI-.06,phi+dy));upCam()}else if(e.touches.length===2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);rad=Math.max(1.5,Math.min(50,rad-(d-ld2)*.05));ld2=d;upCam()}tch=[...e.touches];e.preventDefault()},{passive:false});
+  const ro=new ResizeObserver(()=>{const W=host.clientWidth,H=host.clientHeight||400;renderer.setSize(W,H);camera.aspect=W/H;camera.updateProjectionMatrix()});ro.observe(host);
+  function animate(){requestAnimationFrame(animate);renderer.render(scene,camera)}animate();
+  return {scene,camera,renderer,axG,gridG,labG,vecG,extG,upCam,
+    get theta(){return theta},set theta(v){theta=v},
+    get phi(){return phi},set phi(v){phi=v},
+    get rad(){return rad},set rad(v){rad=v},
+    get tx(){return tx},set tx(v){tx=v},
+    showAxes:true,showGrid:true,showLabels:true,showExtra:true};
+}
+
+function makeSpriteLabel(text,pos,color='#ffffff'){
+  const cv=document.createElement('canvas');cv.width=192;cv.height=56;
+  const ctx=cv.getContext('2d');
+  ctx.fillStyle='rgba(10,13,20,.82)';ctx.roundRect(2,2,188,52,8);ctx.fill();
+  ctx.font='bold 26px JetBrains Mono,monospace';ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,96,28);
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(cv),transparent:true,depthTest:false}));
+  sp.scale.set(.8,.22,1);sp.position.copy(pos);return sp;
+}
+
+function addArrow(scene,from,to,color,hs=0.15){
+  const dir=new THREE.Vector3().subVectors(to,from);const len=dir.length();if(len<1e-9)return;
+  const n=dir.clone().normalize();const sl=Math.max(0,len-hs*1.5);
+  const geo=new THREE.BufferGeometry().setFromPoints([from,from.clone().add(n.clone().multiplyScalar(sl))]);
+  scene.add(new THREE.Line(geo,new THREE.LineBasicMaterial({color,linewidth:2})));
+  const c=new THREE.Mesh(new THREE.ConeGeometry(hs*.35,hs*1.4,10),new THREE.MeshPhongMaterial({color}));
+  c.position.copy(to);c.quaternion.setFromUnitVectors(V3(0,1,0),n);scene.add(c);
+}
+
+function addDash(scene,p1,p2,color=0x4a5578){
+  const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints([V3(...p1),V3(...p2)]),new THREE.LineDashedMaterial({color,dashSize:.12,gapSize:.08}));l.computeLineDistances();scene.add(l);
+}
+function addDot(scene,pos,color,r=.1){const m=new THREE.Mesh(new THREE.SphereGeometry(r,12,12),new THREE.MeshPhongMaterial({color}));m.position.set(...pos);scene.add(m);return m}
+
+function renderScene(vw,vectors){
+  if(!vw)return;
+  while(vw.vecG.children.length)vw.vecG.remove(vw.vecG.children[0]);
+  while(vw.labG.children.length)vw.labG.remove(vw.labG.children[0]);
+  while(vw.extG.children.length)vw.extG.remove(vw.extG.children[0]);
+
+  vectors.forEach(v=>{
+    if(v.type==='arc'){
+      const n1=sa3(v.v1).normalize(),n2=sa3(v.v2).normalize();
+      const pts=[];for(let i=0;i<=24;i++)pts.push(n1.clone().lerp(n2,i/24).normalize().multiplyScalar(.6));
+      const geo=new THREE.BufferGeometry().setFromPoints(pts);
+      vw.extG.add(new THREE.Line(geo,new THREE.LineBasicMaterial({color:v.color})));
+      const mid=n1.clone().lerp(n2,.5).normalize().multiplyScalar(.85);
+      vw.labG.add(makeSpriteLabel('θ',mid,'#fbbf24'));
+    } else if(v.type==='para'){
+      const [x1,y1,z1]=v.u,[x2,y2,z2]=v.v;
+      const verts=new Float32Array([0,0,0,y1,z1,x1,y1+y2,z1+z2,x1+x2,0,0,0,y1+y2,z1+z2,x1+x2,y2,z2,x2]);
+      const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));
+      vw.extG.add(new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:v.color,opacity:.15,transparent:true,side:THREE.DoubleSide})));
+    } else if(v.type==='box'){
+      const [x1,y1,z1]=v.u,[x2,y2,z2]=v.v,[x3,y3,z3]=v.w;
+      const A=[0,0,0],B=[x1,y1,z1],C=[x2,y2,z2],D=[x3,y3,z3];
+      const E=[x1+x2,y1+y2,z1+z2],F=[x1+x3,y1+y3,z1+z3],G=[x2+x3,y2+y3,z2+z3],H=[x1+x2+x3,y1+y2+y3,z1+z2+z3];
+      [[A,B],[A,C],[A,D],[B,E],[B,F],[C,E],[C,G],[D,F],[D,G],[E,H],[F,H],[G,H]].forEach(([p,q])=>{
+        const geo=new THREE.BufferGeometry().setFromPoints([sa3(p),sa3(q)]);
+        vw.extG.add(new THREE.Line(geo,new THREE.LineBasicMaterial({color:0x886644,opacity:.5,transparent:true})));
+      });
+    } else if(v.type==='projaxes'){
+      const [x,y,z]=v.v;
+      addDash(vw.extG.parent?vw.scene:vw.extG,sp3([x,y,z]),sp3([x,0,0]));
+      addDash(vw.extG.parent?vw.scene:vw.extG,sp3([x,y,z]),sp3([0,y,0]));
+      addDash(vw.extG.parent?vw.scene:vw.extG,sp3([x,y,z]),sp3([0,0,z]));
+      [[x,0,0,0xff4444],[0,y,0,0x22c55e],[0,0,z,0x3b82f6]].forEach(([px,py,pz,c])=>addDot(vw.scene,sp3([px,py,pz]),c,.07));
+    } else if(v.type==='midpoint'){
+      const [ax,ay,az]=v.a,[bx,by,bz]=v.b,[mx,my,mz]=v.m;
+      vw.scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([sv3(ax,ay,az),sv3(bx,by,bz)]),new THREE.LineBasicMaterial({color:0x4a5578})));
+      addDot(vw.scene,sp3(v.a),0x7c6af7,.12);addDot(vw.scene,sp3(v.b),0x2dd4a0,.12);addDot(vw.scene,sp3(v.m),0xfbbf24,.14);
+      vw.labG.add(makeSpriteLabel('A',sv3(ax+.2,ay+.25,az+.1),'#a78bfa'));
+      vw.labG.add(makeSpriteLabel('B',sv3(bx+.2,by+.25,bz+.1),'#34d399'));
+      vw.labG.add(makeSpriteLabel('M',sv3(mx+.2,my+.25,mz+.1),'#fbbf24'));
+    } else if(v.type==='dash'){
+      addDash(vw.vecG,sp3(v.from),sp3(v.to));
+    } else {
+      // regular arrow
+      addArrow(vw.vecG,sa3(v.from),sa3(v.to),v.color);
+      if(v.dashed) addDash(vw.vecG,sp3(v.from),sp3(v.to),v.color);
+      if(v.label){
+        const mid=sa3(v.from).lerp(sa3(v.to),.62).add(V3(.15,.2,.1));
+        vw.labG.add(makeSpriteLabel(v.label,mid,'#'+v.color.toString(16).padStart(6,'0')));
+      }
+    }
+  });
+}
+
+/* viewer toggle features */
+function toggleFeature(feat,btn){
+  if(!mainVW)return;
+  if(feat==='axes'){mainVW.showAxes=!mainVW.showAxes;mainVW.axG.visible=mainVW.showAxes}
+  if(feat==='grid'){mainVW.showGrid=!mainVW.showGrid;mainVW.gridG.visible=mainVW.showGrid}
+  if(feat==='labels'){mainVW.showLabels=!mainVW.showLabels;mainVW.labG.visible=mainVW.showLabels}
+  if(feat==='extra'){mainVW.showExtra=!mainVW.showExtra;mainVW.extG.visible=mainVW.showExtra}
+  btn.classList.toggle('on');
+}
+function toggleFeatureC(feat,btn){
+  if(!calcVW)return;
+  if(feat==='axes')calcVW.axG.visible=!calcVW.axG.visible;
+  if(feat==='grid')calcVW.gridG.visible=!calcVW.gridG.visible;
+  if(feat==='labels')calcVW.labG.visible=!calcVW.labG.visible;
+  if(feat==='extra')calcVW.extG.visible=!calcVW.extG.visible;
+  btn.classList.toggle('on');
+}
+function toggleFreeFeature(feat,btn){
+  if(!freeVW)return;
+  if(feat==='axes')freeVW.axG.visible=!freeVW.axG.visible;
+  if(feat==='grid')freeVW.gridG.visible=!freeVW.gridG.visible;
+  if(feat==='labels')freeVW.labG.visible=!freeVW.labG.visible;
+  btn.classList.toggle('on');
+}
+function resetMainCam(){if(mainVW){mainVW.theta=.6;mainVW.phi=.52;mainVW.rad=14;mainVW.tx=0;mainVW.upCam()}}
+function resetCalcCam(){if(calcVW){calcVW.theta=.6;calcVW.phi=.52;calcVW.rad=14;calcVW.tx=0;calcVW.upCam()}}
+function resetFreeCam(){if(freeVW){freeVW.theta=.6;freeVW.phi=.52;freeVW.rad=14;freeVW.tx=0;freeVW.upCam()}}
+
+/* FREE VISUALIZER */
+let freeVectors=[{x:2,y:1,z:3,color:'#7c6af7',name:'v₁'},{x:-1,y:3,z:1,color:'#2dd4a0',name:'v₂'}];
+function renderFreeList(){
+  $('viz-vectors-list').innerHTML=freeVectors.map((v,i)=>`
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:11px;font-weight:700;color:${v.color};font-family:var(--mono)">${v.name}</span>
+        <button onclick="removeFreeVector(${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px">×</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+        <div><div style="font-size:9px;color:var(--text3);text-align:center;font-family:var(--mono)">x</div><input type="number" value="${v.x}" step="any" onchange="updateFreeVector(${i},'x',this.value)" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:5px 4px;color:var(--text);font-family:var(--mono);font-size:13px;text-align:center;outline:none"></div>
+        <div><div style="font-size:9px;color:var(--text3);text-align:center;font-family:var(--mono)">y</div><input type="number" value="${v.y}" step="any" onchange="updateFreeVector(${i},'y',this.value)" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:5px 4px;color:var(--text);font-family:var(--mono);font-size:13px;text-align:center;outline:none"></div>
+        <div><div style="font-size:9px;color:var(--text3);text-align:center;font-family:var(--mono)">z</div><input type="number" value="${v.z}" step="any" onchange="updateFreeVector(${i},'z',this.value)" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:5px 4px;color:var(--text);font-family:var(--mono);font-size:13px;text-align:center;outline:none"></div>
+      </div>
+    </div>
+  `).join('');
+}
+function addVizVector(){
+  const colors=['#f97316','#f472b6','#fbbf24','#60a5fa','#a78bfa'];
+  freeVectors.push({x:1,y:1,z:1,color:colors[freeVectors.length%colors.length],name:`v${freeVectors.length+1}`});
+  renderFreeList(); updateFreeScene();
+}
+function removeFreeVector(i){freeVectors.splice(i,1);renderFreeList();updateFreeScene()}
+function updateFreeVector(i,k,val){freeVectors[i][k]=parseFloat(val)||0;updateFreeScene()}
+function updateFreeScene(){
+  if(!freeVW)return;
+  const vecs=freeVectors.map(v=>({from:[0,0,0],to:[v.x,v.y,v.z],color:parseInt(v.color.replace('#',''),16),label:v.name}));
+  renderScene(freeVW,vecs);
+  $('viz-legend').innerHTML=freeVectors.map(v=>`<div class="leg-item"><div class="leg-dot" style="background:${v.color}"></div>${v.name} = (${v.x},${v.y},${v.z})</div>`).join('');
+}
+function initFreeViewer(){freeVW=initViewer('viz-canvas-host');renderFreeList();updateFreeScene()}
+function initCalcViewer(){calcVW=initViewer('calc-canvas-host')}
+
+/* INIT */
+window.addEventListener('load',()=>{
+  document.addEventListener('keydown',e=>{if(e.key==='/'&&document.activeElement!==$('search-input')){e.preventDefault();$('search-input').focus()}});
+});
+</script>
+</body>
+</html>
