@@ -518,12 +518,12 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 .mod-content-area::-webkit-scrollbar{width:6px}
 .mod-content-area::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 /* Section */
-.mod-section{padding:30px 40px;max-width:860px;width:100%}
-.mod-section-title{font-size:22px;font-weight:800;color:var(--text);margin-bottom:6px;letter-spacing:-.02em}
-.mod-section-sub{font-size:13px;color:var(--text2);margin-bottom:24px;line-height:1.7}
+.mod-section{padding:30px 40px;max-width:1000px;width:100%}
+.mod-section-title{font-size:30px;font-weight:800;color:var(--text);margin-bottom:6px;letter-spacing:-.02em}
+.mod-section-sub{font-size:15px;color:var(--text2);margin-bottom:24px;line-height:1.7}
 .mod-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px}
-.mod-card h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px}
-.mod-card p{font-size:12px;color:var(--text2);line-height:1.7}
+.mod-card h4{font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px}
+.mod-card p{font-size:13px;color:var(--text2);line-height:1.7}
 .mod-two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .mod-canvas-wrap{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;position:relative}
 .mod-canvas-wrap canvas{display:block}
@@ -532,7 +532,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 .mod-slider-wrap label{white-space:nowrap;font-size:11px;color:var(--text2)}
 .mod-slider-wrap input[type=range]{width:110px;cursor:pointer;accent-color:var(--accent)}
 .mod-slider-val{font-family:var(--mono);font-size:12px;color:var(--accent);min-width:36px}
-.mod-formula-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;font-family:var(--mono);font-size:13px;color:var(--accent);margin:10px 0;text-align:center;line-height:1.9}
+.mod-formula-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:15px 14px;font-family:var(--mono);font-size:17px;color:var(--accent);margin:10px 0;text-align:center;line-height:1.9;align-items: center;display: flex;justify-content: center;}
 .mod-hl{color:var(--accent);font-weight:700;font-family:var(--mono)}
 .mod-green{color:var(--green)}
 .mod-blue{color:var(--blue)}

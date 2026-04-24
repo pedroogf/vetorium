@@ -154,16 +154,16 @@ function _s1() {
       <div class="mod-card">
         <h4>📊 Escalar</h4>
         <p>Um número sem direção.<br>Ex: temperatura (25°C), massa (70 kg), tempo (5 s)</p>
-        <div class="mod-formula-box" style="font-size:26px;padding:14px">25°C</div>
+        <div class="mod-formula-box" style="font-size:20px;padding:14px;max-height:70px;height:100%">25°C</div>
       </div>
       <div class="mod-card">
         <h4>→ Vetor</h4>
         <p>Tem magnitude <em>e</em> direção.<br>Ex: velocidade (60 km/h Norte), força (10 N ↗)</p>
-        <div class="mod-formula-box">$$\\vec{v} = (x, y, z)$$</div>
+        <div class="mod-formula-box" style="font-size:20px;padding:14px;max-height:70px;height:100%">$$\\vec{v} = (x, y, z)$$</div>
       </div>
     </div>
     <div class="mod-canvas-wrap">
-      <canvas id="s1c" style="width:100%;height:200px"></canvas>
+      <canvas id="s1c" style="width:100%;height:260px"></canvas>
       <div class="mod-canvas-controls">
         <div class="mod-slider-wrap">
           <label>Magnitude:</label>
@@ -191,7 +191,7 @@ function _s1() {
 
 function _i1() {
   const c = document.getElementById('s1c'); if (!c) return;
-  c.width = c.offsetWidth; c.height = 200;
+  c.width = c.offsetWidth; c.height = 260;
   s1Upd();
 }
 
@@ -524,7 +524,7 @@ function _s5() {
       <div class="mod-card">
         <h4>Vetor unitário</h4>
         <p>O vetor unitário <span class="mod-hl">$\\hat{v}$</span> tem módulo 1 e aponta na mesma direção de $\\vec{v}$:</p>
-        <div class="mod-formula-box" style="font-size:11px">$$\\hat{v}=\\dfrac{\\vec{v}}{|\\vec{v}|}$$</div>
+        <div class="mod-formula-box" style="font-size:17px">$$\\hat{v}=\\dfrac{\\vec{v}}{|\\vec{v}|}$$</div>
       </div>
     </div>
   </div>`;
@@ -966,7 +966,7 @@ function _s10() {
       </div>
     </div>
     <div class="mod-canvas-wrap">
-      <canvas id="s10c" style="width:100%;height:200px"></canvas>
+      <canvas id="s10c" style="width:100%;height:280px"></canvas>
     </div>
   </div>`;
 }
@@ -977,10 +977,11 @@ function accToggle(h) {
 
 function _i10() {
   const c=document.getElementById('s10c'); if(!c) return;
-  c.width=c.offsetWidth; c.height=200;
+  c.width=c.offsetWidth; c.height=280;
   const W=c.width, H=c.height, ctx=c.getContext('2d');
-  _grid(ctx,W,H,40,W*0.12,H/2);
-  const sc=40, ox1=W*0.12, oy=H/2, ox2=W*0.58;
+  const oy=H*0.65;
+  _grid(ctx,W,H,40,W*0.12,oy);
+  const sc=40, ox1=W*0.12, ox2=W*0.58;
   // Commutativity: A+B
   _arrow(ctx,ox1,oy,ox1+3*sc,oy-sc,'#7c6af7',2.5);
   _arrow(ctx,ox1+3*sc,oy-sc,ox1+4*sc,oy-3*sc,'#2dd4a0',2.5);
@@ -1095,10 +1096,10 @@ function _s13() {
 
     <div class="mod-exercise">
       <div class="mod-ex-num">Exercício 1 — Módulo</div>
-      <h4>Calcule o módulo do vetor $\vec{v}=(3,4,0)$</h4>
-      <div class="mod-ex-problem">$\vec{v}=(3,4,0)$ &nbsp;→&nbsp; $|\vec{v}|=\sqrt{3^2+4^2+0^2}=?$</div>
+      <h4>Calcule o módulo do vetor $\\vec{v}=(3,4,0)$</h4>
+      <div class="mod-ex-problem">$\\vec{v}=(3,4,0)$ &nbsp;→&nbsp; $|\\vec{v}|=\\sqrt{3^2+4^2+0^2}=?$</div>
       <div class="mod-ex-row">
-        <span style="font-size:12px;color:var(--text2)">$|\vec{v}|=$</span>
+        <span style="font-size:12px;color:var(--text2)">$|\\vec{v}|=$</span>
         <input class="mod-ex-input" id="e1-ans" type="number" step="0.01" placeholder="?">
         <button class="mod-ex-btn" onclick="checkEx('e1-ans',5,'e1-fb',0.01)">Verificar</button>
       </div>
@@ -1107,8 +1108,8 @@ function _s13() {
 
     <div class="mod-exercise">
       <div class="mod-ex-num">Exercício 2 — Soma</div>
-      <h4>Dados $\vec{A}=(2,-1,3)$ e $\vec{B}=(-1,4,2)$, calcule a componente z de $\vec{A}+\vec{B}$</h4>
-      <div class="mod-ex-problem">$\vec{A}+\vec{B}=(2+(-1),\;-1+4,\;3+2)=(?,?,?)$</div>
+      <h4>Dados $\\vec{A}=(2,-1,3)$ e $\\vec{B}=(-1,4,2)$, calcule a componente z de $\\vec{A}+\\vec{B}$</h4>
+      <div class="mod-ex-problem">$\\vec{A}+\\vec{B}=(2+(-1),\\;-1+4,\\;3+2)=(?,?,?)$</div>
       <div class="mod-ex-row">
         <span style="font-size:12px;color:var(--text2)">z =</span>
         <input class="mod-ex-input" id="e2-ans" type="number" placeholder="?">
@@ -1119,10 +1120,10 @@ function _s13() {
 
     <div class="mod-exercise">
       <div class="mod-ex-num">Exercício 3 — Produto Escalar</div>
-      <h4>Calcule $\vec{A}\cdot\vec{B}$ com $\vec{A}=(1,2,3)$ e $\vec{B}=(4,-1,2)$</h4>
-      <div class="mod-ex-problem">$A\cdot B=1\cdot4+2\cdot(-1)+3\cdot2=?$</div>
+      <h4>Calcule $\\vec{A}\\cdot\\vec{B}$ com $\\vec{A}=(1,2,3)$ e $\\vec{B}=(4,-1,2)$</h4>
+      <div class="mod-ex-problem">$A\\cdot B=1\\cdot4+2\\cdot(-1)+3\\cdot2=?$</div>
       <div class="mod-ex-row">
-        <span style="font-size:12px;color:var(--text2)">$A\cdot B=$</span>
+        <span style="font-size:12px;color:var(--text2)">$A\\cdot B=$</span>
         <input class="mod-ex-input" id="e3-ans" type="number" placeholder="?">
         <button class="mod-ex-btn" onclick="checkEx('e3-ans',8,'e3-fb',0)">Verificar</button>
       </div>
@@ -1131,10 +1132,10 @@ function _s13() {
 
     <div class="mod-exercise">
       <div class="mod-ex-num">Exercício 4 — Escalar</div>
-      <h4>Dado $\vec{v}=(2,-3,1)$, calcule o módulo de $2\,\vec{v}$</h4>
-      <div class="mod-ex-problem">$2\vec{v}=(4,-6,2)$ &nbsp;→&nbsp; $|2\vec{v}|=2\cdot|\vec{v}|=2\sqrt{14}=?$</div>
+      <h4>Dado $\\vec{v}=(2,-3,1)$, calcule o módulo de $2\\,\\vec{v}$</h4>
+      <div class="mod-ex-problem">$2\\vec{v}=(4,-6,2)$ &nbsp;→&nbsp; $|2\\vec{v}|=2\\cdot|\\vec{v}|=2\\sqrt{14}=?$</div>
       <div class="mod-ex-row">
-        <span style="font-size:12px;color:var(--text2)">$|2\vec{v}|=$</span>
+        <span style="font-size:12px;color:var(--text2)">$|2\\vec{v}|=$</span>
         <input class="mod-ex-input" id="e4-ans" type="number" step="0.01" placeholder="?">
         <button class="mod-ex-btn" onclick="checkEx('e4-ans',2*Math.sqrt(14),'e4-fb',0.05)">Verificar</button>
       </div>
@@ -1143,10 +1144,10 @@ function _s13() {
 
     <div class="mod-exercise">
       <div class="mod-ex-num">Exercício 5 — Vetor Unitário</div>
-      <h4>Para $\vec{v}=(0,3,4)$, qual a componente y do vetor unitário $\hat{v}$?</h4>
-      <div class="mod-ex-problem">$|\vec{v}|=\sqrt{0+9+16}=5$ &nbsp;→&nbsp; $\hat{v}=(0,\;3/5,\;4/5)$ &nbsp;→&nbsp; $y=?$</div>
+      <h4>Para $\\vec{v}=(0,3,4)$, qual a componente y do vetor unitário $\\hat{v}$?</h4>
+      <div class="mod-ex-problem">$|\\vec{v}|=\\sqrt{0+9+16}=5$ &nbsp;→&nbsp; $\\hat{v}=(0,\\;3/5,\\;4/5)$ &nbsp;→&nbsp; $y=?$</div>
       <div class="mod-ex-row">
-        <span style="font-size:12px;color:var(--text2)">$\hat{v}_y=$</span>
+        <span style="font-size:12px;color:var(--text2)">$\\hat{v}_y=$</span>
         <input class="mod-ex-input" id="e5-ans" type="number" step="0.01" placeholder="?">
         <button class="mod-ex-btn" onclick="checkEx('e5-ans',0.6,'e5-fb',0.01)">Verificar</button>
       </div>
