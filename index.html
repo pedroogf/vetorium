@@ -6,6 +6,9 @@
 <title>Vetorium</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -315,31 +318,31 @@
           </div>
           <div class="ops-grid">
             <div class="op-chip" style="--oc:#7c6af7" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
-              <span class="op-chip-dot"></span>A + B — Soma
+              <span class="op-chip-dot"></span>$\vec{A}+\vec{B}$ — Soma
             </div>
             <div class="op-chip" style="--oc:#7c6af7" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
-              <span class="op-chip-dot"></span>A − B — Subtração
+              <span class="op-chip-dot"></span>$\vec{A}-\vec{B}$ — Subtração
             </div>
             <div class="op-chip" style="--oc:#4a9eff" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
-              <span class="op-chip-dot" style="background:#4a9eff"></span>A · B — Produto Escalar
+              <span class="op-chip-dot" style="background:#4a9eff"></span>$\vec{A}\cdot\vec{B}$ — Produto Escalar
             </div>
             <div class="op-chip" style="--oc:#f97316" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
-              <span class="op-chip-dot" style="background:#f97316"></span>A × B — Produto Vetorial
+              <span class="op-chip-dot" style="background:#f97316"></span>$\vec{A}\times\vec{B}$ — Produto Vetorial
             </div>
             <div class="op-chip" style="--oc:#f472b6" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
-              <span class="op-chip-dot" style="background:#f472b6"></span>[A,B,W] — Produto Misto
+              <span class="op-chip-dot" style="background:#f472b6"></span>$[\vec{A},\vec{B},\vec{W}]$ — Produto Misto
             </div>
             <div class="op-chip" style="--oc:#2dd4a0" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
-              <span class="op-chip-dot" style="background:#2dd4a0"></span>proj_B A — Projeção
+              <span class="op-chip-dot" style="background:#2dd4a0"></span>$\text{proj}_{\vec{B}}\vec{A}$ — Projeção
             </div>
             <div class="op-chip" style="--oc:#fbbf24" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
-              <span class="op-chip-dot" style="background:#fbbf24"></span>|A| — Módulo e Unitário
+              <span class="op-chip-dot" style="background:#fbbf24"></span>$|\vec{A}|$ — Módulo e Unitário
             </div>
             <div class="op-chip" style="--oc:#a78bfa" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
-              <span class="op-chip-dot" style="background:#a78bfa"></span>θ — Ângulo entre vetores
+              <span class="op-chip-dot" style="background:#a78bfa"></span>$\theta$ — Ângulo entre vetores
             </div>
             <div class="op-chip" style="--oc:#ef4444" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
-              <span class="op-chip-dot" style="background:#ef4444"></span>α β γ — Ângulos Diretores
+              <span class="op-chip-dot" style="background:#ef4444"></span>$\alpha\;\beta\;\gamma$ — Ângulos Diretores
             </div>
             <div class="op-chip" style="--oc:#22c55e" onclick="navigate('calc',document.querySelector('.nav-item:nth-child(2)'))">
               <span class="op-chip-dot" style="background:#22c55e"></span>M — Ponto Médio
@@ -491,18 +494,18 @@
       <h2 style="font-size:15px;font-weight:700">Formulário de Geometria Analítica</h2>
       <p style="font-size:12px;color:var(--text2);margin-top:2px">Todas as fórmulas organizadas por tema</p>
       <div class="formula-grid">
-        <div class="formula-card"><h3>📐 Módulo<span class="formula-tag">Vetores</span></h3><p>Comprimento de um vetor no R³</p><div class="formula-box">|v⃗| = √(x² + y² + z²)</div></div>
-        <div class="formula-card"><h3>🎯 Vetor Unitário<span class="formula-tag">Vetores</span></h3><p>Vetor de módulo 1 na mesma direção</p><div class="formula-box">û = v⃗ / |v⃗|</div></div>
-        <div class="formula-card"><h3>➕ Soma / Subtração<span class="formula-tag">Vetores</span></h3><p>Operação componente a componente</p><div class="formula-box">u⃗ ± v⃗ = (x₁±x₂, y₁±y₂, z₁±z₂)</div></div>
-        <div class="formula-card"><h3>📍 Ponto Médio<span class="formula-tag">Vetores</span></h3><p>Ponto equidistante entre A e B</p><div class="formula-box">M = ((x₁+x₂)/2, (y₁+y₂)/2, (z₁+z₂)/2)</div></div>
-        <div class="formula-card"><h3>· Produto Escalar<span class="formula-tag">Produtos</span></h3><p>Resultado é um escalar</p><div class="formula-box">u⃗·v⃗ = x₁x₂ + y₁y₂ + z₁z₂<br>= |u⃗||v⃗| cosθ</div></div>
-        <div class="formula-card"><h3>× Produto Vetorial<span class="formula-tag">Produtos</span></h3><p>Resultado é um vetor perpendicular a ambos</p><div class="formula-box">u⃗×v⃗ = î(y₁z₂−z₁y₂) − ĵ(x₁z₂−z₁x₂) + k̂(x₁y₂−y₁x₂)</div></div>
-        <div class="formula-card"><h3>⬛ Produto Misto<span class="formula-tag">Produtos</span></h3><p>Volume do paralelepípedo</p><div class="formula-box">[u⃗,v⃗,w⃗] = (u⃗×v⃗)·w⃗<br>Vol = |[u⃗,v⃗,w⃗]|</div></div>
-        <div class="formula-card"><h3>↗ Projeção<span class="formula-tag">Produtos</span></h3><p>Projeção ortogonal de v⃗ sobre u⃗</p><div class="formula-box">proj_u⃗ v⃗ = (v⃗·u⃗ / |u⃗|²) · u⃗</div></div>
-        <div class="formula-card"><h3>📐 Ângulo entre Vetores<span class="formula-tag">Ângulos</span></h3><p>Ângulo formado entre dois vetores</p><div class="formula-box">cosθ = (u⃗·v⃗) / (|u⃗||v⃗|)<br>θ = arccos(...)</div></div>
-        <div class="formula-card"><h3>🧭 Ângulos Diretores<span class="formula-tag">Ângulos</span></h3><p>Ângulos com os eixos x, y, z</p><div class="formula-box">α=arccos(x/|v⃗|)  β=arccos(y/|v⃗|)<br>γ=arccos(z/|v⃗|)<br>cos²α+cos²β+cos²γ=1</div></div>
-        <div class="formula-card"><h3>⟶ Equação da Reta<span class="formula-tag">Retas</span></h3><p>Representações de uma reta no R³</p><div class="formula-box">Vetorial: P = A + t·v⃗<br>Simétrica: (x-x₀)/a = (y-y₀)/b = (z-z₀)/c</div></div>
-        <div class="formula-card"><h3>📐 Lei dos Cossenos<span class="formula-tag">Extra</span></h3><p>Relação entre lados e ângulos de um triângulo</p><div class="formula-box">a²=b²+c²-2bc·cosα<br>|v⃗−u⃗|²=|v⃗|²+|u⃗|²-2u⃗·v⃗·cosθ</div></div>
+        <div class="formula-card"><h3>📐 Módulo<span class="formula-tag">Vetores</span></h3><p>Comprimento de um vetor no R³</p><div class="formula-box">$$|\vec{v}| = \sqrt{x^2 + y^2 + z^2}$$</div></div>
+        <div class="formula-card"><h3>🎯 Vetor Unitário<span class="formula-tag">Vetores</span></h3><p>Vetor de módulo 1 na mesma direção</p><div class="formula-box">$$\hat{u} = \dfrac{\vec{v}}{|\vec{v}|}$$</div></div>
+        <div class="formula-card"><h3>➕ Soma / Subtração<span class="formula-tag">Vetores</span></h3><p>Operação componente a componente</p><div class="formula-box">$$\vec{u} \pm \vec{v} = (x_1 \pm x_2,\; y_1 \pm y_2,\; z_1 \pm z_2)$$</div></div>
+        <div class="formula-card"><h3>📍 Ponto Médio<span class="formula-tag">Vetores</span></h3><p>Ponto equidistante entre A e B</p><div class="formula-box">$$M = \left(\dfrac{x_1+x_2}{2},\; \dfrac{y_1+y_2}{2},\; \dfrac{z_1+z_2}{2}\right)$$</div></div>
+        <div class="formula-card"><h3>· Produto Escalar<span class="formula-tag">Produtos</span></h3><p>Resultado é um escalar</p><div class="formula-box">$$\vec{u}\cdot\vec{v} = x_1x_2 + y_1y_2 + z_1z_2 = |\vec{u}||\vec{v}|\cos\theta$$</div></div>
+        <div class="formula-card"><h3>× Produto Vetorial<span class="formula-tag">Produtos</span></h3><p>Resultado é um vetor perpendicular a ambos</p><div class="formula-box">$$\vec{u}\times\vec{v} = \hat{\imath}(y_1z_2-z_1y_2) - \hat{\jmath}(x_1z_2-z_1x_2) + \hat{k}(x_1y_2-y_1x_2)$$</div></div>
+        <div class="formula-card"><h3>⬛ Produto Misto<span class="formula-tag">Produtos</span></h3><p>Volume do paralelepípedo</p><div class="formula-box">$$[\vec{u},\vec{v},\vec{w}] = (\vec{u}\times\vec{v})\cdot\vec{w}$$<br>$$\text{Vol} = \left|[\vec{u},\vec{v},\vec{w}]\right|$$</div></div>
+        <div class="formula-card"><h3>↗ Projeção<span class="formula-tag">Produtos</span></h3><p>Projeção ortogonal de v⃗ sobre u⃗</p><div class="formula-box">$$\text{proj}_{\vec{u}}\vec{v} = \dfrac{\vec{v}\cdot\vec{u}}{|\vec{u}|^2}\cdot\vec{u}$$</div></div>
+        <div class="formula-card"><h3>📐 Ângulo entre Vetores<span class="formula-tag">Ângulos</span></h3><p>Ângulo formado entre dois vetores</p><div class="formula-box">$$\cos\theta = \dfrac{\vec{u}\cdot\vec{v}}{|\vec{u}||\vec{v}|} \qquad \theta = \arccos\!\left(\dfrac{\vec{u}\cdot\vec{v}}{|\vec{u}||\vec{v}|}\right)$$</div></div>
+        <div class="formula-card"><h3>🧭 Ângulos Diretores<span class="formula-tag">Ângulos</span></h3><p>Ângulos com os eixos x, y, z</p><div class="formula-box">$$\alpha=\arccos\tfrac{x}{|\vec{v}|}\quad\beta=\arccos\tfrac{y}{|\vec{v}|}\quad\gamma=\arccos\tfrac{z}{|\vec{v}|}$$<br>$$\cos^2\!\alpha+\cos^2\!\beta+\cos^2\!\gamma=1$$</div></div>
+        <div class="formula-card"><h3>⟶ Equação da Reta<span class="formula-tag">Retas</span></h3><p>Representações de uma reta no R³</p><div class="formula-box">$$\text{Vetorial: }P=A+t\vec{v}$$<br>$$\dfrac{x-x_0}{a}=\dfrac{y-y_0}{b}=\dfrac{z-z_0}{c}$$</div></div>
+        <div class="formula-card"><h3>📐 Lei dos Cossenos<span class="formula-tag">Extra</span></h3><p>Relação entre lados e ângulos de um triângulo</p><div class="formula-box">$$a^2=b^2+c^2-2bc\cos\alpha$$<br>$$|\vec{v}-\vec{u}|^2=|\vec{v}|^2+|\vec{u}|^2-2\,\vec{u}\cdot\vec{v}$$</div></div>
       </div>
     </div>
   </div>
@@ -517,56 +520,56 @@
           <div class="ex-card-top"><span></span><span class="ex-badge easy">Fácil</span></div>
           <h3>Módulo e Vetor Unitário</h3>
           <p>Calcule o módulo e o vetor unitário associado.</p>
-          <div class="ex-problem">Dados: v⃗ = (3, 4, 0)<br>Calcule |v⃗| e û</div>
+          <div class="ex-problem">Dados: $\vec{v} = (3, 4, 0)$<br>Calcule $|\vec{v}|$ e $\hat{u}$</div>
           <button class="ex-resolve">Resolver →</button>
         </div>
         <div class="ex-card" onclick="loadExercise(2)">
           <div class="ex-card-top"><span></span><span class="ex-badge easy">Fácil</span></div>
           <h3>Produto Escalar e Ângulo</h3>
           <p>Calcule o produto escalar e o ângulo entre os vetores.</p>
-          <div class="ex-problem">u⃗=(1,2,3)  v⃗=(4,-1,2)<br>Calcule u⃗·v⃗ e o ângulo θ</div>
+          <div class="ex-problem">$\vec{u}=(1,2,3)$ &nbsp; $\vec{v}=(4,-1,2)$<br>Calcule $\vec{u}\cdot\vec{v}$ e o ângulo $\theta$</div>
           <button class="ex-resolve">Resolver →</button>
         </div>
         <div class="ex-card" onclick="loadExercise(3)">
           <div class="ex-card-top"><span></span><span class="ex-badge med">Médio</span></div>
           <h3>Produto Vetorial</h3>
           <p>Calcule o produto vetorial e a área do paralelogramo.</p>
-          <div class="ex-problem">u⃗=(2,1,0)  v⃗=(0,3,1)<br>Calcule u⃗×v⃗ e a área</div>
+          <div class="ex-problem">$\vec{u}=(2,1,0)$ &nbsp; $\vec{v}=(0,3,1)$<br>Calcule $\vec{u}\times\vec{v}$ e a área</div>
           <button class="ex-resolve">Resolver →</button>
         </div>
         <div class="ex-card" onclick="loadExercise(4)">
           <div class="ex-card-top"><span></span><span class="ex-badge med">Médio</span></div>
           <h3>Coplanaridade (Prod. Misto)</h3>
           <p>Verifique se os vetores são coplanares.</p>
-          <div class="ex-problem">u⃗=(2,-1,1)  v⃗=(1,0,-1)  w⃗=(2,-1,4)<br>São coplanares?</div>
+          <div class="ex-problem">$\vec{u}=(2,-1,1)$ &nbsp; $\vec{v}=(1,0,-1)$ &nbsp; $\vec{w}=(2,-1,4)$<br>São coplanares?</div>
           <button class="ex-resolve">Resolver →</button>
         </div>
         <div class="ex-card" onclick="loadExercise(5)">
           <div class="ex-card-top"><span></span><span class="ex-badge med">Médio</span></div>
           <h3>Ângulos Diretores</h3>
           <p>Determine os ângulos diretores do vetor.</p>
-          <div class="ex-problem">v⃗=(1,-1,0)<br>Calcule α, β, γ</div>
+          <div class="ex-problem">$\vec{v}=(1,-1,0)$<br>Calcule $\alpha, \beta, \gamma$</div>
           <button class="ex-resolve">Resolver →</button>
         </div>
         <div class="ex-card" onclick="loadExercise(6)">
           <div class="ex-card-top"><span></span><span class="ex-badge hard">Difícil</span></div>
           <h3>Projeção e Decomposição</h3>
           <p>Encontre a projeção e decomposição ortogonal.</p>
-          <div class="ex-problem">v⃗=(2,3,4)  u⃗=(3,-3,0)<br>Decomponha v⃗=v₁+v₂</div>
+          <div class="ex-problem">$\vec{v}=(2,3,4)$ &nbsp; $\vec{u}=(3,-3,0)$<br>Decomponha $\vec{v}=\vec{v}_1+\vec{v}_2$</div>
           <button class="ex-resolve">Resolver →</button>
         </div>
         <div class="ex-card" onclick="loadExercise(7)">
           <div class="ex-card-top"><span></span><span class="ex-badge hard">Difícil</span></div>
           <h3>Equação da Reta</h3>
           <p>Determine as equações da reta em R³.</p>
-          <div class="ex-problem">A=(2,3,-4)  v⃗=(1,-2,3)<br>Eq. vetorial, paramétrica e simétrica</div>
+          <div class="ex-problem">$A=(2,3,-4)$ &nbsp; $\vec{v}=(1,-2,3)$<br>Eq. vetorial, paramétrica e simétrica</div>
           <button class="ex-resolve">Resolver →</button>
         </div>
         <div class="ex-card" onclick="loadExercise(8)">
           <div class="ex-card-top"><span></span><span class="ex-badge hard">Difícil</span></div>
           <h3>Ângulo entre Retas</h3>
           <p>Calcule o ângulo de interseção entre retas.</p>
-          <div class="ex-problem">r₁: v⃗=(3,1,-1)  r₂: v⃗=(-2,1,3)<br>Calcule θ entre r₁ e r₂</div>
+          <div class="ex-problem">$r_1\colon\vec{v}=(3,1,-1)$ &nbsp; $r_2\colon\vec{v}=(-2,1,3)$<br>Calcule $\theta$ entre $r_1$ e $r_2$</div>
           <button class="ex-resolve">Resolver →</button>
         </div>
       </div>
@@ -641,6 +644,7 @@
 <script src="js/calculator.js"></script>
 <script src="js/visualizer.js"></script>
 <script src="js/navigation.js"></script>
+<script src="js/katex-config.js"></script>
 <script src="js/learn-vetores.js"></script>
 <script src="js/app.js"></script>
 </body>

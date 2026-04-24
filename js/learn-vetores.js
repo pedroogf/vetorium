@@ -59,6 +59,7 @@ function _goSec(i) {
   if (!el) return;
   el.innerHTML = _secHTML(i) + _btnsHTML(i);
   el.scrollTop = 0;
+  rerenderMath(el);
   requestAnimationFrame(() => requestAnimationFrame(() => _initSec(i)));
 }
 
@@ -158,7 +159,7 @@ function _s1() {
       <div class="mod-card">
         <h4>→ Vetor</h4>
         <p>Tem magnitude <em>e</em> direção.<br>Ex: velocidade (60 km/h Norte), força (10 N ↗)</p>
-        <div class="mod-formula-box">v⃗ = (x, y, z)</div>
+        <div class="mod-formula-box">$$\\vec{v} = (x, y, z)$$</div>
       </div>
     </div>
     <div class="mod-canvas-wrap">
@@ -178,8 +179,8 @@ function _s1() {
     </div>
     <div class="mod-card">
       <h4>Notação</h4>
-      <p>Um vetor é representado por letra com seta <span class="mod-hl">v⃗</span>, ou em negrito: <strong>v</strong>.
-      No plano 2D: <span class="mod-hl">v⃗ = (x, y)</span>. No espaço 3D: <span class="mod-hl">v⃗ = (x, y, z)</span>.</p>
+      <p>Um vetor é representado por letra com seta <span class="mod-hl">$\\vec{v}$</span>, ou em negrito: <strong>v</strong>.
+      No plano 2D: <span class="mod-hl">$\\vec{v}=(x,y)$</span>. No espaço 3D: <span class="mod-hl">$\\vec{v}=(x,y,z)$</span>.</p>
     </div>
     <div class="mod-info-row">
       <span class="mod-info-icon">💡</span>
@@ -226,14 +227,14 @@ function s1Upd() {
 function _s2() {
   return `<div class="mod-section">
     <h2 class="mod-section-title">Representação Formal</h2>
-    <p class="mod-section-sub">Um vetor é definido por dois pontos: <strong>origem A</strong> e <strong>extremidade B</strong>. O vetor <span class="mod-hl">AB⃗</span> aponta de A para B.</p>
+    <p class="mod-section-sub">Um vetor é definido por dois pontos: <strong>origem A</strong> e <strong>extremidade B</strong>. O vetor <span class="mod-hl">$\\overrightarrow{AB}$</span> aponta de A para B.</p>
     <div class="mod-canvas-wrap">
       <canvas id="s2c" style="width:100%;height:220px"></canvas>
     </div>
     <div class="mod-card">
       <h4>Definição por coordenadas</h4>
       <p>Dados dois pontos A = (x₁, y₁, z₁) e B = (x₂, y₂, z₂):</p>
-      <div class="mod-formula-box">v⃗ = AB⃗ = B − A = (x₂−x₁, y₂−y₁, z₂−z₁)</div>
+      <div class="mod-formula-box">$$\\vec{v}=\\overrightarrow{AB}=B-A=(x_2-x_1,\\;y_2-y_1,\\;z_2-z_1)$$</div>
     </div>
     <div class="mod-two-col">
       <div class="mod-card">
@@ -242,13 +243,13 @@ function _s2() {
       </div>
       <div class="mod-card">
         <h4>Vetor nulo</h4>
-        <p>O vetor nulo <span class="mod-hl">0⃗ = (0, 0, 0)</span> tem módulo zero e direção indefinida. Elemento neutro da adição.</p>
+        <p>O vetor nulo <span class="mod-hl">$\\vec{0}=(0,0,0)$</span> tem módulo zero e direção indefinida. Elemento neutro da adição.</p>
       </div>
     </div>
     <div class="mod-card">
       <h4>Representação na base canônica</h4>
-      <p>Qualquer vetor 3D pode ser escrito como combinação dos vetores unitários <span class="mod-hl">î=(1,0,0)</span>, <span class="mod-hl">ĵ=(0,1,0)</span>, <span class="mod-hl">k̂=(0,0,1)</span>:</p>
-      <div class="mod-formula-box">v⃗ = x·î + y·ĵ + z·k̂</div>
+      <p>Qualquer vetor 3D pode ser escrito como combinação dos vetores unitários <span class="mod-hl">$\\hat{\\imath}=(1,0,0)$</span>, <span class="mod-hl">$\\hat{\\jmath}=(0,1,0)$</span>, <span class="mod-hl">$\\hat{k}=(0,0,1)$</span>:</p>
+      <div class="mod-formula-box">$$\\vec{v}=x\\,\\hat{\\imath}+y\\,\\hat{\\jmath}+z\\,\\hat{k}$$</div>
     </div>
   </div>`;
 }
@@ -279,7 +280,7 @@ function _i2() {
 function _s3() {
   return `<div class="mod-section">
     <h2 class="mod-section-title">Vetor no Plano Cartesiano 2D</h2>
-    <p class="mod-section-sub">Arraste os pontos <strong>A</strong> (verde) e <strong>B</strong> (laranja) no plano para ver o vetor <span class="mod-hl">AB⃗ = B − A</span> calculado em tempo real.</p>
+    <p class="mod-section-sub">Arraste os pontos <strong>A</strong> (verde) e <strong>B</strong> (laranja) no plano para ver o vetor <span class="mod-hl">$\\overrightarrow{AB}=B-A$</span> calculado em tempo real.</p>
     <div class="mod-canvas-wrap">
       <canvas id="s3c" style="width:100%;height:300px;cursor:crosshair"></canvas>
       <div class="mod-canvas-controls">
@@ -291,7 +292,7 @@ function _s3() {
       <div class="mod-card">
         <h4>Componentes do vetor</h4>
         <p>As componentes do vetor AB⃗ são as diferenças entre as coordenadas de B e A:</p>
-        <div class="mod-formula-box" style="font-size:12px">AB⃗ = (Bx−Ax, By−Ay)</div>
+        <div class="mod-formula-box" style="font-size:12px">$$\\overrightarrow{AB}=(B_x-A_x,\\;B_y-A_y)$$</div>
       </div>
       <div class="mod-card">
         <h4>Interpretação geométrica</h4>
@@ -512,18 +513,18 @@ function _s5() {
         <span id="s5-info" style="font-family:var(--mono);font-size:12px;color:var(--accent)">Arraste a ponta do vetor</span>
       </div>
     </div>
-    <div class="mod-formula-box">|v⃗| = √(x² + y²)   &nbsp;&nbsp;   (3D:  √(x² + y² + z²))</div>
+    <div class="mod-formula-box">$$|\\vec{v}|=\\sqrt{x^2+y^2}\\qquad\\text{(3D: }\\sqrt{x^2+y^2+z^2}\\text{)}$$</div>
     <div class="mod-two-col">
       <div class="mod-card">
         <h4>Propriedades do módulo</h4>
-        <p>• |v⃗| ≥ 0 &nbsp; (sempre não-negativo)<br>
-           • |v⃗| = 0 ⟺ v⃗ = 0⃗<br>
-           • |λ·v⃗| = |λ|·|v⃗| &nbsp; (escalar)</p>
+        <p>• $|\\vec{v}|\\geq 0$ &nbsp; (sempre não-negativo)<br>
+           • $|\\vec{v}|=0\\iff\\vec{v}=\\vec{0}$<br>
+           • $|\\lambda\\,\\vec{v}|=|\\lambda|\\,|\\vec{v}|$ &nbsp; (escalar)</p>
       </div>
       <div class="mod-card">
         <h4>Vetor unitário</h4>
-        <p>O vetor unitário <span class="mod-hl">v̂</span> tem módulo 1 e aponta na mesma direção de v⃗:</p>
-        <div class="mod-formula-box" style="font-size:11px">v̂ = v⃗ / |v⃗|</div>
+        <p>O vetor unitário <span class="mod-hl">$\\hat{v}$</span> tem módulo 1 e aponta na mesma direção de $\\vec{v}$:</p>
+        <div class="mod-formula-box" style="font-size:11px">$$\\hat{v}=\\dfrac{\\vec{v}}{|\\vec{v}|}$$</div>
       </div>
     </div>
   </div>`;
@@ -643,12 +644,12 @@ function _s6() {
         </div>
       </div>
     </div>
-    <div class="mod-formula-box">A⃗ + B⃗ = (Ax+Bx, Ay+By)</div>
+    <div class="mod-formula-box">$$\\vec{A}+\\vec{B}=(A_x+B_x,\\;A_y+B_y)$$</div>
     <div class="mod-card">
       <h4>Propriedades da soma</h4>
-      <p>• Comutativa: <span class="mod-hl">A⃗ + B⃗ = B⃗ + A⃗</span><br>
-         • Associativa: <span class="mod-hl">(A⃗+B⃗)+C⃗ = A⃗+(B⃗+C⃗)</span><br>
-         • Elemento neutro: <span class="mod-hl">A⃗ + 0⃗ = A⃗</span></p>
+      <p>• Comutativa: <span class="mod-hl">$\\vec{A}+\\vec{B}=\\vec{B}+\\vec{A}$</span><br>
+         • Associativa: <span class="mod-hl">$(\\vec{A}+\\vec{B})+\\vec{C}=\\vec{A}+(\\vec{B}+\\vec{C})$</span><br>
+         • Elemento neutro: <span class="mod-hl">$\\vec{A}+\\vec{0}=\\vec{A}$</span></p>
     </div>
   </div>`;
 }
@@ -723,7 +724,7 @@ function _i6() {
 function _s7() {
   return `<div class="mod-section">
     <h2 class="mod-section-title">Subtração de Vetores</h2>
-    <p class="mod-section-sub">A subtração <span class="mod-hl">A⃗ − B⃗</span> é equivalente a somar o oposto de B⃗: <span class="mod-hl">A⃗ + (−B⃗)</span>. Geometricamente é a diagonal do paralelogramo no sentido contrário.</p>
+    <p class="mod-section-sub">A subtração <span class="mod-hl">$\\vec{A}-\\vec{B}$</span> é equivalente a somar o oposto de $\\vec{B}$: <span class="mod-hl">$\\vec{A}+(-\\vec{B})$</span>. Geometricamente é a diagonal do paralelogramo no sentido contrário.</p>
     <div class="mod-canvas-wrap">
       <canvas id="s7c" style="width:100%;height:260px"></canvas>
       <div class="mod-canvas-controls">
@@ -744,7 +745,7 @@ function _s7() {
         <span id="s7-res" style="font-family:var(--mono);font-size:12px;color:var(--orange);margin-left:auto"></span>
       </div>
     </div>
-    <div class="mod-formula-box">A⃗ − B⃗ = (Ax−Bx, Ay−By)</div>
+    <div class="mod-formula-box">$$\\vec{A}-\\vec{B}=(A_x-B_x,\\;A_y-B_y)$$</div>
     <div class="mod-info-row">
       <span class="mod-info-icon">💡</span>
       <span>A − B aponta <strong>de B para A</strong> (diagonal do paralelogramo). Também é o vetor que, somado a B, resulta em A: <span class="mod-hl">B + (A−B) = A</span>.</span>
@@ -825,7 +826,7 @@ function _s8() {
         <span id="s8-res" style="font-family:var(--mono);font-size:12px;color:var(--orange);margin-left:auto"></span>
       </div>
     </div>
-    <div class="mod-formula-box">λ·v⃗ = (λx, λy, λz)    |λ·v⃗| = |λ|·|v⃗|</div>
+    <div class="mod-formula-box">$$\\lambda\\,\\vec{v}=(\\lambda x,\\;\\lambda y,\\;\\lambda z)\\qquad|\\lambda\\,\\vec{v}|=|\\lambda|\\,|\\vec{v}|$$</div>
     <div class="mod-two-col">
       <div class="mod-card"><h4>λ > 0</h4><p>Mesmo sentido, módulo multiplicado por λ.</p></div>
       <div class="mod-card"><h4>λ < 0</h4><p>Sentido oposto (vetor oposto), módulo multiplicado por |λ|.</p></div>
@@ -930,11 +931,11 @@ function _s10() {
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="mod-acc-body">
-          <div class="mod-formula-box" style="font-size:12px;text-align:left;line-height:2.2">
-            Comutativa:  A⃗ + B⃗ = B⃗ + A⃗<br>
-            Associativa: (A⃗+B⃗)+C⃗ = A⃗+(B⃗+C⃗)<br>
-            Neutro:      A⃗ + 0⃗ = A⃗<br>
-            Oposto:      A⃗ + (−A⃗) = 0⃗
+          <div class="mod-formula-box" style="font-size:12px;text-align:left;line-height:2.4">
+            $$\\vec{A}+\\vec{B}=\\vec{B}+\\vec{A}$$
+            $$(\\vec{A}+\\vec{B})+\\vec{C}=\\vec{A}+(\\vec{B}+\\vec{C})$$
+            $$\\vec{A}+\\vec{0}=\\vec{A}$$
+            $$\\vec{A}+(-\\vec{A})=\\vec{0}$$
           </div>
         </div>
       </div>
@@ -944,11 +945,11 @@ function _s10() {
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="mod-acc-body">
-          <div class="mod-formula-box" style="font-size:12px;text-align:left;line-height:2.2">
-            Distributiva (escalar): (λ+μ)·v⃗ = λ·v⃗ + μ·v⃗<br>
-            Distributiva (vetor):   λ·(A⃗+B⃗) = λ·A⃗ + λ·B⃗<br>
-            Associativa mista:      λ·(μ·v⃗) = (λμ)·v⃗<br>
-            Neutro:                 1·v⃗ = v⃗
+          <div class="mod-formula-box" style="font-size:12px;text-align:left;line-height:2.4">
+            $$(\\lambda+\\mu)\\,\\vec{v}=\\lambda\\,\\vec{v}+\\mu\\,\\vec{v}$$
+            $$\\lambda\\,(\\vec{A}+\\vec{B})=\\lambda\\,\\vec{A}+\\lambda\\,\\vec{B}$$
+            $$\\lambda\\,(\\mu\\,\\vec{v})=(\\lambda\\mu)\\,\\vec{v}$$
+            $$1\\,\\vec{v}=\\vec{v}$$
           </div>
         </div>
       </div>
@@ -958,9 +959,9 @@ function _s10() {
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="mod-acc-body">
-          <p style="font-size:12px;color:var(--text2);margin-bottom:8px;line-height:1.7">Dois vetores A⃗ e B⃗ são <strong>paralelos</strong> (colineares) se um é múltiplo escalar do outro:</p>
-          <div class="mod-formula-box">A⃗ ∥ B⃗ ⟺ A⃗ = λ·B⃗ para algum λ ∈ ℝ</div>
-          <p style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.7">Equivalentemente: <span class="mod-hl">A⃗ × B⃗ = 0⃗</span> (produto vetorial nulo).</p>
+          <p style="font-size:12px;color:var(--text2);margin-bottom:8px;line-height:1.7">Dois vetores $\\vec{A}$ e $\\vec{B}$ são <strong>paralelos</strong> (colineares) se um é múltiplo escalar do outro:</p>
+          <div class="mod-formula-box">$$\\vec{A}\\parallel\\vec{B}\\iff\\vec{A}=\\lambda\\,\\vec{B}\\text{ para algum }\\lambda\\in\\mathbb{R}$$</div>
+          <p style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.7">Equivalentemente: <span class="mod-hl">$\\vec{A}\\times\\vec{B}=\\vec{0}$</span> (produto vetorial nulo).</p>
         </div>
       </div>
     </div>
@@ -999,27 +1000,27 @@ function _i10() {
 function _s11() {
   const examples = [
     {
-      title:'Dados A=(1,2,3) e B=(4,−1,2), calcule A+B e A·B',
+      title:'Dados $A=(1,2,3)$ e $B=(4,-1,2)$, calcule $A+B$ e $A\\cdot B$',
       steps:[
-        '<strong>Soma:</strong> A+B = (1+4, 2+(−1), 3+2) = <span class="mod-hl">(5, 1, 5)</span>',
-        '<strong>Produto escalar:</strong> A·B = 1·4 + 2·(−1) + 3·2 = 4 − 2 + 6 = <span class="mod-hl">8</span>',
-        '<strong>Interpretação:</strong> como A·B > 0, o ângulo entre os vetores é agudo (< 90°).',
+        '<strong>Soma:</strong> $A+B=(1+4,\\;2+(-1),\\;3+2)=$ <span class="mod-hl">$(5,1,5)$</span>',
+        '<strong>Produto escalar:</strong> $A\\cdot B=1\\cdot4+2\\cdot(-1)+3\\cdot2=4-2+6=$ <span class="mod-hl">$8$</span>',
+        '<strong>Interpretação:</strong> como $A\\cdot B>0$, o ângulo entre os vetores é agudo ($<90°$).',
       ]
     },
     {
-      title:'Calcule o módulo e vetor unitário de v⃗ = (3, 4, 0)',
+      title:'Calcule o módulo e vetor unitário de $\\vec{v}=(3,4,0)$',
       steps:[
-        '<strong>Módulo:</strong> |v⃗| = √(3² + 4² + 0²) = √(9+16) = √25 = <span class="mod-hl">5</span>',
-        '<strong>Vetor unitário:</strong> v̂ = v⃗/|v⃗| = (3/5, 4/5, 0) = <span class="mod-hl">(0.6, 0.8, 0)</span>',
-        '<strong>Verificação:</strong> |v̂| = √(0.36+0.64+0) = √1 = 1 ✓',
+        '<strong>Módulo:</strong> $|\\vec{v}|=\\sqrt{3^2+4^2+0^2}=\\sqrt{25}=$ <span class="mod-hl">$5$</span>',
+        '<strong>Vetor unitário:</strong> $\\hat{v}=\\vec{v}/|\\vec{v}|=(3/5,\\;4/5,\\;0)=$ <span class="mod-hl">$(0.6,0.8,0)$</span>',
+        '<strong>Verificação:</strong> $|\\hat{v}|=\\sqrt{0.36+0.64}=1$ ✓',
       ]
     },
     {
-      title:'Determine se A=(2,4,−2) e B=(1,2,−1) são paralelos',
+      title:'Determine se $A=(2,4,-2)$ e $B=(1,2,-1)$ são paralelos',
       steps:[
-        'Verificamos se existe λ tal que A = λ·B.',
-        'De A = λ·B: (2,4,−2) = λ·(1,2,−1) → λ=2 em todas as componentes.',
-        '<strong>Conclusão:</strong> <span class="mod-hl">A = 2·B</span>, portanto os vetores são paralelos ∥.',
+        'Verificamos se existe $\\lambda$ tal que $A=\\lambda\\cdot B$.',
+        'De $A=\\lambda\\cdot B$: $(2,4,-2)=\\lambda\\cdot(1,2,-1)$ → $\\lambda=2$ em todas as componentes.',
+        '<strong>Conclusão:</strong> <span class="mod-hl">$A=2B$</span>, portanto os vetores são paralelos $\\parallel$.',
       ]
     },
   ];
@@ -1053,12 +1054,12 @@ function _i11() {}
 // ─── SECTION 12: Erros Comuns ─────────────────────────────────
 function _s12() {
   const cards = [
-    {err:'Somar módulos',cor:'Somar componentes',fix:'|A+B| ≠ |A|+|B| (exceto paralelos). Some coordenada a coordenada: (a+b, c+d, e+f)'},
-    {err:'Confundir vetor com ponto',cor:'Vetor ≠ Ponto',fix:'Um ponto indica posição; um vetor indica deslocamento. O vetor AB aponta de A para B.'},
-    {err:'Esquecer o módulo ao unitarizar',cor:'Dividir pelo módulo',fix:'v̂ = v/|v|, não v̂ = v/v. |v| é um número escalar (comprimento).'},
-    {err:'Inverter a subtração',cor:'A−B = B→A',fix:'A−B aponta de B até A. Se A=(3,1) e B=(1,3), então A−B=(2,−2), apontando de B para A.'},
-    {err:'λ negativo não inverte',cor:'λ<0 inverte sentido',fix:'Se λ < 0, o vetor λv⃗ aponta na direção oposta de v⃗, além de escalar o módulo por |λ|.'},
-    {err:'Produto escalar é vetor',cor:'Produto escalar = número',fix:'A·B = AxBx+AyBy+AzBz. O resultado é um número real (escalar), não um vetor.'},
+    {err:'Somar módulos',cor:'Somar componentes',fix:'$|A+B|\\neq|A|+|B|$ (exceto paralelos). Some coordenada a coordenada: $(a+b,\\;c+d,\\;e+f)$'},
+    {err:'Confundir vetor com ponto',cor:'Vetor ≠ Ponto',fix:'Um ponto indica posição; um vetor indica deslocamento. O vetor $AB$ aponta de $A$ para $B$.'},
+    {err:'Esquecer o módulo ao unitarizar',cor:'Dividir pelo módulo',fix:'$\\hat{v}=v/|v|$, não $\\hat{v}=v/v$. $|v|$ é um número escalar (comprimento).'},
+    {err:'Inverter a subtração',cor:'A−B = B→A',fix:'$A-B$ aponta de $B$ até $A$. Se $A=(3,1)$ e $B=(1,3)$, então $A-B=(2,-2)$, apontando de $B$ para $A$.'},
+    {err:'λ negativo não inverte',cor:'λ<0 inverte sentido',fix:'Se $\\lambda<0$, o vetor $\\lambda\\vec{v}$ aponta na direção oposta de $\\vec{v}$, além de escalar o módulo por $|\\lambda|$.'},
+    {err:'Produto escalar é vetor',cor:'Produto escalar = número',fix:'$A\\cdot B=A_x B_x+A_y B_y+A_z B_z$. O resultado é um número real (escalar), não um vetor.'},
   ];
 
   return `<div class="mod-section">
@@ -1094,10 +1095,10 @@ function _s13() {
 
     <div class="mod-exercise">
       <div class="mod-ex-num">Exercício 1 — Módulo</div>
-      <h4>Calcule o módulo do vetor v⃗ = (3, 4, 0)</h4>
-      <div class="mod-ex-problem">v⃗ = (3, 4, 0) &nbsp;→&nbsp; |v⃗| = √(3² + 4² + 0²) = ?</div>
+      <h4>Calcule o módulo do vetor $\vec{v}=(3,4,0)$</h4>
+      <div class="mod-ex-problem">$\vec{v}=(3,4,0)$ &nbsp;→&nbsp; $|\vec{v}|=\sqrt{3^2+4^2+0^2}=?$</div>
       <div class="mod-ex-row">
-        <span style="font-size:12px;color:var(--text2)">|v⃗| =</span>
+        <span style="font-size:12px;color:var(--text2)">$|\vec{v}|=$</span>
         <input class="mod-ex-input" id="e1-ans" type="number" step="0.01" placeholder="?">
         <button class="mod-ex-btn" onclick="checkEx('e1-ans',5,'e1-fb',0.01)">Verificar</button>
       </div>
@@ -1106,8 +1107,8 @@ function _s13() {
 
     <div class="mod-exercise">
       <div class="mod-ex-num">Exercício 2 — Soma</div>
-      <h4>Dados A⃗=(2,−1,3) e B⃗=(−1,4,2), calcule a componente z de A+B</h4>
-      <div class="mod-ex-problem">A⃗+B⃗ = (2+(−1), −1+4, 3+2) = (?,?,?)</div>
+      <h4>Dados $\vec{A}=(2,-1,3)$ e $\vec{B}=(-1,4,2)$, calcule a componente z de $\vec{A}+\vec{B}$</h4>
+      <div class="mod-ex-problem">$\vec{A}+\vec{B}=(2+(-1),\;-1+4,\;3+2)=(?,?,?)$</div>
       <div class="mod-ex-row">
         <span style="font-size:12px;color:var(--text2)">z =</span>
         <input class="mod-ex-input" id="e2-ans" type="number" placeholder="?">
@@ -1118,10 +1119,10 @@ function _s13() {
 
     <div class="mod-exercise">
       <div class="mod-ex-num">Exercício 3 — Produto Escalar</div>
-      <h4>Calcule A⃗·B⃗ com A⃗=(1,2,3) e B⃗=(4,−1,2)</h4>
-      <div class="mod-ex-problem">A·B = 1·4 + 2·(−1) + 3·2 = ?</div>
+      <h4>Calcule $\vec{A}\cdot\vec{B}$ com $\vec{A}=(1,2,3)$ e $\vec{B}=(4,-1,2)$</h4>
+      <div class="mod-ex-problem">$A\cdot B=1\cdot4+2\cdot(-1)+3\cdot2=?$</div>
       <div class="mod-ex-row">
-        <span style="font-size:12px;color:var(--text2)">A·B =</span>
+        <span style="font-size:12px;color:var(--text2)">$A\cdot B=$</span>
         <input class="mod-ex-input" id="e3-ans" type="number" placeholder="?">
         <button class="mod-ex-btn" onclick="checkEx('e3-ans',8,'e3-fb',0)">Verificar</button>
       </div>
@@ -1130,10 +1131,10 @@ function _s13() {
 
     <div class="mod-exercise">
       <div class="mod-ex-num">Exercício 4 — Escalar</div>
-      <h4>Dado v⃗=(2,−3,1), calcule o módulo de 2·v⃗</h4>
-      <div class="mod-ex-problem">2v⃗ = (4,−6,2) &nbsp;→&nbsp; |2v⃗| = 2·|v⃗| = 2·√(4+9+1) = ?</div>
+      <h4>Dado $\vec{v}=(2,-3,1)$, calcule o módulo de $2\,\vec{v}$</h4>
+      <div class="mod-ex-problem">$2\vec{v}=(4,-6,2)$ &nbsp;→&nbsp; $|2\vec{v}|=2\cdot|\vec{v}|=2\sqrt{14}=?$</div>
       <div class="mod-ex-row">
-        <span style="font-size:12px;color:var(--text2)">|2v⃗| =</span>
+        <span style="font-size:12px;color:var(--text2)">$|2\vec{v}|=$</span>
         <input class="mod-ex-input" id="e4-ans" type="number" step="0.01" placeholder="?">
         <button class="mod-ex-btn" onclick="checkEx('e4-ans',2*Math.sqrt(14),'e4-fb',0.05)">Verificar</button>
       </div>
@@ -1142,10 +1143,10 @@ function _s13() {
 
     <div class="mod-exercise">
       <div class="mod-ex-num">Exercício 5 — Vetor Unitário</div>
-      <h4>Para v⃗=(0,3,4), qual a componente y do vetor unitário v̂?</h4>
-      <div class="mod-ex-problem">|v⃗|=√(0+9+16)=5 &nbsp;→&nbsp; v̂=(0, 3/5, 4/5) &nbsp;→&nbsp; y=?</div>
+      <h4>Para $\vec{v}=(0,3,4)$, qual a componente y do vetor unitário $\hat{v}$?</h4>
+      <div class="mod-ex-problem">$|\vec{v}|=\sqrt{0+9+16}=5$ &nbsp;→&nbsp; $\hat{v}=(0,\;3/5,\;4/5)$ &nbsp;→&nbsp; $y=?$</div>
       <div class="mod-ex-row">
-        <span style="font-size:12px;color:var(--text2)">ŷ =</span>
+        <span style="font-size:12px;color:var(--text2)">$\hat{v}_y=$</span>
         <input class="mod-ex-input" id="e5-ans" type="number" step="0.01" placeholder="?">
         <button class="mod-ex-btn" onclick="checkEx('e5-ans',0.6,'e5-fb',0.01)">Verificar</button>
       </div>
@@ -1191,35 +1192,35 @@ function _s14() {
     <div class="mod-cheat">
       <div class="mod-cheat-card">
         <h5>Definição</h5>
-        <div class="mod-formula-box">v⃗ = B − A = (x₂−x₁, y₂−y₁, z₂−z₁)</div>
+        <div class="mod-formula-box">$$\\vec{v}=B-A=(x_2-x_1,\\;y_2-y_1,\\;z_2-z_1)$$</div>
       </div>
       <div class="mod-cheat-card">
         <h5>Módulo</h5>
-        <div class="mod-formula-box">|v⃗| = √(x² + y² + z²)</div>
+        <div class="mod-formula-box">$$|\\vec{v}|=\\sqrt{x^2+y^2+z^2}$$</div>
       </div>
       <div class="mod-cheat-card">
         <h5>Vetor Unitário</h5>
-        <div class="mod-formula-box">v̂ = v⃗ / |v⃗|</div>
+        <div class="mod-formula-box">$$\\hat{v}=\\dfrac{\\vec{v}}{|\\vec{v}|}$$</div>
       </div>
       <div class="mod-cheat-card">
         <h5>Soma e Subtração</h5>
-        <div class="mod-formula-box">A⃗ ± B⃗ = (Ax±Bx, Ay±By, Az±Bz)</div>
+        <div class="mod-formula-box">$$\\vec{A}\\pm\\vec{B}=(A_x\\pm B_x,\\;A_y\\pm B_y,\\;A_z\\pm B_z)$$</div>
       </div>
       <div class="mod-cheat-card">
         <h5>Produto por Escalar</h5>
-        <div class="mod-formula-box">λ·v⃗ = (λx, λy, λz)</div>
+        <div class="mod-formula-box">$$\\lambda\\,\\vec{v}=(\\lambda x,\\;\\lambda y,\\;\\lambda z)$$</div>
       </div>
       <div class="mod-cheat-card">
         <h5>Vetores Paralelos</h5>
-        <div class="mod-formula-box">A⃗ ∥ B⃗ ⟺ A⃗ = λ·B⃗</div>
+        <div class="mod-formula-box">$$\\vec{A}\\parallel\\vec{B}\\iff\\vec{A}=\\lambda\\,\\vec{B}$$</div>
       </div>
       <div class="mod-cheat-card">
         <h5>Base Canônica R³</h5>
-        <div class="mod-formula-box">v⃗ = x·î + y·ĵ + z·k̂</div>
+        <div class="mod-formula-box">$$\\vec{v}=x\\,\\hat{\\imath}+y\\,\\hat{\\jmath}+z\\,\\hat{k}$$</div>
       </div>
       <div class="mod-cheat-card">
         <h5>Produto Escalar</h5>
-        <div class="mod-formula-box">A·B = AxBx + AyBy + AzBz</div>
+        <div class="mod-formula-box">$$\\vec{A}\\cdot\\vec{B}=A_x B_x+A_y B_y+A_z B_z$$</div>
       </div>
     </div>
     <div class="mod-info-row" style="background:rgba(124,106,247,.08);border-color:rgba(124,106,247,.3)">

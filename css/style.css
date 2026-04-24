@@ -598,4 +598,18 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 .mod-cheat-card .mod-formula-box{font-size:11px;margin:0;padding:7px 10px}
 /* Confetti */
 @keyframes cffall{to{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+/* ===== KATEX OVERRIDES ===== */
+.formula-box .katex, .formula-box .katex-display,
+.mod-formula-box .katex, .mod-formula-box .katex-display {
+  font-size: 1em;
+  color: var(--accent);
+}
+.formula-box .katex-display, .mod-formula-box .katex-display { margin: 0; }
+.formula-box, .mod-formula-box { overflow: visible; }
+#c-res-label .katex, #c-res-val .katex { color: inherit; }
+.result-row-key .katex, .result-row-val .katex, .step-highlight .katex {
+  color: inherit;
+  font-size: 0.95em;
+}
 .cf-piece{position:fixed;width:8px;height:8px;border-radius:2px;animation:cffall 1.2s ease-in forwards;pointer-events:none;z-index:9999}
