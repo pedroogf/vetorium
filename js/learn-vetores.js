@@ -145,6 +145,44 @@ function _canvasW(id) {
   return el ? el.offsetWidth || 500 : 500;
 }
 
+// ─── KaTeX SVG label overlay ──────────────────────────────────
+function _svgOverlay(id) {
+  const cv = document.getElementById(id); if (!cv) return null;
+  let wrap = cv.parentNode;
+  if (!wrap.classList.contains('cs-wrap')) {
+    const w = document.createElement('div');
+    w.className = 'cs-wrap';
+    w.style.cssText = 'position:relative;display:block;width:100%';
+    wrap.insertBefore(w, cv); w.appendChild(cv); wrap = w;
+  }
+  let svg = wrap.querySelector('svg.cs-svg');
+  if (!svg) {
+    svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'cs-svg');
+    svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible';
+    wrap.appendChild(svg);
+  }
+  svg.setAttribute('viewBox', `0 0 ${cv.width} ${cv.height}`);
+  return svg;
+}
+function _clrSvg(id) { const s = _svgOverlay(id); if (s) s.innerHTML = ''; }
+function _ktx(id, latex, x, y, color, sz) {
+  const svg = _svgOverlay(id); if (!svg) return;
+  sz = sz || 12;
+  let h;
+  try { h = katex.renderToString(latex, { throwOnError: false, displayMode: false }); }
+  catch(e) { h = latex; }
+  const fo = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+  fo.setAttribute('x', x); fo.setAttribute('y', y - sz);
+  fo.setAttribute('width', '260'); fo.setAttribute('height', sz + 12);
+  fo.setAttribute('overflow', 'visible');
+  const d = document.createElement('div');
+  d.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+  d.style.cssText = `color:${color};font-size:${sz}px;white-space:nowrap;display:inline-block`;
+  d.innerHTML = h;
+  fo.appendChild(d); svg.appendChild(fo);
+}
+
 // ─── SECTION 1: O que é um Vetor? ─────────────────────────────
 function _s1() {
   return `<div class="mod-section">
@@ -217,10 +255,11 @@ function s1Upd() {
   _dot(ctx, ox, oy, '#7c6af7', 4);
   _dot(ctx, ex, ey, '#a78bfa', 5);
   // labels
-  _txt(ctx, 'v⃗', (ox+ex)/2-6, (oy+ey)/2-10, '#a78bfa', 13);
-  _txt(ctx, 'x='+Math.round(mag*Math.cos(rad)), ex+6, oy+14, '#4a9eff', 11);
-  _txt(ctx, 'y='+Math.round(mag*Math.sin(rad)), ox-50, ey-6, '#2dd4a0', 11);
-  _txt(ctx, '|v⃗|='+mag, ox+4, oy-8, '#8892b0', 10);
+  _clrSvg('s1c');
+  _ktx('s1c', '\\vec{v}', (ox+ex)/2-6, (oy+ey)/2-10, '#a78bfa', 13);
+  _ktx('s1c', 'x='+Math.round(mag*Math.cos(rad)), ex+6, oy+14, '#4a9eff', 11);
+  _ktx('s1c', 'y='+Math.round(mag*Math.sin(rad)), ox-50, ey-6, '#2dd4a0', 11);
+  _ktx('s1c', '|\\vec{v}|='+mag, ox+4, oy-8, '#8892b0', 10);
 }
 
 // ─── SECTION 2: Representação Formal ─────────────────────────
@@ -270,9 +309,10 @@ function _i2() {
   _dot(ctx, ax, ay, '#2dd4a0', 5); _dot(ctx, bx, by, '#f97316', 5);
   _dot(ctx, ax+80, ay+14, '#2dd4a0', 4); _dot(ctx, bx+80, by+14, '#f97316', 4);
   // labels
-  _txt(ctx, 'A', ax-14, ay+4, '#2dd4a0', 13);
-  _txt(ctx, 'B', bx+6, by-4, '#f97316', 13);
-  _txt(ctx, 'AB⃗', (ax+bx)/2-12, (ay+by)/2-12, '#a78bfa', 13);
+  _clrSvg('s2c');
+  _ktx('s2c', 'A', ax-14, ay+4, '#2dd4a0', 13);
+  _ktx('s2c', 'B', bx+6, by-4, '#f97316', 13);
+  _ktx('s2c', '\\overrightarrow{AB}', (ax+bx)/2-12, (ay+by)/2-12, '#a78bfa', 13);
   _txt(ctx, 'vetor equipolente', ax+90, ay+30, '#4a5578', 11);
 }
 
@@ -291,7 +331,7 @@ function _s3() {
     <div class="mod-two-col">
       <div class="mod-card">
         <h4>Componentes do vetor</h4>
-        <p>As componentes do vetor AB⃗ são as diferenças entre as coordenadas de B e A:</p>
+        <p>As componentes do vetor $\overrightarrow{AB}$ são as diferenças entre as coordenadas de B e A:</p>
         <div class="mod-formula-box" style="font-size:12px">$$\\overrightarrow{AB}=(B_x-A_x,\\;B_y-A_y)$$</div>
       </div>
       <div class="mod-card">
@@ -371,18 +411,23 @@ function s3Draw() {
   const scl = step/40;
   const vx = Math.round((bx-ax)/step*scl*10)/10;
   const vy = Math.round((ay-by)/step*scl*10)/10;
-  _txt(ctx, 'x='+vx, (ax+bx)/2, ay+(by>ay?-6:14), '#4a9eff', 11);
-  _txt(ctx, 'y='+vy, bx+5, (ay+by)/2, '#2dd4a0', 11);
+  _clrSvg('s3c');
+  _ktx('s3c', 'x='+vx, (ax+bx)/2, ay+(by>ay?-6:14), '#4a9eff', 11);
+  _ktx('s3c', 'y='+vy, bx+5, (ay+by)/2, '#2dd4a0', 11);
 
   _dot(ctx, ax, ay, '#2dd4a0', 8); _dot(ctx, bx, by, '#f97316', 8);
-  _txt(ctx, 'A', ax-16, ay-4, '#2dd4a0', 13);
-  _txt(ctx, 'B', bx+6, by-4, '#f97316', 13);
-  _txt(ctx, 'v⃗=('+vx+', '+vy+')', cx2-20, cy2-14, '#a78bfa', 12);
+  _ktx('s3c', 'A', ax-16, ay-4, '#2dd4a0', 13);
+  _ktx('s3c', 'B', bx+6, by-4, '#f97316', 13);
+  _ktx('s3c', '\\vec{v}=('+vx+','+vy+')', cx2-20, cy2-14, '#a78bfa', 12);
 
   const info = document.getElementById('s3-info');
-  if (info) info.textContent = 'A=('+Math.round(_s3A.x*10-5)+', '+Math.round(5-_s3A.y*10)+
-    ')  B=('+Math.round(_s3B.x*10-5)+', '+Math.round(5-_s3B.y*10)+
-    ')  v⃗=('+vx+', '+vy+')  |v⃗|='+Math.round(Math.hypot(bx-ax,by-ay)/step*scl*100)/100;
+  if (info) {
+    const xa=Math.round(_s3A.x*10-5), ya=Math.round(5-_s3A.y*10);
+    const xb=Math.round(_s3B.x*10-5), yb=Math.round(5-_s3B.y*10);
+    const vm=Math.round(Math.hypot(bx-ax,by-ay)/step*scl*100)/100;
+    info.innerHTML = `$A=(${xa},${ya})$ &nbsp; $B=(${xb},${yb})$ &nbsp; $\\vec{v}=(${vx},${vy})$ &nbsp; $|\\vec{v}|=${vm}$`;
+    rerenderMath(info);
+  }
 }
 
 // ─── SECTION 4: Vetor no Espaço 3D ───────────────────────────
@@ -418,7 +463,7 @@ function _s4() {
       </div>
       <div class="mod-card">
         <h4>Base canônica R³</h4>
-        <p><span class="mod-hl">î</span>= eixo X (vermelho) &nbsp; <span class="mod-green">ĵ</span>= eixo Y (verde) &nbsp; <span class="mod-blue">k̂</span>= eixo Z (azul)</p>
+        <p><span class="mod-hl">$\hat{\imath}$</span> = eixo $x$ (vermelho) &nbsp; <span class="mod-green">$\hat{\jmath}$</span> = eixo $y$ (verde) &nbsp; <span class="mod-blue">$\hat{k}$</span> = eixo $z$ (azul)</p>
       </div>
     </div>
   </div>`;
@@ -440,7 +485,7 @@ function s4Upd() {
   document.getElementById('s4zv').textContent = vz;
   const mod = Math.sqrt(vx*vx+vy*vy+vz*vz);
   const mEl = document.getElementById('s4-mod');
-  if (mEl) mEl.textContent = '|v⃗| = ' + mod.toFixed(2);
+  if (mEl) { mEl.innerHTML = `$|\\vec{v}| = ${mod.toFixed(2)}$`; rerenderMath(mEl); }
 
   const W = c.width, H = c.height, ctx = c.getContext('2d');
   ctx.clearRect(0, 0, W, H);
@@ -478,9 +523,10 @@ function s4Upd() {
   _arrow(ctx, o.sx,o.sy, xEnd.sx,xEnd.sy, '#ef4444', 2);
   _arrow(ctx, o.sx,o.sy, yEnd.sx,yEnd.sy, '#22c55e', 2);
   _arrow(ctx, o.sx,o.sy, zEnd.sx,zEnd.sy, '#3b82f6', 2);
-  _txt(ctx, 'X', xEnd.sx+4, xEnd.sy+4, '#ef4444', 12);
-  _txt(ctx, 'Y', yEnd.sx-16, yEnd.sy+4, '#22c55e', 12);
-  _txt(ctx, 'Z', zEnd.sx+4, zEnd.sy-4, '#3b82f6', 12);
+  _clrSvg('s4c');
+  _ktx('s4c', 'x', xEnd.sx+4, xEnd.sy+4, '#ef4444', 12);
+  _ktx('s4c', 'y', yEnd.sx-16, yEnd.sy+4, '#22c55e', 12);
+  _ktx('s4c', 'z', zEnd.sx+4, zEnd.sy-4, '#3b82f6', 12);
 
   // Vector projections (dashed)
   const vEnd = iso(vx, vy, vz);
@@ -499,7 +545,7 @@ function s4Upd() {
   _arrow(ctx, o.sx, o.sy, vEnd.sx, vEnd.sy, '#7c6af7', 2.8);
   _dot(ctx, o.sx, o.sy, '#7c6af7', 5);
   _dot(ctx, vEnd.sx, vEnd.sy, '#a78bfa', 6);
-  _txt(ctx, 'v⃗('+vx+','+vy+','+vz+')', vEnd.sx+6, vEnd.sy-6, '#a78bfa', 12);
+  _ktx('s4c', '\\vec{v}('+vx+','+vy+','+vz+')', vEnd.sx+6, vEnd.sy-6, '#a78bfa', 12);
 }
 
 // ─── SECTION 5: Módulo ────────────────────────────────────────
@@ -603,15 +649,19 @@ function s5Draw() {
   // Labels
   const vx = (dx/step).toFixed(1), vy = (-dy/step).toFixed(1);
   const vm = (mag/step).toFixed(2);
-  _txt(ctx, 'x='+vx, (ox+ex)/2, oy+16, '#4a9eff', 11);
-  _txt(ctx, 'y='+vy, ex+(dx>0?6:-34), (oy+ey)/2, '#2dd4a0', 11);
-  _txt(ctx, '|v⃗|='+vm, (ox+ex)/2-20, (oy+ey)/2-12, '#a78bfa', 12);
+  _clrSvg('s5c');
+  _ktx('s5c', 'x='+vx, (ox+ex)/2, oy+16, '#4a9eff', 11);
+  _ktx('s5c', 'y='+vy, ex+(dx>0?6:-34), (oy+ey)/2, '#2dd4a0', 11);
+  _ktx('s5c', '|\\vec{v}|='+vm, (ox+ex)/2-20, (oy+ey)/2-12, '#a78bfa', 12);
 
   _dot(ctx, ox, oy, '#7c6af7', 5);
   _dot(ctx, ex, ey, '#a78bfa', 8);
 
   const info = document.getElementById('s5-info');
-  if (info) info.textContent = 'v⃗=('+vx+', '+vy+')  |v⃗|=√('+vx+'²+'+vy+'²) = '+vm;
+  if (info) {
+    info.innerHTML = `$\\vec{v}=(${vx},${vy})$ &nbsp;&nbsp; $|\\vec{v}|=\\sqrt{${vx}^2+${vy}^2}=${vm}$`;
+    rerenderMath(info);
+  }
 }
 
 // ─── SECTION 6: Soma ─────────────────────────────────────────
@@ -677,6 +727,7 @@ function s6Draw() {
   ctx.clearRect(0,0,W,H);
   _grid(ctx,W,H,sc,W/2,H/2);
   const ox=W/2, oy=H/2;
+  _clrSvg('s6c');
 
   if (_s6mode==='tri') {
     // Triangle rule: A from O, B from tip of A, result from O to tip of B
@@ -685,9 +736,9 @@ function s6Draw() {
     _arrow(ctx, ox, oy, ax1, ay1, '#7c6af7', 2.5);
     _arrow(ctx, ax1, ay1, bx1, by1, '#2dd4a0', 2.5);
     _arrow(ctx, ox, oy, bx1, by1, '#f97316', 2.8);
-    _txt(ctx,'A⃗',ox+(ax1-ox)/2-16, oy+(ay1-oy)/2+4,'#7c6af7',12);
-    _txt(ctx,'B⃗',ax1+(bx1-ax1)/2+4,ay1+(by1-ay1)/2-4,'#2dd4a0',12);
-    _txt(ctx,'A⃗+B⃗='+'('+( ax+bx)+','+(ay+by)+')',(ox+bx1)/2+4,(oy+by1)/2+4,'#f97316',12);
+    _ktx('s6c','\\vec{A}',ox+(ax1-ox)/2-16,oy+(ay1-oy)/2+4,'#7c6af7',12);
+    _ktx('s6c','\\vec{B}',ax1+(bx1-ax1)/2+4,ay1+(by1-ay1)/2-4,'#2dd4a0',12);
+    _ktx('s6c','\\vec{A}+\\vec{B}=('+( ax+bx)+','+(ay+by)+')',(ox+bx1)/2+4,(oy+by1)/2+4,'#f97316',12);
     _dot(ctx,ox,oy,'#8892b0',4);
     _dot(ctx,ax1,ay1,'#7c6af7',5);
     _dot(ctx,bx1,by1,'#f97316',6);
@@ -707,9 +758,9 @@ function s6Draw() {
     _arrow(ctx, ox, oy, ax1, ay1, '#7c6af7', 2.5);
     _arrow(ctx, ox, oy, bx1, by1, '#2dd4a0', 2.5);
     _arrow(ctx, ox, oy, rx, ry, '#f97316', 2.8);
-    _txt(ctx,'A⃗',ox+(ax1-ox)/2-16, oy+(ay1-oy)/2+14,'#7c6af7',12);
-    _txt(ctx,'B⃗',ox+(bx1-ox)/2+4,oy+(by1-oy)/2-4,'#2dd4a0',12);
-    _txt(ctx,'A⃗+B⃗',(ox+rx)/2+4,(oy+ry)/2-8,'#f97316',12);
+    _ktx('s6c','\\vec{A}',ox+(ax1-ox)/2-16,oy+(ay1-oy)/2+14,'#7c6af7',12);
+    _ktx('s6c','\\vec{B}',ox+(bx1-ox)/2+4,oy+(by1-oy)/2-4,'#2dd4a0',12);
+    _ktx('s6c','\\vec{A}+\\vec{B}',(ox+rx)/2+4,(oy+ry)/2-8,'#f97316',12);
     _dot(ctx,ox,oy,'#8892b0',4); _dot(ctx,rx,ry,'#f97316',6);
   }
 }
@@ -763,7 +814,7 @@ function s7Draw() {
   document.getElementById('s7axv').textContent=ax; document.getElementById('s7ayv').textContent=ay;
   document.getElementById('s7bxv').textContent=bx; document.getElementById('s7byv').textContent=by;
   const res=document.getElementById('s7-res');
-  if(res) res.textContent='A−B=('+((ax-bx).toFixed(1))+','+(( ay-by).toFixed(1))+')';
+  if(res){res.innerHTML=`$\\vec{A}-\\vec{B}=(${(ax-bx).toFixed(1)},${(ay-by).toFixed(1)})$`;rerenderMath(res);}
 
   ctx.clearRect(0,0,W,H); _grid(ctx,W,H,sc,W/2,H/2);
   const ox=W/2, oy=H/2;
@@ -789,9 +840,10 @@ function s7Draw() {
   ctx.setLineDash([]);
   _arrow(ctx,ox,oy,rx,ry,'#f97316',2.8);
 
-  _txt(ctx,'A⃗',(ox+ax1)/2-16,(oy+ay1)/2+4,'#7c6af7',12);
-  _txt(ctx,'B⃗',(ox+bx1)/2+4,(oy+by1)/2-4,'#2dd4a0',12);
-  _txt(ctx,'A−B',(ox+rx)/2+4,(oy+ry)/2-8,'#f97316',12);
+  _clrSvg('s7c');
+  _ktx('s7c','\\vec{A}',(ox+ax1)/2-16,(oy+ay1)/2+4,'#7c6af7',12);
+  _ktx('s7c','\\vec{B}',(ox+bx1)/2+4,(oy+by1)/2-4,'#2dd4a0',12);
+  _ktx('s7c','\\vec{A}-\\vec{B}',(ox+rx)/2+4,(oy+ry)/2-8,'#f97316',12);
   _dot(ctx,ox,oy,'#8892b0',4); _dot(ctx,ax1,ay1,'#7c6af7',5); _dot(ctx,bx1,by1,'#2dd4a0',5); _dot(ctx,rx,ry,'#f97316',6);
 }
 
@@ -815,7 +867,7 @@ function _s8() {
           <span class="mod-slider-val" id="s8-lamv">1.5</span>
         </div>
         <div class="mod-slider-wrap">
-          <label>v⃗ = (</label>
+          <label>$\vec{v}$ = (</label>
           <input type="range" id="s8-vx" min="-3" max="3" value="2" step=".5" oninput="s8Draw()">
           <span class="mod-slider-val" id="s8-vxv">2</span>
           <label>,</label>
@@ -845,17 +897,18 @@ function s8Draw() {
   document.getElementById('s8-vxv').textContent=vx;
   document.getElementById('s8-vyv').textContent=vy;
   const res=document.getElementById('s8-res');
-  if(res) res.textContent='λv⃗=('+((lam*vx).toFixed(1))+','+(( lam*vy).toFixed(1))+')';
+  if(res){res.innerHTML=`$\\lambda\\vec{v}=(${(lam*vx).toFixed(1)},${(lam*vy).toFixed(1)})$`;rerenderMath(res);}
 
   ctx.clearRect(0,0,W,H); _grid(ctx,W,H,sc,W/2,H/2);
   const ox=W/2, oy=H/2;
   // original
   _arrow(ctx,ox,oy,ox+vx*sc,oy-vy*sc,'rgba(124,106,247,.45)',1.8);
-  _txt(ctx,'v⃗',ox+vx*sc/2-12,oy-vy*sc/2-6,'rgba(167,139,250,.7)',11);
   // scaled
   const col=lam<0?'#f87171':'#f97316';
   _arrow(ctx,ox,oy,ox+lam*vx*sc,oy-lam*vy*sc,col,2.8);
-  _txt(ctx,'λv⃗',ox+lam*vx*sc/2+4,oy-lam*vy*sc/2-8,col,12);
+  _clrSvg('s8c');
+  _ktx('s8c','\\vec{v}',ox+vx*sc/2-12,oy-vy*sc/2-6,'rgba(167,139,250,.7)',11);
+  _ktx('s8c','\\lambda\\vec{v}',ox+lam*vx*sc/2+4,oy-lam*vy*sc/2-8,col,12);
   _dot(ctx,ox,oy,'#7c6af7',5);
 }
 
@@ -874,11 +927,11 @@ function _s9() {
       <canvas id="s9c" style="width:100%;height:280px"></canvas>
       <div class="mod-canvas-controls">
         <div class="mod-toggle-group" style="margin:0">
-          <button class="mod-toggle-btn on" id="s9-ta" onclick="s9Toggle('a')">A⃗</button>
-          <button class="mod-toggle-btn on" id="s9-tb" onclick="s9Toggle('b')">B⃗</button>
-          <button class="mod-toggle-btn on" id="s9-ts" onclick="s9Toggle('s')">A+B</button>
-          <button class="mod-toggle-btn on" id="s9-td" onclick="s9Toggle('d')">A−B</button>
-          <button class="mod-toggle-btn on" id="s9-tn" onclick="s9Toggle('n')">−A</button>
+          <button class="mod-toggle-btn on" id="s9-ta" onclick="s9Toggle('a')">$\\vec{A}$</button>
+          <button class="mod-toggle-btn on" id="s9-tb" onclick="s9Toggle('b')">$\\vec{B}$</button>
+          <button class="mod-toggle-btn on" id="s9-ts" onclick="s9Toggle('s')">$\\vec{A}+\\vec{B}$</button>
+          <button class="mod-toggle-btn on" id="s9-td" onclick="s9Toggle('d')">$\\vec{A}-\\vec{B}$</button>
+          <button class="mod-toggle-btn on" id="s9-tn" onclick="s9Toggle('n')">$-\\vec{A}$</button>
         </div>
       </div>
     </div>
@@ -903,11 +956,12 @@ function s9Draw() {
   ctx.clearRect(0,0,W,H); _grid(ctx,W,H,sc,W/2,H/2);
   const ox=W/2, oy=H/2;
   const ax=2,ay=1, bx=1,by=2;
-  if(_s9show.a) { _arrow(ctx,ox,oy,ox+ax*sc,oy-ay*sc,'#7c6af7',2.5); _txt(ctx,'A⃗',ox+ax*sc/2-16,oy-ay*sc/2-6,'#a78bfa',12); }
-  if(_s9show.b) { _arrow(ctx,ox,oy,ox+bx*sc,oy-by*sc,'#2dd4a0',2.5); _txt(ctx,'B⃗',ox+bx*sc/2+4,oy-by*sc/2+10,'#2dd4a0',12); }
-  if(_s9show.s) { _arrow(ctx,ox,oy,ox+(ax+bx)*sc,oy-(ay+by)*sc,'#f97316',2.5); _txt(ctx,'A+B',ox+(ax+bx)*sc/2+4,oy-(ay+by)*sc/2-6,'#f97316',12); }
-  if(_s9show.d) { _arrow(ctx,ox,oy,ox+(ax-bx)*sc,oy-(ay-by)*sc,'#f472b6',2.5); _txt(ctx,'A−B',ox+(ax-bx)*sc/2+4,oy-(ay-by)*sc/2-6,'#f472b6',12); }
-  if(_s9show.n) { _arrow(ctx,ox,oy,ox-ax*sc,oy+ay*sc,'#60a5fa',2.5); _txt(ctx,'−A',ox-ax*sc/2-16,oy+ay*sc/2+12,'#60a5fa',12); }
+  _clrSvg('s9c');
+  if(_s9show.a) { _arrow(ctx,ox,oy,ox+ax*sc,oy-ay*sc,'#7c6af7',2.5); _ktx('s9c','\\vec{A}',ox+ax*sc/2-16,oy-ay*sc/2-6,'#a78bfa',12); }
+  if(_s9show.b) { _arrow(ctx,ox,oy,ox+bx*sc,oy-by*sc,'#2dd4a0',2.5); _ktx('s9c','\\vec{B}',ox+bx*sc/2+4,oy-by*sc/2+10,'#2dd4a0',12); }
+  if(_s9show.s) { _arrow(ctx,ox,oy,ox+(ax+bx)*sc,oy-(ay+by)*sc,'#f97316',2.5); _ktx('s9c','\\vec{A}+\\vec{B}',ox+(ax+bx)*sc/2+4,oy-(ay+by)*sc/2-6,'#f97316',12); }
+  if(_s9show.d) { _arrow(ctx,ox,oy,ox+(ax-bx)*sc,oy-(ay-by)*sc,'#f472b6',2.5); _ktx('s9c','\\vec{A}-\\vec{B}',ox+(ax-bx)*sc/2+4,oy-(ay-by)*sc/2-6,'#f472b6',12); }
+  if(_s9show.n) { _arrow(ctx,ox,oy,ox-ax*sc,oy+ay*sc,'#60a5fa',2.5); _ktx('s9c','-\\vec{A}',ox-ax*sc/2-16,oy+ay*sc/2+12,'#60a5fa',12); }
   _dot(ctx,ox,oy,'#8892b0',5);
 }
 
@@ -992,9 +1046,10 @@ function _i10() {
   ctx.strokeStyle='rgba(249,115,22,.5)'; ctx.lineWidth=1.5; ctx.setLineDash([4,3]);
   ctx.beginPath(); ctx.moveTo(ox2,oy); ctx.lineTo(ox2+4*sc,oy-3*sc); ctx.stroke();
   ctx.setLineDash([]);
-  _txt(ctx,'A⃗+B⃗ = B⃗+A⃗',W/2-36,H-12,'#8892b0',11);
-  _txt(ctx,'A⃗+B⃗',ox1+sc,oy-2*sc-8,'#f97316',11);
-  _txt(ctx,'B⃗+A⃗',ox2+2*sc,oy-2*sc-8,'#f97316',11);
+  _clrSvg('s10c');
+  _ktx('s10c','\\vec{A}+\\vec{B}=\\vec{B}+\\vec{A}',W/2-36,H-12,'#8892b0',11);
+  _ktx('s10c','\\vec{A}+\\vec{B}',ox1+sc,oy-2*sc-8,'#f97316',11);
+  _ktx('s10c','\\vec{B}+\\vec{A}',ox2+2*sc,oy-2*sc-8,'#f97316',11);
 }
 
 // ─── SECTION 11: Exemplos Resolvidos ──────────────────────────
@@ -1246,15 +1301,16 @@ function _i14() {
   const sc=28, ox=W/2, oy=H/2+20;
   _grid(ctx,W,H,sc,ox,oy);
   const vecs=[
-    {x:3,y:1,c:'#7c6af7',l:'A⃗'},
-    {x:1,y:3,c:'#2dd4a0',l:'B⃗'},
-    {x:4,y:4,c:'#f97316',l:'A+B'},
-    {x:2,y:-2,c:'#f472b6',l:'A−B'},
-    {x:-3,y:-1,c:'#60a5fa',l:'−A'},
+    {x:3,y:1,c:'#7c6af7',l:'\\vec{A}'},
+    {x:1,y:3,c:'#2dd4a0',l:'\\vec{B}'},
+    {x:4,y:4,c:'#f97316',l:'\\vec{A}+\\vec{B}'},
+    {x:2,y:-2,c:'#f472b6',l:'\\vec{A}-\\vec{B}'},
+    {x:-3,y:-1,c:'#60a5fa',l:'-\\vec{A}'},
   ];
+  _clrSvg('s14c');
   vecs.forEach(v=>{
     _arrow(ctx,ox,oy,ox+v.x*sc,oy-v.y*sc,v.c,2.2);
-    _txt(ctx,v.l,ox+v.x*sc+(v.x>0?4:-22),oy-v.y*sc+(v.y>0?-4:14),v.c,11);
+    _ktx('s14c',v.l,ox+v.x*sc+(v.x>0?4:-22),oy-v.y*sc+(v.y>0?-4:14),v.c,11);
   });
   _dot(ctx,ox,oy,'#8892b0',5);
   _txt(ctx,'Vetores no R² — visão geral',10,H-8,'#4a5578',11);

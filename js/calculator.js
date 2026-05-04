@@ -26,7 +26,7 @@ function getInputs(prefix='') {
 function computeResult(inp) {
   const {ax,ay,az,bx,by,bz,wx,wy,wz,op}=inp;
   const ma=nm(ax,ay,az), mb=nm(bx,by,bz);
-  let mainLabel='', mainVal='', rows=[], steps=[], vectors=[];
+  let mainLabel='', mainVal='', mainValDisplay='', rows=[], steps=[], vectors=[];
 
   // always show A and B
   vectors.push({from:[0,0,0],to:[ax,ay,az],color:0x7c6af7,label:'A'});
@@ -34,7 +34,7 @@ function computeResult(inp) {
 
   if(op==='soma'){
     const rx=ax+bx,ry=ay+by,rz=az+bz;
-    mainLabel='$\\vec{A} + \\vec{B} =$'; mainVal=`(${ff(rx)}, ${ff(ry)}, ${ff(rz)})`;
+    mainLabel='$\\vec{A} + \\vec{B} =$'; mainVal=`(${ff(rx)}, ${ff(ry)}, ${ff(rz)})`; mainValDisplay=`$(${ff(rx)},\\;${ff(ry)},\\;${ff(rz)})$`;
     rows=[
       {k:'$|\\vec{A}|$',v:`$\\sqrt{${ff(ma*ma)}} \\approx ${ff(ma)}$`,c:''},
       {k:'$|\\vec{B}|$',v:`$\\sqrt{${ff(mb*mb)}} \\approx ${ff(mb)}$`,c:''},
@@ -51,7 +51,7 @@ function computeResult(inp) {
     vectors.push({from:[bx,by,bz],to:[rx,ry,rz],color:0x7c6af7,label:'',dashed:true});
   } else if(op==='sub'){
     const rx=ax-bx,ry=ay-by,rz=az-bz;
-    mainLabel='$\\vec{A} - \\vec{B} =$'; mainVal=`(${ff(rx)}, ${ff(ry)}, ${ff(rz)})`;
+    mainLabel='$\\vec{A} - \\vec{B} =$'; mainVal=`(${ff(rx)}, ${ff(ry)}, ${ff(rz)})`; mainValDisplay=`$(${ff(rx)},\\;${ff(ry)},\\;${ff(rz)})$`;
     rows=[{k:'$|\\vec{A}-\\vec{B}|$',v:ff(nm(rx,ry,rz)),c:'blue'},{k:'$|\\vec{A}|$',v:ff(ma),c:''},{k:'$|\\vec{B}|$',v:ff(mb),c:''}];
     steps=[{n:'1',t:'Subtração componente a componente',h:`$(${ax}-${bx},\\;${ay}-${by},\\;${az}-${bz})$`},{n:'2',t:'Resultado',h:`$(${ff(rx)},\\;${ff(ry)},\\;${ff(rz)})$`}];
     vectors.push({from:[0,0,0],to:[rx,ry,rz],color:0xf97316,label:'A−B'});
@@ -67,7 +67,7 @@ function computeResult(inp) {
   } else if(op==='vetorial'){
     const rx=ay*bz-az*by, ry=-(ax*bz-az*bx), rz=ax*by-ay*bx;
     const area=nm(rx,ry,rz);
-    mainLabel='$\\vec{A}\\times\\vec{B} =$'; mainVal=`(${ff(rx)}, ${ff(ry)}, ${ff(rz)})`;
+    mainLabel='$\\vec{A}\\times\\vec{B} =$'; mainVal=`(${ff(rx)}, ${ff(ry)}, ${ff(rz)})`; mainValDisplay=`$(${ff(rx)},\\;${ff(ry)},\\;${ff(rz)})$`;
     rows=[{k:'$|\\vec{A}\\times\\vec{B}|$',v:ff(area),c:'blue'},{k:'Área paralel.',v:ff(area),c:'accent'},{k:'Área triâng.',v:ff(area/2),c:'green'}];
     steps=[{n:'1',t:'Sarrus: î componente',h:`$\\hat{\\imath}(${ay}\\cdot${bz}-${az}\\cdot${by})=\\hat{\\imath}(${ff(rx)})$`},{n:'2',t:'Sarrus: ĵ componente',h:`$-\\hat{\\jmath}(${ax}\\cdot${bz}-${az}\\cdot${bx})=\\hat{\\jmath}(${ff(ry)})$`},{n:'3',t:'Sarrus: k̂ componente',h:`$\\hat{k}(${ax}\\cdot${by}-${ay}\\cdot${bx})=\\hat{k}(${ff(rz)})$`},{n:'4',t:'Resultado',h:`$\\vec{A}\\times\\vec{B}=(${ff(rx)},\\;${ff(ry)},\\;${ff(rz)})$`}];
     vectors.push({from:[0,0,0],to:[rx,ry,rz],color:0xffcc00,label:'A×B'});
@@ -88,7 +88,7 @@ function computeResult(inp) {
       const dot=ax*bx+ay*by+az*bz, k=dot/mu2;
       const px=ff(k*bx),py=ff(k*by),pz=ff(k*bz);
       const qx=ff(ax-k*bx),qy=ff(ay-k*by),qz=ff(az-k*bz);
-      mainLabel='$\\text{proj}_{\\vec{B}}\\vec{A} =$'; mainVal=`(${px}, ${py}, ${pz})`;
+      mainLabel='$\\text{proj}_{\\vec{B}}\\vec{A} =$'; mainVal=`(${px}, ${py}, ${pz})`; mainValDisplay=`$(${px},\\;${py},\\;${pz})$`;
       rows=[{k:'$k=\\dfrac{\\vec{A}\\cdot\\vec{B}}{|\\vec{B}|^2}$',v:ff(k),c:''},{k:'$|\\text{proj}|$',v:ff(nm(px,py,pz)),c:'blue'},{k:'$\\vec{A}_\\perp=\\vec{A}-\\text{proj}$',v:`(${qx},${qy},${qz})`,c:'accent'}];
       steps=[{n:'1',t:'k = A·B/|B|²',h:`$k=\\dfrac{${ff(dot)}}{${ff(mu2)}}=${ff(k)}$`},{n:'2',t:'Projeção A∥',h:`$k\\cdot\\vec{B}=${ff(k)}\\cdot(${bx},${by},${bz})=(${px},${py},${pz})$`},{n:'3',t:'Componente A⊥',h:`$(${qx},${qy},${qz})$`}];
       vectors.push({from:[0,0,0],to:[px,py,pz],color:0x2dd4a0,label:'proj'});
@@ -114,19 +114,19 @@ function computeResult(inp) {
     const a=Math.acos(Math.max(-1,Math.min(1,ua)));
     const b=Math.acos(Math.max(-1,Math.min(1,ub)));
     const g=Math.acos(Math.max(-1,Math.min(1,uc)));
-    mainLabel='$\\alpha,\\,\\beta,\\,\\gamma =$'; mainVal=`${deg(a)}°, ${deg(b)}°, ${deg(g)}°`;
+    mainLabel='$\\alpha,\\,\\beta,\\,\\gamma =$'; mainVal=`${deg(a)}°, ${deg(b)}°, ${deg(g)}°`; mainValDisplay=`$${deg(a)}°,\\;${deg(b)}°,\\;${deg(g)}°$`;
     rows=[{k:'$\\alpha$ (eixo x)',v:deg(a)+'°',c:'accent'},{k:'$\\beta$ (eixo y)',v:deg(b)+'°',c:'green'},{k:'$\\gamma$ (eixo z)',v:deg(g)+'°',c:'blue'},{k:'$\\cos^2\\!\\alpha+\\cos^2\\!\\beta+\\cos^2\\!\\gamma$',v:ff(ua*ua+ub*ub+uc*uc),c:''}];
     steps=[{n:'1',t:'α=arccos(x/|A|)',h:`$\\alpha=\\arccos(${ff(ua)})\\approx${deg(a)}°$`},{n:'2',t:'β=arccos(y/|A|)',h:`$\\beta=\\arccos(${ff(ub)})\\approx${deg(b)}°$`},{n:'3',t:'γ=arccos(z/|A|)',h:`$\\gamma=\\arccos(${ff(uc)})\\approx${deg(g)}°$`}];
     vectors.push({type:'projaxes',v:[ax,ay,az]});
   } else if(op==='ponto_medio'){
     const mx=(ax+bx)/2,my=(ay+by)/2,mz=(az+bz)/2;
-    mainLabel='$M =$'; mainVal=`(${ff(mx)}, ${ff(my)}, ${ff(mz)})`;
+    mainLabel='$M =$'; mainVal=`(${ff(mx)}, ${ff(my)}, ${ff(mz)})`; mainValDisplay=`$(${ff(mx)},\\;${ff(my)},\\;${ff(mz)})$`;
     rows=[{k:'$|AB|$',v:ff(nm(bx-ax,by-ay,bz-az)),c:''},{k:'$|AM|$',v:ff(nm(mx-ax,my-ay,mz-az)),c:''}];
     steps=[{n:'1',t:'M=((x₁+x₂)/2,…)',h:`$M=\\left(\\dfrac{${ax}+${bx}}{2},\\;\\dfrac{${ay}+${by}}{2},\\;\\dfrac{${az}+${bz}}{2}\\right)=(${ff(mx)},${ff(my)},${ff(mz)})$`}];
     vectors.push({type:'midpoint',a:[ax,ay,az],b:[bx,by,bz],m:[mx,my,mz]});
   }
 
-  return {mainLabel,mainVal,rows,steps,vectors};
+  return {mainLabel,mainVal,mainValDisplay,rows,steps,vectors};
 }
 
 function renderResult(r) {
@@ -157,9 +157,10 @@ function calculateFull() {
   // render result in calc-page panel
   $('c-res-label').innerHTML = r.mainLabel;
   rerenderMath($('c-res-label').parentElement);
-  $('c-res-val').textContent = r.mainVal;
+  $('c-res-val').innerHTML = r.mainValDisplay || r.mainVal;
   $('c-res-val').style.color = 'var(--accent)';
   $('c-res-val').style.fontSize = r.mainVal.length>18?'13px':'22px';
+  rerenderMath($('c-res-val'));
   $('c-res-rows').innerHTML = r.rows.map(row=>
     `<div class="result-row"><span class="result-row-key">${row.k}</span><span class="result-row-val ${row.c}">${row.v}</span></div>`
   ).join('');
@@ -169,6 +170,13 @@ function calculateFull() {
   ).join('');
   rerenderMath($('c-step-list'));
   renderScene(calcVW, r.vectors);
+  const legItems = [
+    `<div class="leg-item"><div class="leg-dot" style="background:#7c6af7"></div><span>$\\vec{A} = (${ff(ax)},\\;${ff(ay)},\\;${ff(az)})$</span></div>`,
+    `<div class="leg-item"><div class="leg-dot" style="background:#2dd4a0"></div><span>$\\vec{B} = (${ff(bx)},\\;${ff(by)},\\;${ff(bz)})$</span></div>`,
+  ];
+  if(op==='misto') legItems.push(`<div class="leg-item"><div class="leg-dot" style="background:#f97316"></div><span>$\\vec{W} = (${ff(wx)},\\;${ff(wy)},\\;${ff(wz)})$</span></div>`);
+  $('calc-legend').innerHTML = legItems.join('');
+  rerenderMath($('calc-legend'));
   toast('Calculado com sucesso!');
 }
 function resetCalc() { resetFull(); }
@@ -181,6 +189,7 @@ function resetFull() {
   $('c-res-val').style.color='var(--text2)';
   $('c-res-rows').innerHTML='';
   $('c-step-list').innerHTML='<div style="font-size:12px;color:var(--text3)">Configure os vetores e clique em Calcular.</div>';
+  $('calc-legend').innerHTML='';
   if(calcVW) renderScene(calcVW,[]);
 }
 

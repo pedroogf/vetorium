@@ -1,4 +1,10 @@
 /* FREE VISUALIZER */
+function nameToLatex(name) {
+  const ascii = name.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, c => c.charCodeAt(0) - 0x2080);
+  const m = ascii.match(/^([a-zA-Z]+)(\d+)$/);
+  if (m) return `\\vec{${m[1]}}_{${m[2]}}`;
+  return `\\vec{\\text{${name}}}`;
+}
 let freeVectors=[{x:2,y:1,z:3,color:'#7c6af7',name:'v₁'},{x:-1,y:3,z:1,color:'#2dd4a0',name:'v₂'}];
 function renderFreeList(){
   $('viz-vectors-list').innerHTML=freeVectors.map((v,i)=>`
@@ -26,7 +32,8 @@ function updateFreeScene(){
   if(!freeVW)return;
   const vecs=freeVectors.map(v=>({from:[0,0,0],to:[v.x,v.y,v.z],color:parseInt(v.color.replace('#',''),16),label:v.name}));
   renderScene(freeVW,vecs);
-  $('viz-legend').innerHTML=freeVectors.map(v=>`<div class="leg-item"><div class="leg-dot" style="background:${v.color}"></div>${v.name} = (${v.x},${v.y},${v.z})</div>`).join('');
+  $('viz-legend').innerHTML=freeVectors.map(v=>`<div class="leg-item"><div class="leg-dot" style="background:${v.color}"></div><span>$${nameToLatex(v.name)} = (${v.x},\\;${v.y},\\;${v.z})$</span></div>`).join('');
+  rerenderMath($('viz-legend'));
 }
 function initFreeViewer(){freeVW=initViewer('viz-canvas-host');renderFreeList();updateFreeScene()}
 function initCalcViewer(){calcVW=initViewer('calc-canvas-host')}
