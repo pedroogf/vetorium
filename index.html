@@ -13,81 +13,50 @@
 </head>
 <body>
 <div class="app">
-<!-- SIDEBAR -->
-<aside class="sidebar">
-  <div class="sidebar-brand">
-    <div class="brand-text">
-      <div class="brand-logo">Ve<span>tor</span></div>
-      <div class="brand-sub">Geometria Analitica</div>
-    </div>
-    <div id="sidebar-toggle" onclick="toggleSidebar()" title="Recolher menu">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-    </div>
-  </div>
-  <nav class="sidebar-nav">
-    <div class="nav-item active" onclick="navigate('home',this)">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
-      <span>Início</span>
-    </div>
-    <div class="nav-item" onclick="navigate('calc',this)">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
-      <span>Calculadora</span>
-    </div>
-    <div class="nav-item" onclick="navigate('learn',this)">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-      <span>Aprender</span>
-    </div>
-    <div class="nav-item" onclick="navigate('exercises',this)">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      <span>Exercícios</span>
-    </div>
-    <div class="nav-item" onclick="navigate('viz',this)">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      <span>Visualizador 3D</span>
-    </div>
-    <div class="nav-item" onclick="navigate('formulas',this)">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
-      <span>Fórmulas</span>
-    </div>
-    <div class="nav-item" onclick="navigate('about',this)">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-      <span>Sobre o projeto</span>
-    </div>
-  </nav>
-  <div class="sidebar-footer">
-    <div class="progress-card">
-      <div class="progress-label">
-        <div class="progress-icon"><svg width="12" height="12" fill="none" stroke="var(--accent)" stroke-width="2" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
-        Continue aprendendo
-      </div>
-      <div class="progress-title">Vetores no R³</div>
-      <div class="progress-bar"><div class="progress-fill"></div></div>
-      <div class="progress-pct">60%</div>
-      <button class="continue-btn" onclick="navigate('learn',document.querySelector('.nav-item:nth-child(3)'))">Continuar</button>
-    </div>
-  </div>
-</aside>
-
 <!-- MAIN -->
 <div class="main">
   <!-- TOPBAR -->
-  <div class="topbar">
-    <div class="topbar-title">
-      <h1>Bem-vindo ao <span>Vetorium</span></h1>
-      <p>Aprenda, visualize e domine a Geometria Analítica.</p>
+  <header class="topbar">
+    <div class="topbar-brand" onclick="navigate('home',document.querySelector('.nav-item:nth-child(1)'))" title="Vetorium — Geometria Analítica">
+      <div class="brand-logo">Ve<span>tor</span></div>
     </div>
-    <div class="search-box">
-      <svg width="14" height="14" fill="none" stroke="var(--text3)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" placeholder="Buscar conteúdo..." id="search-input">
-      <span class="search-kbd">/</span>
-    </div>
-    <div class="topbar-icons">
+    <nav class="topbar-nav">
+      <div class="nav-item active" onclick="navigate('home',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        <span>Início</span>
+      </div>
+      <div class="nav-item" onclick="navigate('calc',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
+        <span>Calculadora</span>
+      </div>
+      <div class="nav-item" onclick="navigate('learn',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        <span>Aprender</span>
+      </div>
+      <div class="nav-item" onclick="navigate('exercises',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span>Exercícios</span>
+      </div>
+      <div class="nav-item" onclick="navigate('viz',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>Visualizador 3D</span>
+      </div>
+      <div class="nav-item" onclick="navigate('formulas',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
+        <span>Fórmulas</span>
+      </div>
+      <div class="nav-item" onclick="navigate('about',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span>Sobre</span>
+      </div>
+    </nav>
+    <div class="topbar-right">
       <div class="icon-btn" id="theme-btn" title="Alternar tema">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </div>
       <div class="avatar">U</div>
     </div>
-  </div>
+  </header>
 
   <!-- PAGES -->
   <div id="pages-wrap">
@@ -577,16 +546,20 @@
 
   <!-- LEARN PAGE -->
   <div id="page-learn" class="page">
-    <div class="learn-page">
-      <h2 style="font-size:15px;font-weight:700">Módulos de Aprendizado</h2>
-      <p style="font-size:12px;color:var(--text2);margin-top:2px">Aprenda no seu ritmo com conteúdo estruturado</p>
-      <div class="learn-grid">
-        <div class="learn-card" onclick="openModule()" style="cursor:pointer"><div class="learn-card-top" style="background:linear-gradient(135deg,#1e1b4b,#2d1b69)"><svg width="46" height="46" viewBox="0 0 46 46" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="23" y1="35" x2="39" y2="35" stroke="#c4b5fd" stroke-width="1.7"/><polyline points="36,32 39,35 36,38" stroke="#c4b5fd" stroke-width="1.7"/><line x1="23" y1="35" x2="23" y2="9" stroke="#c4b5fd" stroke-width="1.7"/><polyline points="20,12 23,9 26,12" stroke="#c4b5fd" stroke-width="1.7"/><line x1="23" y1="35" x2="10" y2="42" stroke="#c4b5fd" stroke-width="1.7"/><polyline points="10,38.5 10,42 13.5,42" stroke="#c4b5fd" stroke-width="1.7"/><line x1="23" y1="35" x2="37" y2="16" stroke="#a78bfa" stroke-width="2.2"/><polyline points="34,14 37,16 35,19.5" stroke="#a78bfa" stroke-width="2.2"/></svg></div><div class="learn-card-body"><h3>Vetores no R³</h3><p>Conceito, representação, operações fundamentais e base canônica.</p><div class="learn-progress"><div class="learn-progress-fill" style="width:60%;background:var(--accent)"></div></div></div></div>
-        <div class="learn-card"><div class="learn-card-top" style="background:linear-gradient(135deg,#052e16,#14532d)"><svg width="46" height="46" viewBox="0 0 46 46" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="37" x2="23" y2="13" stroke="#86efac" stroke-width="1.8"/><polyline points="20,15 23,13 24,17" stroke="#86efac" stroke-width="1.8"/><line x1="37" y1="37" x2="23" y2="13" stroke="#86efac" stroke-width="1.8"/><polyline points="22,17 23,13 26,15" stroke="#86efac" stroke-width="1.8"/><line x1="17" y1="37" x2="29" y2="37" stroke="#4ade80" stroke-width="1.3" stroke-dasharray="2.5,2"/><circle cx="23" cy="37" r="2.2" fill="#4ade80"/></svg></div><div class="learn-card-body"><h3>Produtos de Vetores</h3><p>Produto escalar, vetorial e misto com interpretações geométricas.</p><div class="learn-progress"><div class="learn-progress-fill" style="width:30%;background:var(--green)"></div></div></div></div>
-        <div class="learn-card"><div class="learn-card-top" style="background:linear-gradient(135deg,#1c1917,#292524)"><svg width="46" height="46" viewBox="0 0 46 46" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="38" x2="38" y2="12" stroke="#e2e8f0" stroke-width="1.8"/><polyline points="35,11 38,12 37,15.5" stroke="#e2e8f0" stroke-width="1.8"/><line x1="12" y1="38" x2="12" y2="10" stroke="#e2e8f0" stroke-width="1.8"/><polyline points="9,13 12,10 15,13" stroke="#e2e8f0" stroke-width="1.8"/><path d="M12,27 A15,15 0 0,1 23,16" stroke="#94a3b8" stroke-width="1.4" fill="none"/><line x1="19" y1="31" x2="31" y2="19" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="2,2"/><circle cx="12" cy="38" r="2.5" fill="#cbd5e1"/></svg></div><div class="learn-card-body"><h3>Ângulos e Projeções</h3><p>Ângulos diretores, ângulo entre vetores e projeção ortogonal.</p><div class="learn-progress"><div class="learn-progress-fill" style="width:0%;background:var(--blue)"></div></div></div></div>
-        <div class="learn-card"><div class="learn-card-top" style="background:linear-gradient(135deg,#1a1207,#451a03)"><svg width="46" height="46" viewBox="0 0 46 46" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="39" x2="41" y2="11" stroke="#fed7aa" stroke-width="1.6"/><circle cx="17" cy="31" r="2.8" fill="#fb923c"/><line x1="17" y1="31" x2="29" y2="22" stroke="#fb923c" stroke-width="2.2"/><polyline points="26,20 29,22 27,25.5" stroke="#fb923c" stroke-width="2.2"/><circle cx="5" cy="39" r="1.5" fill="#fdba74" opacity="0.45"/><circle cx="41" cy="11" r="1.5" fill="#fdba74" opacity="0.45"/></svg></div><div class="learn-card-body"><h3>Retas no R³</h3><p>Equações vetorial, paramétrica, simétrica e posições relativas.</p><div class="learn-progress"><div class="learn-progress-fill" style="width:0%;background:var(--orange)"></div></div></div></div>
-        <div class="learn-card"><div class="learn-card-top" style="background:linear-gradient(135deg,#1f1033,#3b0764)"><svg width="46" height="46" viewBox="0 0 46 46" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="7,38 23,30 39,38 23,46" fill="rgba(240,171,252,0.07)" stroke="#f0abfc" stroke-width="1.7"/><polygon points="23,22 39,30 39,38 23,30" fill="rgba(192,132,252,0.05)" stroke="#c084fc" stroke-width="1.2"/><line x1="23" y1="30" x2="23" y2="11" stroke="#f0abfc" stroke-width="1.7"/><polyline points="20,14 23,11 26,14" stroke="#f0abfc" stroke-width="1.7"/></svg></div><div class="learn-card-body"><h3>Planos no R³</h3><p>Equação do plano, posições relativas e interseções.</p><div class="learn-progress"><div class="learn-progress-fill" style="width:0%;background:var(--pink)"></div></div></div></div>
-        <div class="learn-card"><div class="learn-card-top" style="background:linear-gradient(135deg,#0c1a2e,#1e3a5f)"><svg width="46" height="46" viewBox="0 0 46 46" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="31" r="3" fill="#93c5fd"/><circle cx="35" cy="17" r="3" fill="#93c5fd"/><line x1="11" y1="31" x2="35" y2="17" stroke="#93c5fd" stroke-width="1.7" stroke-dasharray="3,2.5"/><line x1="11" y1="31" x2="11" y2="17" stroke="#60a5fa" stroke-width="1.2"/><line x1="8" y1="17" x2="14" y2="17" stroke="#60a5fa" stroke-width="1.2"/><line x1="35" y1="17" x2="35" y2="31" stroke="#60a5fa" stroke-width="1.2"/><line x1="32" y1="31" x2="38" y2="31" stroke="#60a5fa" stroke-width="1.2"/></svg></div><div class="learn-card-body"><h3>Distâncias</h3><p>Distância ponto-reta, ponto-plano e entre retas reversas.</p><div class="learn-progress"><div class="learn-progress-fill" style="width:0%;background:var(--blue)"></div></div></div></div>
+    <div class="learn-wrap">
+      <div class="learn-header">
+        <div class="learn-header-info">
+          <span class="learn-badge">Aprender</span>
+          <span class="learn-header-title" id="learn-sub-title">Geometria Analítica</span>
+        </div>
+        <div class="learn-header-prog">
+          <div class="learn-prog-bar"><div id="learn-prog-fill" class="learn-prog-fill"></div></div>
+          <span id="learn-prog-txt" class="learn-prog-txt">0 / 100</span>
+        </div>
+      </div>
+      <div class="learn-body">
+        <div class="learn-sidenav" id="learn-nav"></div>
+        <div class="learn-content-area" id="learn-content"></div>
       </div>
     </div>
   </div>
@@ -645,6 +618,7 @@
 <script src="js/navigation.js"></script>
 <script src="js/katex-config.js"></script>
 <script src="js/learn-vetores.js"></script>
+<script src="js/learn-ga.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

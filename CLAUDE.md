@@ -31,7 +31,7 @@ Scripts are loaded at the bottom of `index.html` in this sequence:
 | `js/viewer.js` | Three.js engine — defines `initViewer()`, `renderScene()`, global vars `calcVW`/`freeVW` |
 | `js/calculator.js` | Math engine + calculator page UI; defines the `$` shorthand (`getElementById`) |
 | `js/visualizer.js` | Free-mode visualizer page; defines `initFreeViewer()` |
-| `js/navigation.js` | `navigate()` and `toggleSidebar()` |
+| `js/navigation.js` | `navigate()` |
 | `js/learn-vetores.js` | Interactive vector learning module (14 sections, mini Three.js canvases) |
 | `js/app.js` | DOMContentLoaded init and global keyboard shortcut (`/` focuses search) |
 

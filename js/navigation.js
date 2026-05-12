@@ -7,16 +7,6 @@ function navigate(page, el) {
   // init viewers on first visit
   if(page==='viz' && !freeVW) initFreeViewer();
   if(page==='calc' && !calcVW) { setTimeout(()=>{ calcVW=initViewer('calc-canvas-host'); },50); }
+  if(page==='learn' && typeof initLearnGA === 'function') initLearnGA();
 }
 
-function toggleSidebar() {
-  const sb = document.querySelector('.sidebar');
-  sb.classList.toggle('collapsed');
-  const btn = document.getElementById('sidebar-toggle');
-  btn.title = sb.classList.contains('collapsed') ? 'Expandir menu' : 'Recolher menu';
-  // resize 3D viewers after transition
-  setTimeout(()=>{
-    if(calcVW) calcVW.onResize?.();
-    if(freeVW) freeVW.onResize?.();
-  }, 260);
-}
