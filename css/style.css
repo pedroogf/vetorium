@@ -641,3 +641,77 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 .learn-btn-prev:hover:not(:disabled){border-color:var(--border2);color:var(--text)}
 .learn-btn-next{background:var(--accent);color:#fff;margin-left:auto}
 .learn-btn-next:hover:not(:disabled){background:#8e7df9;transform:translateY(-1px)}
+
+/* ===== APRENDER — Conteúdo didático (Tópico 1+) ===== */
+.learn-block-body p{margin-bottom:10px}
+.learn-block-body p:last-child{margin-bottom:0}
+.ga-h4{font-size:13px;font-weight:700;color:var(--text);margin:12px 0 6px;letter-spacing:-.01em}
+.ga-list{margin:6px 0 6px 18px;color:var(--text2);font-size:13.5px;line-height:1.75}
+.ga-list li{margin-bottom:4px}
+.ga-list strong{color:var(--text)}
+.ga-formula{background:var(--bg4);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin:10px 0;text-align:center}
+.ga-formula .katex{color:var(--text);font-size:1.08em}
+
+/* ----- Interactive viz wrappers ----- */
+.ga-viz3d, .ga-viz2d{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;align-items:stretch}
+@media (max-width:780px){.ga-viz3d,.ga-viz2d{grid-template-columns:1fr}}
+.ga-3d-host{background:#0a0d14;border:1px solid var(--border);border-radius:var(--radius-sm);height:380px;min-height:300px;width:100%;overflow:hidden;position:relative;cursor:grab}
+.ga-3d-host:active{cursor:grabbing}
+.ga-3d-host canvas{display:block;width:100%;height:100%}
+.ga-3d-side, .ga-2d-side{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;display:flex;flex-direction:column;gap:10px;font-size:13px}
+.ga-3d-readout, .ga-2d-readout{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--accent);background:var(--accent-soft);border:1px solid rgba(124,106,247,.3);border-radius:var(--radius-sm);padding:8px 10px;text-align:center}
+.ga-slider-row{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px}
+.ga-slider-row label{width:18px;font-weight:700;color:var(--text2)}
+.ga-slider-row label.lx{color:#ef4444}
+.ga-slider-row label.ly{color:#22c55e}
+.ga-slider-row label.lz{color:#3b82f6}
+.ga-slider-row input[type=range]{flex:1;accent-color:var(--accent)}
+.ga-slider-row span{width:36px;text-align:right;color:var(--text);font-weight:600}
+.ga-input-row{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px}
+.ga-input-row label{width:18px;font-weight:700;color:var(--text2)}
+.ga-input-row input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);padding:6px 8px;font-family:var(--mono);font-size:12px}
+.ga-input-row input:focus{outline:none;border-color:var(--accent)}
+.ga-btn{background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);padding:8px 12px;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;transition:background .15s}
+.ga-btn:hover{background:#8e7df9}
+.ga-btn-toggle{background:var(--bg4);color:var(--text);border:1px solid var(--border)}
+.ga-btn-toggle:hover{background:var(--bg2);border-color:var(--accent)}
+.ga-hint{font-size:11.5px;color:var(--text3);line-height:1.55;padding-top:6px;border-top:1px dashed var(--border)}
+
+/* ----- 2D canvas (1.3) ----- */
+.ga-2d-canvas{display:block;width:100%;height:380px;background:#0a0d14;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:crosshair}
+.ga-quad-legend{display:grid;grid-template-columns:auto 1fr;gap:4px 8px;font-size:11px;font-family:var(--mono);color:var(--text2);padding-top:6px;border-top:1px dashed var(--border)}
+.ga-quad{display:inline-block;width:22px;text-align:center;font-weight:700;border-radius:4px;padding:1px 0}
+.ga-quad.q1{background:rgba(124,106,247,.2);color:#a892ff}
+.ga-quad.q2{background:rgba(45,212,160,.2);color:#5eebbe}
+.ga-quad.q3{background:rgba(74,158,255,.2);color:#7ab8ff}
+.ga-quad.q4{background:rgba(244,114,182,.2);color:#f896c8}
+
+/* ----- Timeline (1.2) ----- */
+.ga-timeline{display:flex;gap:14px;overflow-x:auto;padding:6px 2px 14px;scroll-snap-type:x mandatory}
+.ga-timeline::-webkit-scrollbar{height:6px}
+.ga-timeline::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.ga-tl-card{flex:0 0 260px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;scroll-snap-align:start;position:relative}
+.ga-tl-card::before{content:"";position:absolute;top:-2px;left:14px;right:14px;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:2px}
+.ga-tl-year{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.05em;margin-bottom:4px}
+.ga-tl-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
+.ga-tl-blurb{font-size:12.5px;color:var(--text2);line-height:1.55}
+.ga-tl-blurb .katex{color:var(--text)}
+
+/* ----- Prereq cards (1.6) ----- */
+.ga-prereq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.ga-prereq-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+.ga-prereq-card[open]{border-color:var(--accent)}
+.ga-prereq-card summary{cursor:pointer;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;color:var(--text);list-style:none;user-select:none}
+.ga-prereq-card summary::-webkit-details-marker{display:none}
+.ga-prereq-card summary::after{content:"+";font-size:18px;color:var(--accent);font-weight:700;transition:transform .2s}
+.ga-prereq-card[open] summary::after{content:"−"}
+.ga-prereq-tag{font-size:10px;color:var(--text3);font-family:var(--mono);background:var(--bg4);padding:2px 6px;border-radius:10px;margin-left:auto}
+.ga-prereq-body{padding:0 14px 14px;font-size:12.5px;color:var(--text2);line-height:1.65;border-top:1px dashed var(--border);padding-top:10px}
+.ga-prereq-body .katex{color:var(--text)}
+
+/* ----- Hand diagram (1.5) ----- */
+.ga-hand-diagram{display:flex;flex-direction:column;gap:5px;padding-top:6px;border-top:1px dashed var(--border)}
+.ga-hand-finger{font-family:var(--mono);font-size:11px;padding:5px 8px;border-radius:4px;font-weight:600}
+.ga-hand-x{background:rgba(239,68,68,.13);color:#f87171}
+.ga-hand-y{background:rgba(34,197,94,.13);color:#4ade80}
+.ga-hand-z{background:rgba(59,130,246,.13);color:#60a5fa}
