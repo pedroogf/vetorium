@@ -544,20 +544,241 @@ $\vec{w}$ tem módulo $5$, direção horizontal e sentido para a esquerda.</p>
     title: 'Vetores em Coordenadas',
     subs: [
       { id: '4.1', title: 'Vetores no Plano (R²)',
+        explanation: String.raw`
+<p>Fixada a base canônica $\{\vec{i}, \vec{j}\}$ (vetores unitários nos eixos $x$ e $y$), todo vetor $\vec{v}$ do plano pode ser escrito unicamente como:</p>
+<div class="ga-formula">$$\vec{v} = x\vec{i} + y\vec{j}$$</div>
+<p>Ou, equivalentemente, por suas <strong>coordenadas</strong>:</p>
+<div class="ga-formula">$$\vec{v} = (x, y)$$</div>
+<p>Onde $x$ é a <strong>componente horizontal</strong> e $y$ a <strong>componente vertical</strong>.</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz2d">
+  <canvas id="ga41-cv" class="ga-2d-canvas"></canvas>
+  <div class="ga-2d-side">
+    <div class="ga-2d-readout" id="ga41-read">v = (3, 2) = 3i + 2j</div>
+    <div class="ga-slider-row"><label class="lx">x</label><input type="range" id="ga41-x" min="-5" max="5" step="0.5" value="3"><span id="ga41-xv">3</span></div>
+    <div class="ga-slider-row"><label class="ly">y</label><input type="range" id="ga41-y" min="-5" max="5" step="0.5" value="2"><span id="ga41-yv">2</span></div>
+    <div class="ga-hint">A "caminhada": ande $x$ unidades em $\vec{i}$ (vermelho), depois $y$ unidades em $\vec{j}$ (verde). A diagonal é $\vec{v}$.</div>
+  </div>
+</div>`,
+        init: 'gaInit41',
         viz: String.raw`Plano cartesiano onde o usuário desenha um vetor a partir da origem; as componentes $x$ e $y$ são automaticamente projetadas nos eixos com linhas tracejadas, e o vetor é decomposto em $x\vec{i} + y\vec{j}$ visualmente (duas setas pequenas indo dos eixos formando a "caminhada").` },
+
       { id: '4.2', title: 'Vetores no Espaço (R³)',
+        explanation: String.raw`
+<p>Analogamente, no espaço usamos a base canônica $\{\vec{i}, \vec{j}, \vec{k}\}$. Todo vetor pode ser escrito como:</p>
+<div class="ga-formula">$$\vec{v} = x\vec{i} + y\vec{j} + z\vec{k} = (x, y, z)$$</div>`,
+        example: String.raw`
+<p>O vetor $\vec{v} = (2, -3, 5)$ tem componente $2$ em $x$, componente $-3$ em $y$ e componente $5$ em $z$.</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz3d">
+  <div id="ga42-host" class="ga-3d-host"></div>
+  <div class="ga-3d-side">
+    <div class="ga-3d-readout" id="ga42-read">v = (2, -3, 5) = 2i - 3j + 5k</div>
+    <div class="ga-slider-row"><label class="lx">x</label><input type="range" id="ga42-x" min="-5" max="5" step="0.5" value="2"><span id="ga42-xv">2</span></div>
+    <div class="ga-slider-row"><label class="ly">y</label><input type="range" id="ga42-y" min="-5" max="5" step="0.5" value="-3"><span id="ga42-yv">-3</span></div>
+    <div class="ga-slider-row"><label class="lz">z</label><input type="range" id="ga42-z" min="-5" max="5" step="0.5" value="5"><span id="ga42-zv">5</span></div>
+    <div class="ga-hint">As linhas tracejadas projetam $\vec{v}$ sobre cada eixo, revelando suas componentes. Arraste para girar a cena.</div>
+  </div>
+</div>`,
+        init: 'gaInit42',
         viz: String.raw`Cena 3D com o vetor desenhado a partir da origem. Três linhas tracejadas, uma em cada cor de eixo, mostram a decomposição. Sliders permitem mudar cada componente independentemente. OrbitControls para girar a cena.` },
+
       { id: '4.3', title: 'Igualdade de Vetores',
+        explanation: String.raw`
+<p>Dois vetores são <strong>iguais</strong> se, e somente se, suas componentes correspondentes são iguais:</p>
+<div class="ga-formula">$$(x_1, y_1, z_1) = (x_2, y_2, z_2) \iff x_1 = x_2,\ y_1 = y_2,\ z_1 = z_2$$</div>
+<p>Isto formaliza a noção de equipolência: vetores são iguais quando representam a mesma "lista" de coordenadas.</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz3d">
+  <div id="ga43-host" class="ga-3d-host"></div>
+  <div class="ga-3d-side">
+    <div class="ga-eq-pair">
+      <div class="ga-eq-card">
+        <div class="ga-eq-tag" style="color:#ef4444">u</div>
+        <div class="ga-input-row"><label>x</label><input type="number" id="ga43-ux" value="2" step="0.5"></div>
+        <div class="ga-input-row"><label>y</label><input type="number" id="ga43-uy" value="3" step="0.5"></div>
+        <div class="ga-input-row"><label>z</label><input type="number" id="ga43-uz" value="1" step="0.5"></div>
+      </div>
+      <div class="ga-eq-card">
+        <div class="ga-eq-tag" style="color:#22c55e">v</div>
+        <div class="ga-input-row"><label>x</label><input type="number" id="ga43-vx" value="2" step="0.5"></div>
+        <div class="ga-input-row"><label>y</label><input type="number" id="ga43-vy" value="3" step="0.5"></div>
+        <div class="ga-input-row"><label>z</label><input type="number" id="ga43-vz" value="1" step="0.5"></div>
+      </div>
+    </div>
+    <div class="ga-status on" id="ga43-status">IGUAIS — as setas se sobrepõem</div>
+    <div class="ga-hint">Dois vetores em $\mathbb{R}^3$ são iguais quando <strong>todas</strong> as componentes correspondentes coincidem.</div>
+  </div>
+</div>`,
+        init: 'gaInit43',
         viz: String.raw`Dois campos de entrada lado a lado. O usuário insere as componentes de $\vec{u}$ e $\vec{v}$; se forem iguais, ambas as setas se sobrepõem perfeitamente e um selo "IGUAIS" aparece. Caso contrário, ficam separadas.` },
+
       { id: '4.4', title: 'Operações Vetoriais em Coordenadas',
+        explanation: String.raw`
+<p>As operações com vetores tornam-se simples cálculos componente a componente:</p>
+<div class="ga-formula">$$\vec{u} + \vec{v} = (x_1 + x_2,\ y_1 + y_2,\ z_1 + z_2)$$</div>
+<div class="ga-formula">$$\vec{u} - \vec{v} = (x_1 - x_2,\ y_1 - y_2,\ z_1 - z_2)$$</div>
+<div class="ga-formula">$$k\vec{v} = (kx,\ ky,\ kz)$$</div>`,
+        example: String.raw`
+<p>Sejam $\vec{u} = (2, -1, 3)$ e $\vec{v} = (4, 0, -2)$.</p>
+<ul class="ga-list">
+  <li>$\vec{u} + \vec{v} = (6, -1, 1)$</li>
+  <li>$\vec{u} - \vec{v} = (-2, -1, 5)$</li>
+  <li>$3\vec{u} = (6, -3, 9)$</li>
+</ul>`,
+        vizHTML: String.raw`
+<div class="ga-viz3d">
+  <div id="ga44-host" class="ga-3d-host"></div>
+  <div class="ga-3d-side">
+    <div class="ga-3d-readout" id="ga44-read">u + v = (6, -1, 1)</div>
+    <div class="ga-prop-tabs">
+      <button class="ga-prop-tab active" data-i="0" onclick="gaSelOp44(0)">u + v</button>
+      <button class="ga-prop-tab" data-i="1" onclick="gaSelOp44(1)">u - v</button>
+      <button class="ga-prop-tab" data-i="2" onclick="gaSelOp44(2)">k · u</button>
+    </div>
+    <div class="ga-slider-row" id="ga44-krow" style="display:none"><label>k</label><input type="range" id="ga44-k" min="-3" max="3" step="0.1" value="2"><span id="ga44-kv">2.0</span></div>
+    <div class="ga-eq-pair">
+      <div class="ga-eq-card">
+        <div class="ga-eq-tag" style="color:#ef4444">u</div>
+        <div class="ga-input-row"><label>x</label><input type="number" id="ga44-ux" value="2" step="0.5"></div>
+        <div class="ga-input-row"><label>y</label><input type="number" id="ga44-uy" value="-1" step="0.5"></div>
+        <div class="ga-input-row"><label>z</label><input type="number" id="ga44-uz" value="3" step="0.5"></div>
+      </div>
+      <div class="ga-eq-card" id="ga44-vcard">
+        <div class="ga-eq-tag" style="color:#22c55e">v</div>
+        <div class="ga-input-row"><label>x</label><input type="number" id="ga44-vx" value="4" step="0.5"></div>
+        <div class="ga-input-row"><label>y</label><input type="number" id="ga44-vy" value="0" step="0.5"></div>
+        <div class="ga-input-row"><label>z</label><input type="number" id="ga44-vz" value="-2" step="0.5"></div>
+      </div>
+    </div>
+    <div class="ga-hint">Operações em coordenadas: <strong>componente a componente</strong>. A seta laranja é o resultado; $\vec{u}$ e $\vec{v}$ ficam mais transparentes.</div>
+  </div>
+</div>`,
+        init: 'gaInit44',
         viz: String.raw`Calculadora 3D: o usuário define dois vetores e seleciona a operação. A cena 3D exibe os vetores originais (mais transparentes) e o resultado (em destaque), com animação mostrando, por exemplo, a translação na soma.` },
+
       { id: '4.5', title: 'Vetor Definido por Dois Pontos',
+        explanation: String.raw`
+<p>Dados dois pontos $A = (x_A, y_A, z_A)$ e $B = (x_B, y_B, z_B)$, o vetor $\vec{AB}$ é obtido subtraindo as coordenadas de $A$ das de $B$:</p>
+<div class="ga-formula">$$\vec{AB} = B - A = (x_B - x_A,\ y_B - y_A,\ z_B - z_A)$$</div>
+<p><strong>Regra mnemônica:</strong> "extremidade menos origem".</p>`,
+        example: String.raw`
+<p>Se $A = (1, 2, 3)$ e $B = (4, 0, 7)$, então:</p>
+<div class="ga-formula">$$\vec{AB} = (4 - 1,\ 0 - 2,\ 7 - 3) = (3, -2, 4)$$</div>`,
+        vizHTML: String.raw`
+<div class="ga-viz3d">
+  <div id="ga45-host" class="ga-3d-host"></div>
+  <div class="ga-3d-side">
+    <div class="ga-3d-readout" id="ga45-read">AB = B - A = (3, -2, 4)</div>
+    <div class="ga-eq-pair">
+      <div class="ga-eq-card">
+        <div class="ga-eq-tag" style="color:#f472b6">A</div>
+        <div class="ga-input-row"><label>x</label><input type="number" id="ga45-ax" value="1" step="0.5"></div>
+        <div class="ga-input-row"><label>y</label><input type="number" id="ga45-ay" value="2" step="0.5"></div>
+        <div class="ga-input-row"><label>z</label><input type="number" id="ga45-az" value="3" step="0.5"></div>
+      </div>
+      <div class="ga-eq-card">
+        <div class="ga-eq-tag" style="color:#f97316">B</div>
+        <div class="ga-input-row"><label>x</label><input type="number" id="ga45-bx" value="4" step="0.5"></div>
+        <div class="ga-input-row"><label>y</label><input type="number" id="ga45-by" value="0" step="0.5"></div>
+        <div class="ga-input-row"><label>z</label><input type="number" id="ga45-bz" value="7" step="0.5"></div>
+      </div>
+    </div>
+    <div class="ga-calc-steps" id="ga45-steps"></div>
+    <div class="ga-hint">"Extremidade menos origem": $\vec{AB} = B - A$.</div>
+  </div>
+</div>`,
+        init: 'gaInit45',
         viz: String.raw`O usuário clica em dois pontos na cena 3D. O vetor $\vec{AB}$ é traçado entre eles, e o cálculo das componentes aparece em uma caixa lateral, animado.` },
+
       { id: '4.6', title: 'Ponto Médio de um Segmento',
+        explanation: String.raw`
+<p>O <strong>ponto médio</strong> $M$ do segmento $\overline{AB}$ é a média aritmética das coordenadas de $A$ e $B$:</p>
+<div class="ga-formula">$$M = \left(\frac{x_A + x_B}{2},\ \frac{y_A + y_B}{2},\ \frac{z_A + z_B}{2}\right)$$</div>`,
+        example: String.raw`
+<p>Se $A = (2, 4, 6)$ e $B = (8, 0, 2)$, então $M = (5, 2, 4)$.</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz3d">
+  <div id="ga46-host" class="ga-3d-host"></div>
+  <div class="ga-3d-side">
+    <div class="ga-3d-readout" id="ga46-read">M = (5, 2, 4)</div>
+    <div class="ga-eq-pair">
+      <div class="ga-eq-card">
+        <div class="ga-eq-tag" style="color:#f472b6">A</div>
+        <div class="ga-input-row"><label>x</label><input type="number" id="ga46-ax" value="2" step="0.5"></div>
+        <div class="ga-input-row"><label>y</label><input type="number" id="ga46-ay" value="4" step="0.5"></div>
+        <div class="ga-input-row"><label>z</label><input type="number" id="ga46-az" value="6" step="0.5"></div>
+      </div>
+      <div class="ga-eq-card">
+        <div class="ga-eq-tag" style="color:#f97316">B</div>
+        <div class="ga-input-row"><label>x</label><input type="number" id="ga46-bx" value="8" step="0.5"></div>
+        <div class="ga-input-row"><label>y</label><input type="number" id="ga46-by" value="0" step="0.5"></div>
+        <div class="ga-input-row"><label>z</label><input type="number" id="ga46-bz" value="2" step="0.5"></div>
+      </div>
+    </div>
+    <div class="ga-calc-steps" id="ga46-steps"></div>
+    <div class="ga-hint">$M$ é a média das coordenadas de $A$ e $B$. Os segmentos $\overline{AM}$ e $\overline{MB}$ têm o <strong>mesmo comprimento</strong>.</div>
+  </div>
+</div>`,
+        init: 'gaInit46',
         viz: String.raw`Dois pontos $A$ e $B$ ajustáveis em 3D. O ponto $M$ é destacado em outra cor, e ao mover qualquer extremo, $M$ se reposiciona suavemente. Linhas conectam $A$ a $M$ e $M$ a $B$ com tamanhos iguais.` },
+
       { id: '4.7', title: 'Cálculo do Módulo (Norma)',
+        explanation: String.raw`
+<p>O <strong>módulo</strong> (ou <strong>norma</strong>) de um vetor $\vec{v} = (x, y, z)$ é dado pela generalização do Teorema de Pitágoras:</p>
+<div class="ga-formula">$$|\vec{v}| = \sqrt{x^2 + y^2 + z^2}$$</div>
+<p>No plano: $|\vec{v}| = \sqrt{x^2 + y^2}$.</p>`,
+        example: String.raw`
+<p>Se $\vec{v} = (3, 4, 12)$, então:</p>
+<div class="ga-formula">$$|\vec{v}| = \sqrt{9 + 16 + 144} = \sqrt{169} = 13$$</div>`,
+        vizHTML: String.raw`
+<div class="ga-viz3d">
+  <div id="ga47-host" class="ga-3d-host"></div>
+  <div class="ga-3d-side">
+    <div class="ga-3d-readout" id="ga47-read">|v| = √(9 + 16 + 9) = 5.39</div>
+    <div class="ga-slider-row"><label class="lx">x</label><input type="range" id="ga47-x" min="-5" max="5" step="0.5" value="3"><span id="ga47-xv">3</span></div>
+    <div class="ga-slider-row"><label class="ly">y</label><input type="range" id="ga47-y" min="-5" max="5" step="0.5" value="4"><span id="ga47-yv">4</span></div>
+    <div class="ga-slider-row"><label class="lz">z</label><input type="range" id="ga47-z" min="-5" max="5" step="0.5" value="3"><span id="ga47-zv">3</span></div>
+    <button class="ga-btn ga-btn-toggle" id="ga47-pas" onclick="gaTogglePasso47()">Mostrar passo a passo</button>
+    <div class="ga-calc-steps" id="ga47-steps"></div>
+    <div class="ga-hint">Pitágoras duas vezes: primeiro no plano $xy$ ($\sqrt{x^2 + y^2}$), depois subindo em $z$.</div>
+  </div>
+</div>`,
+        init: 'gaInit47',
         viz: String.raw`Vetor 3D com cálculo do módulo passo a passo: primeiro a projeção no plano $xy$ (com seu próprio módulo $\sqrt{x^2 + y^2}$ destacado), depois a "subida" em $z$ formando o triângulo retângulo final cujo cateto é $\sqrt{x^2 + y^2}$ e a hipotenusa é $|\vec{v}|$.` },
+
       { id: '4.8', title: 'Condição de Paralelismo via Coordenadas',
+        explanation: String.raw`
+<p>Dois vetores $\vec{u} = (x_1, y_1, z_1)$ e $\vec{v} = (x_2, y_2, z_2)$ são <strong>paralelos</strong> se, e somente se, suas coordenadas são proporcionais:</p>
+<div class="ga-formula">$$\frac{x_1}{x_2} = \frac{y_1}{y_2} = \frac{z_1}{z_2}$$</div>
+<p>(considerando que nenhuma coordenada de $\vec{v}$ é zero; se for, a coordenada correspondente de $\vec{u}$ também deve ser).</p>`,
+        example: String.raw`
+<p>$\vec{u} = (2, 4, 6)$ e $\vec{v} = (1, 2, 3)$ são paralelos, pois $\tfrac{2}{1} = \tfrac{4}{2} = \tfrac{6}{3} = 2$. De fato, $\vec{u} = 2\vec{v}$.</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz3d">
+  <div id="ga48-host" class="ga-3d-host"></div>
+  <div class="ga-3d-side">
+    <div class="ga-3d-readout" id="ga48-read">u = 2 · v</div>
+    <div class="ga-eq-pair">
+      <div class="ga-eq-card">
+        <div class="ga-eq-tag" style="color:#ef4444">u</div>
+        <div class="ga-input-row"><label>x</label><input type="number" id="ga48-ux" value="2" step="0.5"></div>
+        <div class="ga-input-row"><label>y</label><input type="number" id="ga48-uy" value="4" step="0.5"></div>
+        <div class="ga-input-row"><label>z</label><input type="number" id="ga48-uz" value="6" step="0.5"></div>
+      </div>
+      <div class="ga-eq-card">
+        <div class="ga-eq-tag" style="color:#22c55e">v</div>
+        <div class="ga-input-row"><label>x</label><input type="number" id="ga48-vx" value="1" step="0.5"></div>
+        <div class="ga-input-row"><label>y</label><input type="number" id="ga48-vy" value="2" step="0.5"></div>
+        <div class="ga-input-row"><label>z</label><input type="number" id="ga48-vz" value="3" step="0.5"></div>
+      </div>
+    </div>
+    <div class="ga-status on" id="ga48-status">PARALELOS · k ≈ 2.00</div>
+    <div class="ga-calc-steps" id="ga48-ratios"></div>
+    <div class="ga-hint">Razão constante entre componentes ⇔ vetores paralelos. Se alguma componente de $\vec{v}$ é zero, a correspondente de $\vec{u}$ deve ser zero também.</div>
+  </div>
+</div>`,
+        init: 'gaInit48',
         viz: String.raw`Dois vetores em 3D. Um indicador colorido brilha verde quando são paralelos (proporção dentro de tolerância numérica). O painel lateral mostra os três quocientes calculados em tempo real.` },
     ],
   },
@@ -2537,4 +2758,442 @@ function gaSnap37() {
   document.getElementById('ga37-uy').value = newUy.toFixed(1);
   _ga37.upd();
 }
+
+// ═══════════════════════════════════════════════════════════════
+//   Visualizações Interativas — Tópico 4
+// ═══════════════════════════════════════════════════════════════
+
+// ─── 4.1 — Vetores no Plano R² ───────────────────────────────
+let _ga41 = null;
+function gaInit41() {
+  const cv = document.getElementById('ga41-cv'); if (!cv) return;
+  const g = _ga2D(cv, { lim: 6 });
+  _ga41 = { g };
+
+  const upd = () => {
+    const x = +document.getElementById('ga41-x').value;
+    const y = +document.getElementById('ga41-y').value;
+    document.getElementById('ga41-xv').textContent = x;
+    document.getElementById('ga41-yv').textContent = y;
+    const sx = x >= 0 ? '' : '';
+    const sy = y >= 0 ? ' + ' : ' - ';
+    document.getElementById('ga41-read').textContent =
+      `v = (${x}, ${y}) = ${x}i${sy}${Math.abs(y)}j`;
+
+    g.clear(); g.grid(false);
+    // Dashed projection lines from v back to axes
+    if (Math.abs(x) > 0.01) g.line(x, 0, x, y, '#22c55e', { dashed: true, alpha: 0.55 });
+    if (Math.abs(y) > 0.01) g.line(0, y, x, y, '#ef4444', { dashed: true, alpha: 0.55 });
+
+    // Caminhada: x along x-axis (red), then y up (green)
+    if (Math.abs(x) > 0.01) g.arrow(0, 0, x, 0, '#ef4444', { lw: 2.4, label: 'x·i' });
+    if (Math.abs(y) > 0.01) g.arrow(x, 0, x, y, '#22c55e', { lw: 2.4, label: 'y·j' });
+    // Final v
+    g.arrow(0, 0, x, y, '#f97316', { lw: 3.4, label: 'v' });
+    // Component markers on axes
+    if (Math.abs(x) > 0.01) g.point(x, 0, '#ef4444', `(${x}, 0)`, '#ef4444');
+    if (Math.abs(y) > 0.01) g.point(0, y, '#22c55e', `(0, ${y})`, '#22c55e');
+  };
+  ['ga41-x', 'ga41-y'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+
+// ─── 4.2 — Vetores no Espaço R³ ──────────────────────────────
+let _ga42 = null;
+function gaInit42() {
+  const host = document.getElementById('ga42-host'); if (!host) return;
+  if (_ga42) { try { _ga42.ctx.dispose(); } catch (e) {} }
+  const ctx = _gaMake3D(host);
+  const dynamic = new THREE.Group(); ctx.scene.add(dynamic);
+  _ga42 = { ctx, dynamic };
+
+  const upd = () => {
+    const x = +document.getElementById('ga42-x').value;
+    const y = +document.getElementById('ga42-y').value;
+    const z = +document.getElementById('ga42-z').value;
+    document.getElementById('ga42-xv').textContent = x;
+    document.getElementById('ga42-yv').textContent = y;
+    document.getElementById('ga42-zv').textContent = z;
+    const sy = y >= 0 ? ' + ' : ' - ';
+    const sz = z >= 0 ? ' + ' : ' - ';
+    document.getElementById('ga42-read').textContent =
+      `v = (${x}, ${y}, ${z}) = ${x}i${sy}${Math.abs(y)}j${sz}${Math.abs(z)}k`;
+
+    while (dynamic.children.length) dynamic.remove(dynamic.children[0]);
+    const v = [x, y, z];
+    // Component arrows along axes (small, axis-colored)
+    if (Math.abs(x) > 0.01) {
+      const g1 = new THREE.Group();
+      _gaFatArrow(g1, [0, 0, 0], [x, 0, 0], 0xef4444);
+      dynamic.add(g1);
+    }
+    if (Math.abs(y) > 0.01) {
+      const g2 = new THREE.Group();
+      _gaFatArrow(g2, [0, 0, 0], [0, y, 0], 0x22c55e);
+      dynamic.add(g2);
+    }
+    if (Math.abs(z) > 0.01) {
+      const g3 = new THREE.Group();
+      _gaFatArrow(g3, [0, 0, 0], [0, 0, z], 0x3b82f6);
+      dynamic.add(g3);
+    }
+    // Projection lines from v back to axes
+    _gaDashed(dynamic, new THREE.Vector3(x, y, z), new THREE.Vector3(x, y, 0), 0x7c6af7);
+    _gaDashed(dynamic, new THREE.Vector3(x, y, 0), new THREE.Vector3(x, 0, 0), 0x22c55e);
+    _gaDashed(dynamic, new THREE.Vector3(x, 0, 0), new THREE.Vector3(0, 0, 0), 0xef4444);
+    _gaDashed(dynamic, new THREE.Vector3(x, y, 0), new THREE.Vector3(0, y, 0), 0xef4444);
+    _gaDashed(dynamic, new THREE.Vector3(0, y, 0), new THREE.Vector3(0, 0, 0), 0x22c55e);
+    // The main vector v (fat orange arrow)
+    const gv = new THREE.Group();
+    _gaFatArrow(gv, [0, 0, 0], v, 0xf97316);
+    dynamic.add(gv);
+    _gaPoint(dynamic, new THREE.Vector3(x, y, z), 0xf97316);
+  };
+  ['ga42-x', 'ga42-y', 'ga42-z'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+
+// ─── 4.3 — Igualdade de vetores ──────────────────────────────
+let _ga43 = null;
+function gaInit43() {
+  const host = document.getElementById('ga43-host'); if (!host) return;
+  if (_ga43) { try { _ga43.ctx.dispose(); } catch (e) {} }
+  const ctx = _gaMake3D(host);
+  const dynamic = new THREE.Group(); ctx.scene.add(dynamic);
+  _ga43 = { ctx, dynamic };
+
+  const upd = () => {
+    const u = ['ga43-ux', 'ga43-uy', 'ga43-uz'].map(id => +document.getElementById(id).value);
+    const v = ['ga43-vx', 'ga43-vy', 'ga43-vz'].map(id => +document.getElementById(id).value);
+    const eq = u[0] === v[0] && u[1] === v[1] && u[2] === v[2];
+
+    while (dynamic.children.length) dynamic.remove(dynamic.children[0]);
+    const gu = new THREE.Group(); _gaFatArrow(gu, [0, 0, 0], u, 0xef4444); dynamic.add(gu);
+    const gv = new THREE.Group(); _gaFatArrow(gv, [0, 0, 0], v, 0x22c55e); dynamic.add(gv);
+    // When equal, slightly offset v visually so user still sees both colors interleaved
+    if (eq) {
+      gu.traverse(o => { if (o.material) { o.material.transparent = true; o.material.opacity = 0.85; } });
+      gv.traverse(o => { if (o.material) { o.material.transparent = true; o.material.opacity = 0.85; } });
+    }
+    const status = document.getElementById('ga43-status');
+    if (status) {
+      if (eq) {
+        status.textContent = 'IGUAIS — as setas se sobrepõem';
+        status.classList.add('on'); status.classList.remove('off');
+      } else {
+        const diffs = [];
+        if (u[0] !== v[0]) diffs.push(`x: ${u[0]} ≠ ${v[0]}`);
+        if (u[1] !== v[1]) diffs.push(`y: ${u[1]} ≠ ${v[1]}`);
+        if (u[2] !== v[2]) diffs.push(`z: ${u[2]} ≠ ${v[2]}`);
+        status.textContent = 'DIFERENTES — ' + diffs.join(' · ');
+        status.classList.add('off'); status.classList.remove('on');
+      }
+    }
+  };
+  ['ga43-ux', 'ga43-uy', 'ga43-uz', 'ga43-vx', 'ga43-vy', 'ga43-vz'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+
+// ─── 4.4 — Operações em coordenadas ──────────────────────────
+let _ga44 = null;
+function gaInit44() {
+  const host = document.getElementById('ga44-host'); if (!host) return;
+  if (_ga44) { try { _ga44.ctx.dispose(); } catch (e) {} }
+  const ctx = _gaMake3D(host);
+  const dynamic = new THREE.Group(); ctx.scene.add(dynamic);
+  _ga44 = { ctx, dynamic, op: 0 };
+
+  const upd = () => {
+    const u = ['ga44-ux', 'ga44-uy', 'ga44-uz'].map(id => +document.getElementById(id).value);
+    const v = ['ga44-vx', 'ga44-vy', 'ga44-vz'].map(id => +document.getElementById(id).value);
+    const k = +document.getElementById('ga44-k').value;
+    document.getElementById('ga44-kv').textContent = k.toFixed(1);
+
+    let result, label;
+    if (_ga44.op === 0)      { result = [u[0]+v[0], u[1]+v[1], u[2]+v[2]]; label = 'u + v'; }
+    else if (_ga44.op === 1) { result = [u[0]-v[0], u[1]-v[1], u[2]-v[2]]; label = 'u - v'; }
+    else                      { result = [k*u[0], k*u[1], k*u[2]]; label = `${k.toFixed(1)} · u`; }
+    document.getElementById('ga44-read').textContent =
+      `${label} = (${result.map(n => n.toFixed(1)).join(', ')})`;
+
+    while (dynamic.children.length) dynamic.remove(dynamic.children[0]);
+    // u (faded)
+    const gu = new THREE.Group(); _gaFatArrow(gu, [0, 0, 0], u, 0xef4444);
+    gu.traverse(o => { if (o.material) { o.material.transparent = true; o.material.opacity = 0.4; } });
+    dynamic.add(gu);
+    // v (faded) — only when relevant (ops 0, 1)
+    if (_ga44.op !== 2) {
+      const gv = new THREE.Group(); _gaFatArrow(gv, [0, 0, 0], v, 0x22c55e);
+      gv.traverse(o => { if (o.material) { o.material.transparent = true; o.material.opacity = 0.4; } });
+      dynamic.add(gv);
+    }
+    // result (orange, full opacity)
+    const gr = new THREE.Group(); _gaFatArrow(gr, [0, 0, 0], result, 0xf97316);
+    dynamic.add(gr);
+    _gaPoint(dynamic, new THREE.Vector3(...result), 0xf97316);
+  };
+  _ga44.upd = upd;
+  ['ga44-ux', 'ga44-uy', 'ga44-uz', 'ga44-vx', 'ga44-vy', 'ga44-vz', 'ga44-k'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+function gaSelOp44(i) {
+  if (!_ga44) return;
+  _ga44.op = i;
+  document.querySelectorAll('.ga-prop-tabs .ga-prop-tab').forEach(t =>
+    t.classList.toggle('active', +t.dataset.i === i));
+  const krow  = document.getElementById('ga44-krow');
+  const vcard = document.getElementById('ga44-vcard');
+  if (krow)  krow.style.display  = (i === 2) ? '' : 'none';
+  if (vcard) vcard.style.opacity = (i === 2) ? '0.45' : '1';
+  _ga44.upd();
+}
+
+// ─── 4.5 — Vetor por dois pontos ─────────────────────────────
+let _ga45 = null;
+function gaInit45() {
+  const host = document.getElementById('ga45-host'); if (!host) return;
+  if (_ga45) { try { _ga45.ctx.dispose(); } catch (e) {} }
+  const ctx = _gaMake3D(host);
+  const dynamic = new THREE.Group(); ctx.scene.add(dynamic);
+  _ga45 = { ctx, dynamic };
+
+  const upd = () => {
+    const A = ['ga45-ax', 'ga45-ay', 'ga45-az'].map(id => +document.getElementById(id).value);
+    const B = ['ga45-bx', 'ga45-by', 'ga45-bz'].map(id => +document.getElementById(id).value);
+    const AB = [B[0] - A[0], B[1] - A[1], B[2] - A[2]];
+    document.getElementById('ga45-read').textContent =
+      `AB = B - A = (${AB.map(n => n.toFixed(1)).join(', ')})`;
+    const steps = document.getElementById('ga45-steps');
+    if (steps) {
+      steps.innerHTML =
+        `<strong>A</strong> = (${A.join(', ')})\n` +
+        `<strong>B</strong> = (${B.join(', ')})\n` +
+        `<strong>AB</strong> = (${B[0]} - ${A[0]}, ${B[1]} - ${A[1]}, ${B[2]} - ${A[2]})\n` +
+        `       = (${AB.join(', ')})`;
+    }
+
+    while (dynamic.children.length) dynamic.remove(dynamic.children[0]);
+    _gaPoint(dynamic, new THREE.Vector3(...A), 0xf472b6);
+    _gaPoint(dynamic, new THREE.Vector3(...B), 0xf97316);
+    const g = new THREE.Group(); _gaFatArrow(g, A, B, 0x7c6af7); dynamic.add(g);
+    // Faded translated copy from origin showing AB as a free vector
+    const g2 = new THREE.Group(); _gaFatArrow(g2, [0, 0, 0], AB, 0x7c6af7);
+    g2.traverse(o => { if (o.material) { o.material.transparent = true; o.material.opacity = 0.35; } });
+    dynamic.add(g2);
+  };
+  ['ga45-ax', 'ga45-ay', 'ga45-az', 'ga45-bx', 'ga45-by', 'ga45-bz'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+
+// ─── 4.6 — Ponto médio ───────────────────────────────────────
+let _ga46 = null;
+function gaInit46() {
+  const host = document.getElementById('ga46-host'); if (!host) return;
+  if (_ga46) { try { _ga46.ctx.dispose(); } catch (e) {} }
+  const ctx = _gaMake3D(host);
+  const dynamic = new THREE.Group(); ctx.scene.add(dynamic);
+  _ga46 = { ctx, dynamic };
+
+  const upd = () => {
+    const A = ['ga46-ax', 'ga46-ay', 'ga46-az'].map(id => +document.getElementById(id).value);
+    const B = ['ga46-bx', 'ga46-by', 'ga46-bz'].map(id => +document.getElementById(id).value);
+    const M = [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2, (A[2] + B[2]) / 2];
+    document.getElementById('ga46-read').textContent =
+      `M = (${M.map(n => n.toFixed(2)).join(', ')})`;
+    const steps = document.getElementById('ga46-steps');
+    if (steps) {
+      steps.innerHTML =
+        `Mx = (${A[0]} + ${B[0]}) / 2 = <strong>${M[0].toFixed(2)}</strong>\n` +
+        `My = (${A[1]} + ${B[1]}) / 2 = <strong>${M[1].toFixed(2)}</strong>\n` +
+        `Mz = (${A[2]} + ${B[2]}) / 2 = <strong>${M[2].toFixed(2)}</strong>`;
+    }
+
+    while (dynamic.children.length) dynamic.remove(dynamic.children[0]);
+    // Segment A → B (thin)
+    const seg = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(...A), new THREE.Vector3(...B)
+    ]);
+    dynamic.add(new THREE.Line(seg, new THREE.LineBasicMaterial({ color: 0x7c6af7 })));
+    _gaPoint(dynamic, new THREE.Vector3(...A), 0xf472b6);
+    _gaPoint(dynamic, new THREE.Vector3(...B), 0xf97316);
+    // Midpoint (larger and accent color)
+    const m = new THREE.Mesh(
+      new THREE.SphereGeometry(0.2, 16, 16),
+      new THREE.MeshPhongMaterial({ color: 0x5eebbe })
+    );
+    m.position.set(...M);
+    dynamic.add(m);
+    // Label-ish indication: dashed AM and MB (same length)
+    _gaDashed(dynamic, new THREE.Vector3(...A), new THREE.Vector3(...M), 0x5eebbe);
+    _gaDashed(dynamic, new THREE.Vector3(...M), new THREE.Vector3(...B), 0x5eebbe);
+  };
+  ['ga46-ax', 'ga46-ay', 'ga46-az', 'ga46-bx', 'ga46-by', 'ga46-bz'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+
+// ─── 4.7 — Módulo (norma) com Pitágoras ──────────────────────
+let _ga47 = null;
+function gaInit47() {
+  const host = document.getElementById('ga47-host'); if (!host) return;
+  if (_ga47) { try { _ga47.ctx.dispose(); } catch (e) {} }
+  const ctx = _gaMake3D(host);
+  const dynamic = new THREE.Group(); ctx.scene.add(dynamic);
+  _ga47 = { ctx, dynamic, showSteps: false };
+
+  const upd = () => {
+    const x = +document.getElementById('ga47-x').value;
+    const y = +document.getElementById('ga47-y').value;
+    const z = +document.getElementById('ga47-z').value;
+    document.getElementById('ga47-xv').textContent = x;
+    document.getElementById('ga47-yv').textContent = y;
+    document.getElementById('ga47-zv').textContent = z;
+    const xyMod = Math.sqrt(x * x + y * y);
+    const mod = Math.sqrt(x * x + y * y + z * z);
+    document.getElementById('ga47-read').textContent =
+      `|v| = √(${x * x} + ${y * y} + ${z * z}) = ${mod.toFixed(2)}`;
+
+    const steps = document.getElementById('ga47-steps');
+    if (steps) {
+      if (_ga47.showSteps) {
+        steps.style.display = '';
+        steps.innerHTML =
+          `<strong>Passo 1</strong> · projeção no plano xy:\n` +
+          `  |v_xy| = √(x² + y²) = √(${x * x} + ${y * y}) = <strong>${xyMod.toFixed(2)}</strong>\n\n` +
+          `<strong>Passo 2</strong> · subindo em z (triângulo retângulo):\n` +
+          `  |v| = √(|v_xy|² + z²) = √(${xyMod.toFixed(2)}² + ${z}²)\n` +
+          `      = √(${(xyMod * xyMod).toFixed(2)} + ${z * z}) = <strong>${mod.toFixed(2)}</strong>`;
+      } else {
+        steps.style.display = 'none';
+      }
+    }
+
+    while (dynamic.children.length) dynamic.remove(dynamic.children[0]);
+    // Main vector (orange)
+    const gv = new THREE.Group();
+    _gaFatArrow(gv, [0, 0, 0], [x, y, z], 0xf97316);
+    dynamic.add(gv);
+    _gaPoint(dynamic, new THREE.Vector3(x, y, z), 0xf97316);
+
+    // Pythagoras triangle: O → (x,y,0) → (x,y,z) → O
+    const Pxy = new THREE.Vector3(x, y, 0);
+    const P   = new THREE.Vector3(x, y, z);
+    const O   = new THREE.Vector3(0, 0, 0);
+    // Hypotenuse of xy (purple)
+    const seg1 = new THREE.BufferGeometry().setFromPoints([O, Pxy]);
+    dynamic.add(new THREE.Line(seg1, new THREE.LineBasicMaterial({ color: 0x7c6af7, linewidth: 2 })));
+    // Vertical edge (blue)
+    const seg2 = new THREE.BufferGeometry().setFromPoints([Pxy, P]);
+    dynamic.add(new THREE.Line(seg2, new THREE.LineBasicMaterial({ color: 0x3b82f6, linewidth: 2 })));
+
+    // Projection helpers
+    _gaDashed(dynamic, new THREE.Vector3(x, 0, 0), Pxy, 0x22c55e);
+    _gaDashed(dynamic, new THREE.Vector3(0, y, 0), Pxy, 0xef4444);
+
+    // Translucent triangle (right triangle in vertical plane containing v)
+    const triGeom = new THREE.BufferGeometry();
+    triGeom.setAttribute('position', new THREE.Float32BufferAttribute(
+      [0, 0, 0, x, y, 0, x, y, z], 3));
+    triGeom.setIndex([0, 1, 2]);
+    triGeom.computeVertexNormals();
+    const triMesh = new THREE.Mesh(triGeom, new THREE.MeshBasicMaterial({
+      color: 0xa892ff, transparent: true, opacity: 0.18, side: THREE.DoubleSide,
+      depthWrite: false
+    }));
+    dynamic.add(triMesh);
+  };
+  _ga47.upd = upd;
+  ['ga47-x', 'ga47-y', 'ga47-z'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+function gaTogglePasso47() {
+  if (!_ga47) return;
+  _ga47.showSteps = !_ga47.showSteps;
+  const btn = document.getElementById('ga47-pas');
+  if (btn) btn.textContent = _ga47.showSteps ? 'Ocultar passo a passo' : 'Mostrar passo a passo';
+  _ga47.upd();
+}
+
+// ─── 4.8 — Paralelismo via coordenadas ───────────────────────
+let _ga48 = null;
+function gaInit48() {
+  const host = document.getElementById('ga48-host'); if (!host) return;
+  if (_ga48) { try { _ga48.ctx.dispose(); } catch (e) {} }
+  const ctx = _gaMake3D(host);
+  const dynamic = new THREE.Group(); ctx.scene.add(dynamic);
+  _ga48 = { ctx, dynamic };
+
+  const upd = () => {
+    const u = ['ga48-ux', 'ga48-uy', 'ga48-uz'].map(id => +document.getElementById(id).value);
+    const v = ['ga48-vx', 'ga48-vy', 'ga48-vz'].map(id => +document.getElementById(id).value);
+    // Parallelism via cross product magnitude
+    const cx = u[1] * v[2] - u[2] * v[1];
+    const cy = u[2] * v[0] - u[0] * v[2];
+    const cz = u[0] * v[1] - u[1] * v[0];
+    const crossMag = Math.sqrt(cx * cx + cy * cy + cz * cz);
+    const mu = Math.sqrt(u[0] ** 2 + u[1] ** 2 + u[2] ** 2);
+    const mv = Math.sqrt(v[0] ** 2 + v[1] ** 2 + v[2] ** 2);
+    const tol = 0.04 * Math.max(mu * mv, 0.01);
+    const parallel = crossMag <= tol && mu > 0.01 && mv > 0.01;
+    // k such that u = k·v (use largest |v| component)
+    let k = NaN;
+    if (parallel) {
+      const idx = (Math.abs(v[0]) >= Math.abs(v[1]) && Math.abs(v[0]) >= Math.abs(v[2])) ? 0
+                : (Math.abs(v[1]) >= Math.abs(v[2])) ? 1 : 2;
+      k = u[idx] / v[idx];
+    }
+
+    // Ratios display (per axis)
+    const ratios = document.getElementById('ga48-ratios');
+    if (ratios) {
+      const rows = ['x', 'y', 'z'].map((nm, i) => {
+        if (Math.abs(v[i]) < 1e-6) {
+          const ok = Math.abs(u[i]) < 1e-6;
+          return `${nm}: u=${u[i]}, v=0 → ${ok ? 'compatível (ambos 0)' : 'NÃO compatível'}`;
+        }
+        const r = u[i] / v[i];
+        return `${nm}: ${u[i]} / ${v[i]} = <strong>${r.toFixed(2)}</strong>`;
+      });
+      ratios.innerHTML = rows.join('\n');
+    }
+    const status = document.getElementById('ga48-status');
+    const read = document.getElementById('ga48-read');
+    if (status) {
+      if (parallel) {
+        const sense = k >= 0 ? 'mesmo sentido' : 'sentidos opostos';
+        status.textContent = `PARALELOS · k ≈ ${k.toFixed(2)} · ${sense}`;
+        status.classList.add('on'); status.classList.remove('off');
+        if (read) read.textContent = `u = ${k.toFixed(2)} · v`;
+      } else {
+        status.textContent = `NÃO paralelos · |u × v| = ${crossMag.toFixed(2)}`;
+        status.classList.add('off'); status.classList.remove('on');
+        if (read) read.textContent = `u e v não são proporcionais`;
+      }
+    }
+
+    while (dynamic.children.length) dynamic.remove(dynamic.children[0]);
+    const gu = new THREE.Group(); _gaFatArrow(gu, [0, 0, 0], u, parallel ? 0xf97316 : 0xef4444);
+    dynamic.add(gu);
+    const gv = new THREE.Group(); _gaFatArrow(gv, [0, 0, 0], v, 0x22c55e);
+    dynamic.add(gv);
+  };
+  ['ga48-ux', 'ga48-uy', 'ga48-uz', 'ga48-vx', 'ga48-vy', 'ga48-vz'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+
 

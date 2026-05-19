@@ -752,3 +752,15 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 .ga-status{font-family:var(--mono);font-size:12px;font-weight:700;text-align:center;padding:8px 10px;border-radius:var(--radius-sm);border:1px solid;letter-spacing:.02em}
 .ga-status.on{background:rgba(94,235,190,.13);color:#5eebbe;border-color:rgba(94,235,190,.4)}
 .ga-status.off{background:rgba(120,128,150,.10);color:var(--text3);border-color:var(--border)}
+
+/* ===== APRENDER — Tópico 4 (Vetores em Coordenadas) ===== */
+.ga-eq-pair{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ga-eq-card{background:var(--bg4);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;display:flex;flex-direction:column;gap:5px}
+.ga-eq-tag{font-family:var(--mono);font-size:11px;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:.1em;border-bottom:1px dashed var(--border);padding-bottom:4px;margin-bottom:2px}
+.ga-eq-card .ga-input-row{font-size:11px}
+.ga-eq-card .ga-input-row label{width:14px;color:var(--text3)}
+.ga-eq-card .ga-input-row input{padding:4px 6px}
+
+.ga-calc-steps{background:var(--bg4);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;font-family:var(--mono);font-size:11.5px;color:var(--text2);line-height:1.65;white-space:pre-wrap}
+.ga-calc-steps strong{color:var(--accent)}
+.ga-calc-steps .katex{color:var(--text)}
