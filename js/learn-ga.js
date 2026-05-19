@@ -185,18 +185,176 @@ const GA_TOPICS = [
     title: 'Vetores: Conceitos Fundamentais',
     subs: [
       { id: '2.1', title: 'Grandezas Escalares e Vetoriais',
+        explanation: String.raw`
+<p>Em ciência e matemática, distinguimos dois tipos fundamentais de grandezas:</p>
+<ul class="ga-list">
+  <li><strong>Escalar:</strong> caracterizada apenas por um <strong>número real</strong> (módulo) e uma unidade. Exemplos: massa, temperatura, tempo, energia.</li>
+  <li><strong>Vetorial:</strong> exige <strong>três informações</strong> para ser completamente descrita — <strong>módulo</strong> (intensidade), <strong>direção</strong> (a reta sobre a qual atua) e <strong>sentido</strong> (orientação na reta). Exemplos: força, velocidade, aceleração, deslocamento.</li>
+</ul>`,
+        example: String.raw`
+<p>"$5\ \text{kg}$" é uma grandeza escalar — basta o número. Mas "$5\ \text{N}$ para o norte" é uma grandeza vetorial: precisa do <strong>módulo</strong> ($5\ \text{N}$), <strong>direção</strong> (norte–sul) e <strong>sentido</strong> (para o norte).</p>`,
+        vizHTML: String.raw`
+<div class="ga-split2">
+  <div class="ga-svp">
+    <div class="ga-panel-tag">Escalar — Temperatura</div>
+    <canvas id="ga21-tcv" class="ga-svp-canvas"></canvas>
+    <div class="ga-slider-row"><label>T</label><input type="range" id="ga21-t" min="-10" max="40" step="1" value="25"><span id="ga21-tv">25 °C</span></div>
+    <div class="ga-hint">Um único número descreve completamente a grandeza.</div>
+  </div>
+  <div class="ga-svp">
+    <div class="ga-panel-tag">Vetorial — Velocidade</div>
+    <canvas id="ga21-vcv" class="ga-svp-canvas"></canvas>
+    <div class="ga-slider-row"><label>|v|</label><input type="range" id="ga21-m" min="0.5" max="5" step="0.1" value="3"><span id="ga21-mv">3.0</span></div>
+    <div class="ga-slider-row"><label>θ</label><input type="range" id="ga21-a" min="0" max="359" step="1" value="30"><span id="ga21-av">30°</span></div>
+    <div class="ga-hint">Mudar módulo, direção ou sentido produz outro vetor.</div>
+  </div>
+</div>`,
+        init: 'gaInit21',
         viz: String.raw`Painel comparativo: à esquerda, um termômetro mostrando "25 °C" (escalar — só um número). À direita, uma seta no plano com sliders para módulo e ângulo, mostrando que a mesma grandeza muda completamente se mudarmos qualquer um dos três atributos.` },
+
       { id: '2.2', title: 'Definição de Vetor (Segmento Orientado)',
+        explanation: String.raw`
+<p>Um <strong>vetor</strong> é matematicamente definido como um <strong>segmento de reta orientado</strong>. Dados dois pontos $A$ e $B$ no espaço, o segmento orientado de $A$ até $B$ é denotado por:</p>
+<div class="ga-formula">$$\vec{AB}$$</div>
+<ul class="ga-list">
+  <li>$A$ é o <strong>ponto inicial</strong> (ou origem).</li>
+  <li>$B$ é o <strong>ponto final</strong> (ou extremidade).</li>
+</ul>
+<p>Graficamente, o vetor é representado por uma <strong>seta</strong> que parte de $A$ e termina em $B$. Trocar a ordem dos pontos inverte o sentido: $\vec{BA} = -\vec{AB}$.</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz2d">
+  <canvas id="ga22-cv" class="ga-2d-canvas"></canvas>
+  <div class="ga-2d-side">
+    <div class="ga-2d-readout" id="ga22-read">Clique no plano para marcar A</div>
+    <button class="ga-btn ga-btn-toggle" onclick="gaSwapAB22()">Trocar A ↔ B</button>
+    <button class="ga-btn ga-btn-toggle" onclick="gaClearAB22()">Limpar</button>
+    <div class="ga-hint">Clique uma vez para definir $A$ (ponto inicial, em rosa) e outra para $B$ (ponto final, em laranja). O vetor $\vec{AB}$ é traçado como uma seta. Trocar a ordem inverte o sentido.</div>
+  </div>
+</div>`,
+        init: 'gaInit22',
         viz: String.raw`Plano 2D onde o usuário clica em dois pontos $A$ e $B$. Imediatamente uma seta é desenhada entre eles e o vetor $\vec{AB}$ é nomeado. Ao trocar $A$ por $B$, a seta inverte o sentido (mostrando que $\vec{AB} \neq \vec{BA}$).` },
+
       { id: '2.3', title: 'Vetores Equipolentes',
+        explanation: String.raw`
+<p>Dois segmentos orientados $\vec{AB}$ e $\vec{CD}$ são chamados <strong>equipolentes</strong> quando possuem:</p>
+<ul class="ga-list">
+  <li>Mesmo <strong>módulo</strong> (comprimento)</li>
+  <li>Mesma <strong>direção</strong> (são paralelos)</li>
+  <li>Mesmo <strong>sentido</strong></li>
+</ul>
+<p>Todos os segmentos orientados equipolentes entre si representam o <strong>mesmo vetor</strong>. Assim, um vetor não tem posição fixa: pode ser "transladado" livremente pelo espaço, desde que preserve módulo, direção e sentido.</p>
+<div class="ga-formula">$$\vec{AB} \equiv \vec{CD} \iff \text{mesma direção, mesmo módulo e mesmo sentido}$$</div>`,
+        vizHTML: String.raw`
+<div class="ga-viz2d">
+  <canvas id="ga23-cv" class="ga-2d-canvas"></canvas>
+  <div class="ga-2d-side">
+    <div class="ga-2d-readout" id="ga23-read">Vetor: Δ = (3, 2) — cópias: 0</div>
+    <button class="ga-btn ga-btn-toggle" onclick="gaFillEqui23()">Preencher 10 cópias</button>
+    <button class="ga-btn ga-btn-toggle" onclick="gaClearEqui23()">Limpar cópias</button>
+    <div class="ga-hint">Clique em qualquer ponto do plano para criar uma cópia equipolente começando ali. Todas as setas têm o mesmo módulo, direção e sentido — logo, representam o <strong>mesmo</strong> vetor.</div>
+  </div>
+</div>`,
+        init: 'gaInit23',
         viz: String.raw`Cena 2D ou 3D mostrando inicialmente um vetor $\vec{AB}$. O usuário pode arrastar a seta (mantendo orientação e tamanho) e ver várias cópias equipolentes — todas representando o mesmo vetor. Há um botão "Mostrar todas as representações" que preenche o plano com setas equipolentes em posições diferentes.` },
+
       { id: '2.4', title: 'Módulo, Direção e Sentido',
+        explanation: String.raw`
+<p>Todo vetor $\vec{v}$ possui três atributos fundamentais:</p>
+<ul class="ga-list">
+  <li><strong>Módulo</strong> $|\vec{v}|$: o comprimento da seta (sempre $\geq 0$).</li>
+  <li><strong>Direção:</strong> a reta-suporte da seta (ou qualquer reta paralela a ela).</li>
+  <li><strong>Sentido:</strong> uma das duas orientações possíveis sobre essa reta.</li>
+</ul>
+<p>Dois vetores podem ter a <strong>mesma direção</strong> mas <strong>sentidos opostos</strong>.</p>`,
+        example: String.raw`
+<p>$\vec{u}$ tem módulo $5$, direção horizontal e sentido para a direita.<br>
+$\vec{w}$ tem módulo $5$, direção horizontal e sentido para a esquerda.</p>
+<p>$\vec{u}$ e $\vec{w}$ têm a <strong>mesma direção</strong> e <strong>módulos iguais</strong>, mas <strong>sentidos opostos</strong>.</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz2d">
+  <canvas id="ga24-cv" class="ga-2d-canvas"></canvas>
+  <div class="ga-2d-side">
+    <div class="ga-2d-readout" id="ga24-read">|v| = 3.0 · θ = 30° · sentido →</div>
+    <div class="ga-slider-row"><label>|v|</label><input type="range" id="ga24-m" min="0.5" max="5" step="0.1" value="3"><span id="ga24-mv">3.0</span></div>
+    <div class="ga-slider-row"><label>θ</label><input type="range" id="ga24-a" min="0" max="180" step="1" value="30"><span id="ga24-av">30°</span></div>
+    <button class="ga-btn ga-btn-toggle" onclick="gaInvert24()">Inverter sentido</button>
+    <div class="ga-hint">O <em>módulo</em> estica/encolhe; a <em>direção</em> rotaciona a reta-suporte (tracejada); o <em>sentido</em> escolhe uma das duas orientações sobre essa reta.</div>
+  </div>
+</div>`,
+        init: 'gaInit24',
         viz: String.raw`Vetor manipulável com três controles separados: (a) slider de módulo (estica/encolhe), (b) dial circular de direção (rotaciona), (c) botão de "inverter sentido". O usuário percebe que mudar qualquer um dos três produz um vetor diferente.` },
+
       { id: '2.5', title: 'Vetor Nulo, Vetor Unitário e Versor',
+        explanation: String.raw`
+<ul class="ga-list">
+  <li><strong>Vetor nulo</strong> $\vec{0}$: vetor de módulo zero. Não tem direção nem sentido definidos. Algebricamente, é o elemento neutro da adição.</li>
+  <li><strong>Vetor unitário:</strong> todo vetor cujo módulo vale $1$, isto é, $|\vec{v}| = 1$.</li>
+  <li><strong>Versor de $\vec{v}$:</strong> o vetor unitário de mesma direção e sentido de $\vec{v}$. É obtido dividindo $\vec{v}$ pelo seu módulo:</li>
+</ul>
+<div class="ga-formula">$$\hat{v} = \frac{\vec{v}}{|\vec{v}|}$$</div>
+<p>O versor "limpa" a informação do módulo, restando apenas a orientação.</p>`,
+        example: String.raw`
+<p>Se $\vec{v} = (3, 4)$, então $|\vec{v}| = \sqrt{9 + 16} = 5$, e o versor é:</p>
+<div class="ga-formula">$$\hat{v} = \frac{1}{5}(3, 4) = \left(\tfrac{3}{5},\ \tfrac{4}{5}\right)$$</div>
+<p>Verificação: $\left(\tfrac{3}{5}\right)^2 + \left(\tfrac{4}{5}\right)^2 = \tfrac{9 + 16}{25} = 1$. ✓</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz2d">
+  <canvas id="ga25-cv" class="ga-2d-canvas"></canvas>
+  <div class="ga-2d-side">
+    <div class="ga-2d-readout" id="ga25-read">v = (3.0, 4.0) — |v| = 5.00</div>
+    <div class="ga-slider-row"><label class="lx">vx</label><input type="range" id="ga25-x" min="-5" max="5" step="0.1" value="3"><span id="ga25-xv">3.0</span></div>
+    <div class="ga-slider-row"><label class="ly">vy</label><input type="range" id="ga25-y" min="-5" max="5" step="0.1" value="4"><span id="ga25-yv">4.0</span></div>
+    <button class="ga-btn ga-btn-toggle" id="ga25-btn" onclick="gaToggleVersor25()">Mostrar versor</button>
+    <div class="ga-versor-out" id="ga25-vout" style="display:none">v̂ = (0.60, 0.80) — |v̂| = 1.00</div>
+    <div class="ga-hint">O círculo tracejado é a circunferência unitária. O versor $\hat{v}$ pousa sempre sobre ela, na mesma direção e sentido de $\vec{v}$.</div>
+  </div>
+</div>`,
+        init: 'gaInit25',
         viz: String.raw`Vetor $\vec{v}$ desenhado em 2D. Ao apertar o botão "Versor", uma seta menor é desenhada sobre $\vec{v}$, com exatamente 1 unidade de comprimento, e suas componentes são mostradas. Slider para mudar $\vec{v}$ e ver o versor se ajustar em tempo real.` },
+
       { id: '2.6', title: 'Vetores Opostos',
+        explanation: String.raw`
+<p>O <strong>vetor oposto</strong> de $\vec{v}$, denotado $-\vec{v}$, é o vetor de <strong>mesmo módulo</strong> e <strong>mesma direção</strong> de $\vec{v}$, mas <strong>sentido contrário</strong>.</p>
+<div class="ga-formula">$$\vec{v} + (-\vec{v}) = \vec{0}$$</div>
+<p>Se $\vec{AB}$ é um vetor, então $\vec{BA} = -\vec{AB}$.</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz2d">
+  <canvas id="ga26-cv" class="ga-2d-canvas"></canvas>
+  <div class="ga-2d-side">
+    <div class="ga-2d-readout" id="ga26-read">v = (3.0, 2.0) · -v = (-3.0, -2.0)</div>
+    <div class="ga-slider-row"><label class="lx">vx</label><input type="range" id="ga26-x" min="-5" max="5" step="0.1" value="3"><span id="ga26-xv">3.0</span></div>
+    <div class="ga-slider-row"><label class="ly">vy</label><input type="range" id="ga26-y" min="-5" max="5" step="0.1" value="2"><span id="ga26-yv">2.0</span></div>
+    <button class="ga-btn ga-btn-toggle" id="ga26-anim" onclick="gaAnimSum26()">Animar v + (-v)</button>
+    <div class="ga-hint">$-\vec{v}$ tem o mesmo módulo e direção, mas sentido contrário. Ao caminhar primeiro $\vec{v}$ e depois $-\vec{v}$, voltamos à origem — o vetor nulo.</div>
+  </div>
+</div>`,
+        init: 'gaInit26',
         viz: String.raw`Vetor $\vec{v}$ com botão "Mostrar oposto". Aparece $-\vec{v}$ sobreposto na mesma reta-suporte, mas apontando para o lado contrário. Ao somar visualmente os dois (regra do triângulo), a seta resultante colapsa em um ponto, evidenciando o vetor nulo.` },
+
       { id: '2.7', title: 'Representação Geométrica',
+        explanation: String.raw`
+<p>Resumindo o que vimos: graficamente, um vetor é representado por uma <strong>seta</strong> com:</p>
+<ul class="ga-list">
+  <li><strong>Ponto de aplicação:</strong> origem da seta (qualquer ponto, dada a equipolência).</li>
+  <li><strong>Comprimento da seta:</strong> módulo do vetor.</li>
+  <li><strong>Direção:</strong> a reta da seta.</li>
+  <li><strong>Ponta (cabeça):</strong> indica o sentido.</li>
+</ul>
+<p>Esta representação é a mesma em $\mathbb{R}^2$ (plano) e $\mathbb{R}^3$ (espaço).</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz3d">
+  <div class="ga-gallery-host">
+    <canvas id="ga27-cv" class="ga-gallery-canvas"></canvas>
+    <div id="ga27-host" class="ga-gallery-3d" style="display:none"></div>
+  </div>
+  <div class="ga-3d-side">
+    <div class="ga-3d-readout" id="ga27-read">Selecione um vetor</div>
+    <button class="ga-btn ga-btn-toggle" id="ga27-btn" onclick="gaToggleDim27()">Mostrar em 3D</button>
+    <div class="ga-vec-list" id="ga27-list"></div>
+    <div class="ga-hint">Clique em uma seta (ou em um cartão à direita) para destacar e ver seus atributos. Em 3D, arraste para girar a cena.</div>
+  </div>
+</div>`,
+        init: 'gaInit27',
         viz: String.raw`Galeria de vetores em 2D e 3D — o usuário alterna entre as duas dimensões com um toggle. Em 3D, OrbitControls permite girar a cena e observar os vetores de diferentes ângulos. Todos os vetores são clicáveis para destacar e mostrar seus atributos.` },
     ],
   },
@@ -204,18 +362,181 @@ const GA_TOPICS = [
     title: 'Operações Geométricas com Vetores',
     subs: [
       { id: '3.1', title: 'Adição: Regra do Triângulo',
+        explanation: String.raw`
+<p>Dados dois vetores $\vec{u}$ e $\vec{v}$, a <strong>soma</strong> $\vec{u} + \vec{v}$ é construída geometricamente pela <strong>regra do triângulo</strong>:</p>
+<ol class="ga-list">
+  <li>Desenhe $\vec{u}$ a partir de um ponto qualquer $A$, terminando em $B$.</li>
+  <li>Translade $\vec{v}$ para que sua origem coincida com $B$. Termina em $C$.</li>
+  <li>O vetor soma $\vec{u} + \vec{v} = \vec{AC}$ vai diretamente de $A$ a $C$.</li>
+</ol>
+<p>A interpretação física é intuitiva: se você caminha primeiro $\vec{u}$ e depois $\vec{v}$, sua posição final em relação à origem é $\vec{u} + \vec{v}$.</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz2d">
+  <canvas id="ga31-cv" class="ga-2d-canvas"></canvas>
+  <div class="ga-2d-side">
+    <div class="ga-2d-readout" id="ga31-read">u + v = (4.0, 4.0)</div>
+    <div class="ga-slider-row"><label class="lx">ux</label><input type="range" id="ga31-ux" min="-5" max="5" step="0.1" value="3"><span id="ga31-uxv">3.0</span></div>
+    <div class="ga-slider-row"><label class="ly">uy</label><input type="range" id="ga31-uy" min="-5" max="5" step="0.1" value="1"><span id="ga31-uyv">1.0</span></div>
+    <div class="ga-slider-row"><label class="lx">vx</label><input type="range" id="ga31-vx" min="-5" max="5" step="0.1" value="1"><span id="ga31-vxv">1.0</span></div>
+    <div class="ga-slider-row"><label class="ly">vy</label><input type="range" id="ga31-vy" min="-5" max="5" step="0.1" value="3"><span id="ga31-vyv">3.0</span></div>
+    <button class="ga-btn ga-btn-toggle" id="ga31-anim" onclick="gaAnimSum31()">Animar soma</button>
+    <div class="ga-hint">Caminhe primeiro $\vec{u}$ (vermelho), depois $\vec{v}$ (verde) a partir da ponta de $\vec{u}$. A seta laranja é a soma $\vec{AC}$.</div>
+  </div>
+</div>`,
+        init: 'gaInit31',
         viz: String.raw`Plano 2D com dois vetores $\vec{u}$ e $\vec{v}$ ajustáveis. Botão "Animar soma" mostra passo a passo: $\vec{u}$ aparece, $\vec{v}$ é arrastado até a ponta de $\vec{u}$, e a seta resultante é traçada. Em 3D, o mesmo procedimento, com possibilidade de rotacionar a cena.` },
+
       { id: '3.2', title: 'Adição: Regra do Paralelogramo',
+        explanation: String.raw`
+<p>Uma forma equivalente de somar vetores é a <strong>regra do paralelogramo</strong>:</p>
+<ol class="ga-list">
+  <li>Desenhe $\vec{u}$ e $\vec{v}$ a partir do mesmo ponto $A$.</li>
+  <li>Complete o paralelogramo cujos lados são $\vec{u}$ e $\vec{v}$.</li>
+  <li>A diagonal que parte de $A$ é o vetor $\vec{u} + \vec{v}$.</li>
+</ol>
+<p>Esta regra é equivalente à do triângulo e é particularmente útil para somar vetores que representam <strong>forças concorrentes</strong>.</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz2d">
+  <canvas id="ga32-cv" class="ga-2d-canvas"></canvas>
+  <div class="ga-2d-side">
+    <div class="ga-2d-readout" id="ga32-read">u + v = (4.0, 4.0) — |u+v| = 5.66</div>
+    <div class="ga-slider-row"><label class="lx">ux</label><input type="range" id="ga32-ux" min="-5" max="5" step="0.1" value="3"><span id="ga32-uxv">3.0</span></div>
+    <div class="ga-slider-row"><label class="ly">uy</label><input type="range" id="ga32-uy" min="-5" max="5" step="0.1" value="1"><span id="ga32-uyv">1.0</span></div>
+    <div class="ga-slider-row"><label class="lx">vx</label><input type="range" id="ga32-vx" min="-5" max="5" step="0.1" value="1"><span id="ga32-vxv">1.0</span></div>
+    <div class="ga-slider-row"><label class="ly">vy</label><input type="range" id="ga32-vy" min="-5" max="5" step="0.1" value="3"><span id="ga32-vyv">3.0</span></div>
+    <button class="ga-btn ga-btn-toggle" id="ga32-btn" onclick="gaToggleParallelo32()">Ocultar paralelogramo</button>
+    <div class="ga-hint">A diagonal partindo de $A$ é $\vec{u} + \vec{v}$ — mesmo resultado da regra do triângulo.</div>
+  </div>
+</div>`,
+        init: 'gaInit32',
         viz: String.raw`Dois vetores com origem comum. Botão "Mostrar paralelogramo" desenha os lados opostos (cópias equipolentes de $\vec{u}$ e $\vec{v}$) e a diagonal aparece em destaque. Sliders independentes mudam $\vec{u}$ e $\vec{v}$ em tempo real.` },
+
       { id: '3.3', title: 'Propriedades da Adição',
+        explanation: String.raw`
+<p>A adição de vetores satisfaz propriedades algébricas idênticas às da adição de números reais:</p>
+<ul class="ga-list">
+  <li><strong>Comutativa:</strong> $\vec{u} + \vec{v} = \vec{v} + \vec{u}$</li>
+  <li><strong>Associativa:</strong> $(\vec{u} + \vec{v}) + \vec{w} = \vec{u} + (\vec{v} + \vec{w})$</li>
+  <li><strong>Elemento neutro:</strong> $\vec{v} + \vec{0} = \vec{v}$</li>
+  <li><strong>Elemento oposto:</strong> $\vec{v} + (-\vec{v}) = \vec{0}$</li>
+</ul>`,
+        vizHTML: String.raw`
+<div class="ga-viz2d">
+  <canvas id="ga33-cv" class="ga-2d-canvas"></canvas>
+  <div class="ga-2d-side">
+    <div class="ga-2d-readout" id="ga33-read">Comutativa: u + v = v + u</div>
+    <div class="ga-prop-tabs">
+      <button class="ga-prop-tab active" data-i="0" onclick="gaSelProp33(0)">Comutativa</button>
+      <button class="ga-prop-tab" data-i="1" onclick="gaSelProp33(1)">Associativa</button>
+      <button class="ga-prop-tab" data-i="2" onclick="gaSelProp33(2)">Neutro</button>
+      <button class="ga-prop-tab" data-i="3" onclick="gaSelProp33(3)">Oposto</button>
+    </div>
+    <div class="ga-prop-formula" id="ga33-formula">$\vec{u} + \vec{v} = \vec{v} + \vec{u}$</div>
+    <div class="ga-hint">As duas formas de somar produzem o <strong>mesmo vetor resultante</strong> (em laranja).</div>
+  </div>
+</div>`,
+        init: 'gaInit33',
         viz: String.raw`Quatro painéis lado a lado, um para cada propriedade. Em "Comutativa", são mostradas as duas formas de somar e a coincidência da resultante. Em "Associativa", três vetores são somados em duas ordens diferentes e o resultado é o mesmo.` },
+
       { id: '3.4', title: 'Subtração de Vetores',
+        explanation: String.raw`
+<p>A <strong>subtração</strong> $\vec{u} - \vec{v}$ é definida como a soma de $\vec{u}$ com o oposto de $\vec{v}$:</p>
+<div class="ga-formula">$$\vec{u} - \vec{v} = \vec{u} + (-\vec{v})$$</div>
+<p>Geometricamente, se $\vec{u}$ e $\vec{v}$ partem do mesmo ponto, então $\vec{u} - \vec{v}$ é o vetor que vai da <strong>extremidade de $\vec{v}$ até a extremidade de $\vec{u}$</strong>.</p>`,
+        example: String.raw`
+<p>Se $A$ e $B$ são pontos do espaço, então:</p>
+<div class="ga-formula">$$\vec{AB} = \vec{OB} - \vec{OA}$$</div>
+<p>onde $O$ é a origem.</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz2d">
+  <canvas id="ga34-cv" class="ga-2d-canvas"></canvas>
+  <div class="ga-2d-side">
+    <div class="ga-2d-readout" id="ga34-read">u - v = (2.0, -1.0)</div>
+    <div class="ga-slider-row"><label class="lx">ux</label><input type="range" id="ga34-ux" min="-5" max="5" step="0.1" value="3"><span id="ga34-uxv">3.0</span></div>
+    <div class="ga-slider-row"><label class="ly">uy</label><input type="range" id="ga34-uy" min="-5" max="5" step="0.1" value="2"><span id="ga34-uyv">2.0</span></div>
+    <div class="ga-slider-row"><label class="lx">vx</label><input type="range" id="ga34-vx" min="-5" max="5" step="0.1" value="1"><span id="ga34-vxv">1.0</span></div>
+    <div class="ga-slider-row"><label class="ly">vy</label><input type="range" id="ga34-vy" min="-5" max="5" step="0.1" value="3"><span id="ga34-vyv">3.0</span></div>
+    <button class="ga-btn ga-btn-toggle" id="ga34-swap" onclick="gaSwapSub34()">Trocar para v - u</button>
+    <div class="ga-hint">A diferença (em laranja) vai da <strong>ponta do segundo</strong> até a <strong>ponta do primeiro</strong>. Trocar a ordem inverte a seta.</div>
+  </div>
+</div>`,
+        init: 'gaInit34',
         viz: String.raw`Dois vetores $\vec{u}$ e $\vec{v}$ com origem comum. Botão "Subtrair" desenha o vetor que liga a ponta de $\vec{v}$ à ponta de $\vec{u}$, destacando-o em laranja. Permite alternar entre "$\vec{u} - \vec{v}$" e "$\vec{v} - \vec{u}$" para mostrar que são opostos.` },
+
       { id: '3.5', title: 'Multiplicação de Vetor por Escalar',
+        explanation: String.raw`
+<p>Dado um vetor $\vec{v}$ e um número real $k$ (escalar), o produto $k\vec{v}$ é um novo vetor com:</p>
+<ul class="ga-list">
+  <li><strong>Módulo:</strong> $|k\vec{v}| = |k| \cdot |\vec{v}|$</li>
+  <li><strong>Direção:</strong> mesma de $\vec{v}$</li>
+  <li><strong>Sentido:</strong> mesmo de $\vec{v}$ se $k &gt; 0$; oposto se $k &lt; 0$; nulo se $k = 0$</li>
+</ul>`,
+        example: String.raw`
+<p>Se $\vec{v}$ tem módulo $4$, então $2\vec{v}$ tem módulo $8$ (mesmo sentido) e $-\tfrac{1}{2}\vec{v}$ tem módulo $2$ (sentido oposto).</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz2d">
+  <canvas id="ga35-cv" class="ga-2d-canvas"></canvas>
+  <div class="ga-2d-side">
+    <div class="ga-2d-readout" id="ga35-read">k·v = 2.0·(3, 2) = (6.0, 4.0) — |kv| = 7.21</div>
+    <div class="ga-slider-row"><label class="lx">vx</label><input type="range" id="ga35-vx" min="-4" max="4" step="0.1" value="3"><span id="ga35-vxv">3.0</span></div>
+    <div class="ga-slider-row"><label class="ly">vy</label><input type="range" id="ga35-vy" min="-4" max="4" step="0.1" value="2"><span id="ga35-vyv">2.0</span></div>
+    <div class="ga-slider-row"><label>k</label><input type="range" id="ga35-k" min="-3" max="3" step="0.1" value="2"><span id="ga35-kv">2.0</span></div>
+    <div class="ga-hint">$k &gt; 0$: mesma direção e sentido; $k &lt; 0$: sentido oposto; $|k|$ controla o quanto a seta estica ou encolhe.</div>
+  </div>
+</div>`,
+        init: 'gaInit35',
         viz: String.raw`Vetor $\vec{v}$ com um slider para $k$ variando de $-3$ a $3$. À medida que o slider se move, $k\vec{v}$ é redesenhado em tempo real, mostrando o efeito de esticar, encolher e inverter.` },
+
       { id: '3.6', title: 'Propriedades da Multiplicação por Escalar',
+        explanation: String.raw`
+<p>Para escalares $a, b \in \mathbb{R}$ e vetores $\vec{u}, \vec{v}$:</p>
+<ul class="ga-list">
+  <li><strong>Distributiva em relação à soma de vetores:</strong> $a(\vec{u} + \vec{v}) = a\vec{u} + a\vec{v}$</li>
+  <li><strong>Distributiva em relação à soma de escalares:</strong> $(a + b)\vec{v} = a\vec{v} + b\vec{v}$</li>
+  <li><strong>Associativa com escalares:</strong> $a(b\vec{v}) = (ab)\vec{v}$</li>
+  <li><strong>Identidade:</strong> $1 \cdot \vec{v} = \vec{v}$</li>
+</ul>
+<p>Estas propriedades, juntamente com as da adição, fazem do conjunto dos vetores um <strong>espaço vetorial</strong> — tópico central da Álgebra Linear.</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz2d">
+  <canvas id="ga36-cv" class="ga-2d-canvas"></canvas>
+  <div class="ga-2d-side">
+    <div class="ga-2d-readout" id="ga36-read">Distributiva (vetores): a(u + v) = au + av</div>
+    <div class="ga-prop-tabs">
+      <button class="ga-prop-tab active" data-i="0" onclick="gaSelProp36(0)">Distrib. vetores</button>
+      <button class="ga-prop-tab" data-i="1" onclick="gaSelProp36(1)">Distrib. escalares</button>
+      <button class="ga-prop-tab" data-i="2" onclick="gaSelProp36(2)">Associativa</button>
+      <button class="ga-prop-tab" data-i="3" onclick="gaSelProp36(3)">Identidade</button>
+    </div>
+    <div class="ga-slider-row"><label>a</label><input type="range" id="ga36-a" min="-2.5" max="2.5" step="0.1" value="1.5"><span id="ga36-av">1.5</span></div>
+    <div class="ga-slider-row"><label>b</label><input type="range" id="ga36-b" min="-2.5" max="2.5" step="0.1" value="0.8"><span id="ga36-bv">0.8</span></div>
+    <div class="ga-prop-formula" id="ga36-formula">$a(\vec{u} + \vec{v}) = a\vec{u} + a\vec{v}$</div>
+    <div class="ga-hint">As duas combinações produzem o <strong>mesmo</strong> vetor resultante — daí o conceito de espaço vetorial.</div>
+  </div>
+</div>`,
+        init: 'gaInit36',
         viz: String.raw`Mini-laboratório com dois vetores e dois sliders escalares. O usuário verifica cada propriedade fazendo as duas combinações lado a lado e vê os vetores resultantes se sobrepondo, confirmando a igualdade.` },
+
       { id: '3.7', title: 'Vetores Paralelos (Colineares)',
+        explanation: String.raw`
+<p>Dois vetores $\vec{u}$ e $\vec{v}$ são <strong>paralelos</strong> (ou <strong>colineares</strong>) quando possuem a mesma direção, isto é, quando existe um escalar $k$ tal que:</p>
+<div class="ga-formula">$$\vec{u} = k\vec{v}$$</div>
+<p>Se $k &gt; 0$, os vetores têm o mesmo sentido; se $k &lt; 0$, sentidos opostos. O vetor nulo é considerado paralelo a qualquer vetor.</p>`,
+        vizHTML: String.raw`
+<div class="ga-viz2d">
+  <canvas id="ga37-cv" class="ga-2d-canvas"></canvas>
+  <div class="ga-2d-side">
+    <div class="ga-2d-readout" id="ga37-read">u = (3.0, 2.0) · v = (1.5, 1.0)</div>
+    <div class="ga-slider-row"><label class="lx">ux</label><input type="range" id="ga37-ux" min="-5" max="5" step="0.1" value="3"><span id="ga37-uxv">3.0</span></div>
+    <div class="ga-slider-row"><label class="ly">uy</label><input type="range" id="ga37-uy" min="-5" max="5" step="0.1" value="2"><span id="ga37-uyv">2.0</span></div>
+    <div class="ga-slider-row"><label class="lx">vx</label><input type="range" id="ga37-vx" min="-5" max="5" step="0.1" value="1.5"><span id="ga37-vxv">1.5</span></div>
+    <div class="ga-slider-row"><label class="ly">vy</label><input type="range" id="ga37-vy" min="-5" max="5" step="0.1" value="1"><span id="ga37-vyv">1.0</span></div>
+    <button class="ga-btn ga-btn-toggle" onclick="gaSnap37()">Tornar paralelos (k = 2)</button>
+    <div class="ga-status on" id="ga37-status">PARALELOS · k ≈ 2.00</div>
+    <div class="ga-hint">Detectamos paralelismo via determinante: $u_x v_y - u_y v_x \approx 0$. Quando paralelos, $k$ é a razão entre as componentes.</div>
+  </div>
+</div>`,
+        init: 'gaInit37',
         viz: String.raw`Dois vetores no plano. O usuário arrasta um deles; se passar a ser paralelo ao outro, um indicador "PARALELOS! k ≈ ..." se acende, exibindo o valor aproximado do escalar.` },
     ],
   },
@@ -1034,3 +1355,1186 @@ function gaToggleHandedness15() {
   _ga15.dextro = !_ga15.dextro;
   _ga15.draw();
 }
+
+// ═══════════════════════════════════════════════════════════════
+//   Visualizações Interativas — Tópico 2
+// ═══════════════════════════════════════════════════════════════
+
+// ─── Generic 2D plane helper (math convention: y up) ──────────
+function _ga2D(cv, opts) {
+  opts = opts || {};
+  const lim = opts.lim || 6;
+  const H = opts.H || 380;
+  cv.width = cv.offsetWidth || 480;
+  cv.height = H;
+  const W = cv.width;
+  const unit = Math.min(W, H) / (2 * lim);
+  const ox = W / 2, oy = H / 2;
+  const ctx = cv.getContext('2d');
+  const api = {
+    cv, ctx, W, H, unit, ox, oy, lim,
+    sx(x) { return this.ox + x * this.unit; },
+    sy(y) { return this.oy - y * this.unit; },
+    fx(px) { return (px - this.ox) / this.unit; },
+    fy(py) { return -(py - this.oy) / this.unit; },
+    clear() { this.ctx.clearRect(0, 0, this.W, this.H); },
+    grid(showQuad) {
+      const c = this.ctx;
+      if (showQuad) {
+        c.fillStyle = 'rgba(124,106,247,.05)'; c.fillRect(this.ox, 0, this.W - this.ox, this.oy);
+        c.fillStyle = 'rgba(45,212,160,.05)';  c.fillRect(0, 0, this.ox, this.oy);
+        c.fillStyle = 'rgba(74,158,255,.05)';  c.fillRect(0, this.oy, this.ox, this.H - this.oy);
+        c.fillStyle = 'rgba(244,114,182,.05)'; c.fillRect(this.ox, this.oy, this.W - this.ox, this.H - this.oy);
+      }
+      c.strokeStyle = '#2a3350'; c.lineWidth = 0.7;
+      for (let i = -this.lim; i <= this.lim; i++) {
+        if (i === 0) continue;
+        const x = this.sx(i), y = this.sy(i);
+        c.beginPath(); c.moveTo(x, 0); c.lineTo(x, this.H); c.stroke();
+        c.beginPath(); c.moveTo(0, y); c.lineTo(this.W, y); c.stroke();
+      }
+      c.strokeStyle = '#8892b0'; c.lineWidth = 1.5;
+      c.beginPath(); c.moveTo(0, this.oy); c.lineTo(this.W, this.oy); c.stroke();
+      c.beginPath(); c.moveTo(this.ox, 0); c.lineTo(this.ox, this.H); c.stroke();
+      c.fillStyle = '#8892b0'; c.font = 'bold 12px JetBrains Mono, monospace';
+      c.textAlign = 'right'; c.textBaseline = 'middle';
+      c.fillText('x', this.W - 6, this.oy - 8);
+      c.fillText('y', this.ox - 8, 10);
+      c.fillStyle = '#e8ecf4';
+      c.beginPath(); c.arc(this.ox, this.oy, 2.5, 0, Math.PI * 2); c.fill();
+    },
+    arrow(x1, y1, x2, y2, color, opt) {
+      opt = opt || {};
+      const c = this.ctx;
+      const px1 = this.sx(x1), py1 = this.sy(y1);
+      const px2 = this.sx(x2), py2 = this.sy(y2);
+      const dx = px2 - px1, dy = py2 - py1;
+      const len = Math.sqrt(dx * dx + dy * dy);
+      if (len < 1) return;
+      const ux = dx / len, uy = dy / len;
+      const headLen = Math.min(14, Math.max(8, len * 0.28));
+      const headW = headLen * 0.5;
+      c.strokeStyle = color;
+      c.lineWidth = opt.lw || 2.6;
+      c.lineCap = 'round';
+      if (opt.dashed) c.setLineDash([6, 4]);
+      if (opt.alpha != null) c.globalAlpha = opt.alpha;
+      c.beginPath();
+      c.moveTo(px1, py1);
+      c.lineTo(px2 - ux * headLen * 0.65, py2 - uy * headLen * 0.65);
+      c.stroke();
+      c.setLineDash([]);
+      c.fillStyle = color;
+      c.beginPath();
+      c.moveTo(px2, py2);
+      c.lineTo(px2 - ux * headLen - uy * headW, py2 - uy * headLen + ux * headW);
+      c.lineTo(px2 - ux * headLen + uy * headW, py2 - uy * headLen - ux * headW);
+      c.closePath();
+      c.fill();
+      c.globalAlpha = 1;
+      if (opt.label) {
+        c.fillStyle = opt.labelColor || color;
+        c.font = 'bold 13px JetBrains Mono, monospace';
+        c.textAlign = 'center'; c.textBaseline = 'middle';
+        const tx = (px1 + px2) / 2 - uy * 14;
+        const ty = (py1 + py2) / 2 + ux * 14;
+        c.fillText(opt.label, tx, ty);
+      }
+    },
+    line(x1, y1, x2, y2, color, opt) {
+      opt = opt || {};
+      const c = this.ctx;
+      c.strokeStyle = color;
+      c.lineWidth = opt.lw || 1.2;
+      if (opt.dashed) c.setLineDash(opt.dashed === true ? [5, 4] : opt.dashed);
+      if (opt.alpha != null) c.globalAlpha = opt.alpha;
+      c.beginPath();
+      c.moveTo(this.sx(x1), this.sy(y1));
+      c.lineTo(this.sx(x2), this.sy(y2));
+      c.stroke();
+      c.setLineDash([]);
+      c.globalAlpha = 1;
+    },
+    point(x, y, color, label, labelColor) {
+      const c = this.ctx;
+      const px = this.sx(x), py = this.sy(y);
+      c.fillStyle = color;
+      c.beginPath(); c.arc(px, py, 5, 0, Math.PI * 2); c.fill();
+      if (label) {
+        c.fillStyle = labelColor || '#e8ecf4';
+        c.font = 'bold 13px JetBrains Mono, monospace';
+        c.textAlign = 'left'; c.textBaseline = 'bottom';
+        c.fillText(label, px + 8, py - 6);
+      }
+    },
+    circle(x, y, r, color, opt) {
+      opt = opt || {};
+      const c = this.ctx;
+      c.strokeStyle = color;
+      c.lineWidth = opt.lw || 1.2;
+      if (opt.dashed) c.setLineDash([5, 4]);
+      if (opt.alpha != null) c.globalAlpha = opt.alpha;
+      c.beginPath();
+      c.arc(this.sx(x), this.sy(y), r * this.unit, 0, Math.PI * 2);
+      c.stroke();
+      c.setLineDash([]);
+      c.globalAlpha = 1;
+    }
+  };
+  return api;
+}
+
+// ─── 2.1 — Escalar vs Vetorial ────────────────────────────────
+let _ga21 = null;
+function gaInit21() {
+  const tcv = document.getElementById('ga21-tcv');
+  const vcv = document.getElementById('ga21-vcv');
+  if (!tcv || !vcv) return;
+
+  // Thermometer canvas
+  tcv.width = tcv.offsetWidth || 240;
+  tcv.height = 240;
+  const tctx = tcv.getContext('2d');
+  // Arrow canvas (compact 2D plane)
+  const v2d = _ga2D(vcv, { lim: 5.5, H: 240 });
+  _ga21 = { tctx, tcv, v2d };
+
+  const drawTherm = (T) => {
+    const W = tcv.width, H = tcv.height;
+    tctx.clearRect(0, 0, W, H);
+    const cx = W / 2;
+    const tubeTop = 24;
+    const tubeBot = H - 50;
+    const tubeH = tubeBot - tubeTop;
+    const bulbR = 22;
+    // Frame
+    tctx.strokeStyle = '#3a4565';
+    tctx.lineWidth = 2;
+    tctx.beginPath();
+    tctx.moveTo(cx - 10, tubeTop);
+    tctx.arcTo(cx + 10, tubeTop, cx + 10, tubeTop + 10, 10);
+    tctx.lineTo(cx + 10, tubeBot - 4);
+    tctx.arc(cx, tubeBot + bulbR - 14, bulbR, -0.32, Math.PI + 0.32, false);
+    tctx.lineTo(cx - 10, tubeTop);
+    tctx.closePath();
+    tctx.stroke();
+    // Tick marks
+    tctx.strokeStyle = '#4a5478'; tctx.lineWidth = 1;
+    tctx.fillStyle = '#8892b0';
+    tctx.font = '10px JetBrains Mono, monospace';
+    tctx.textAlign = 'left'; tctx.textBaseline = 'middle';
+    for (let i = -10; i <= 40; i += 10) {
+      const ty = tubeBot - ((i - (-10)) / 50) * tubeH;
+      tctx.beginPath(); tctx.moveTo(cx + 12, ty); tctx.lineTo(cx + 18, ty); tctx.stroke();
+      tctx.fillText(i + '°', cx + 22, ty);
+    }
+    // Mercury (color shifts blue→orange→red)
+    const frac = Math.max(0, Math.min(1, (T - (-10)) / 50));
+    const r = Math.round(80 + frac * 175);
+    const g = Math.round(160 - frac * 90);
+    const b = Math.round(240 - frac * 200);
+    const merc = `rgb(${r},${g},${b})`;
+    const fillTop = tubeBot - frac * tubeH;
+    tctx.fillStyle = merc;
+    tctx.beginPath();
+    tctx.moveTo(cx - 6, fillTop);
+    tctx.lineTo(cx + 6, fillTop);
+    tctx.lineTo(cx + 6, tubeBot);
+    tctx.arc(cx, tubeBot + bulbR - 14, bulbR - 4, -0.38, Math.PI + 0.38, false);
+    tctx.lineTo(cx - 6, tubeBot);
+    tctx.closePath();
+    tctx.fill();
+    // Readout
+    tctx.fillStyle = '#e8ecf4';
+    tctx.font = 'bold 22px JetBrains Mono, monospace';
+    tctx.textAlign = 'center'; tctx.textBaseline = 'middle';
+    tctx.fillText(T + ' °C', cx - 30, tubeTop + tubeH / 2);
+  };
+
+  const drawArrow = (m, ang) => {
+    v2d.clear(); v2d.grid(false);
+    const rad = ang * Math.PI / 180;
+    const x = m * Math.cos(rad);
+    const y = m * Math.sin(rad);
+    // Direction line (support)
+    v2d.line(-5 * Math.cos(rad), -5 * Math.sin(rad), 5 * Math.cos(rad), 5 * Math.sin(rad),
+             '#5a6080', { dashed: true, alpha: 0.5 });
+    // Angle arc
+    const ctx = v2d.ctx;
+    ctx.strokeStyle = '#a892ff';
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.arc(v2d.ox, v2d.oy, 22, 0, -rad, true);
+    ctx.stroke();
+    ctx.fillStyle = '#a892ff';
+    ctx.font = 'bold 11px JetBrains Mono, monospace';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText('θ', v2d.ox + 28, v2d.oy - 8);
+    // The vector
+    v2d.arrow(0, 0, x, y, '#f97316', { lw: 3, label: 'v' });
+  };
+
+  const upd = () => {
+    const T = +document.getElementById('ga21-t').value;
+    const m = +document.getElementById('ga21-m').value;
+    const ang = +document.getElementById('ga21-a').value;
+    document.getElementById('ga21-tv').textContent = T + ' °C';
+    document.getElementById('ga21-mv').textContent = m.toFixed(1);
+    document.getElementById('ga21-av').textContent = ang + '°';
+    drawTherm(T);
+    drawArrow(m, ang);
+  };
+  ['ga21-t', 'ga21-m', 'ga21-a'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+
+// ─── 2.2 — Segmento orientado ────────────────────────────────
+let _ga22 = null;
+function gaInit22() {
+  const cv = document.getElementById('ga22-cv'); if (!cv) return;
+  const g = _ga2D(cv, { lim: 6 });
+  _ga22 = { g, A: null, B: null, next: 'A' };
+
+  cv.onclick = (e) => {
+    const rect = cv.getBoundingClientRect();
+    const px = e.clientX - rect.left, py = e.clientY - rect.top;
+    const x = Math.round(g.fx(px) * 2) / 2;
+    const y = Math.round(g.fy(py) * 2) / 2;
+    if (_ga22.next === 'A') { _ga22.A = { x, y }; _ga22.B = null; _ga22.next = 'B'; }
+    else                    { _ga22.B = { x, y }; _ga22.next = 'A'; }
+    _ga22Redraw();
+  };
+
+  // Default sample so user immediately sees a vector
+  _ga22.A = { x: -2, y: -1 };
+  _ga22.B = { x: 3, y: 2 };
+  _ga22Redraw();
+}
+
+function _ga22Redraw() {
+  if (!_ga22) return;
+  const g = _ga22.g;
+  g.clear(); g.grid(true);
+  const r = document.getElementById('ga22-read');
+  if (_ga22.A) g.point(_ga22.A.x, _ga22.A.y, '#f472b6', `A (${_ga22.A.x}, ${_ga22.A.y})`);
+  if (_ga22.B) g.point(_ga22.B.x, _ga22.B.y, '#f97316', `B (${_ga22.B.x}, ${_ga22.B.y})`);
+  if (_ga22.A && _ga22.B) {
+    g.arrow(_ga22.A.x, _ga22.A.y, _ga22.B.x, _ga22.B.y, '#7c6af7', { lw: 3, label: 'AB' });
+    const dx = (_ga22.B.x - _ga22.A.x), dy = (_ga22.B.y - _ga22.A.y);
+    const mod = Math.sqrt(dx * dx + dy * dy);
+    if (r) r.textContent = `AB = (${dx.toFixed(1)}, ${dy.toFixed(1)}) — |AB| = ${mod.toFixed(2)}`;
+  } else if (r) {
+    r.textContent = _ga22.next === 'A' ? 'Clique no plano para marcar A'
+                                       : 'Clique no plano para marcar B';
+  }
+}
+
+function gaSwapAB22() {
+  if (!_ga22 || !_ga22.A || !_ga22.B) return;
+  const t = _ga22.A; _ga22.A = _ga22.B; _ga22.B = t;
+  _ga22Redraw();
+}
+
+function gaClearAB22() {
+  if (!_ga22) return;
+  _ga22.A = null; _ga22.B = null; _ga22.next = 'A';
+  _ga22Redraw();
+}
+
+// ─── 2.3 — Equipolentes ──────────────────────────────────────
+let _ga23 = null;
+function gaInit23() {
+  const cv = document.getElementById('ga23-cv'); if (!cv) return;
+  const g = _ga2D(cv, { lim: 6 });
+  // base vector: from (-4, -2) to (-1, 0) — displacement (3, 2)
+  const base = { x1: -4, y1: -2, x2: -1, y2: 0 };
+  _ga23 = { g, base, copies: [] };
+
+  const upd = () => {
+    g.clear(); g.grid(false);
+    // Equipolent copies (faded)
+    const dx = base.x2 - base.x1, dy = base.y2 - base.y1;
+    for (const c of _ga23.copies) {
+      g.arrow(c.x, c.y, c.x + dx, c.y + dy, '#7c6af7', { lw: 2.2, alpha: 0.55 });
+    }
+    // Original (bold orange)
+    g.arrow(base.x1, base.y1, base.x2, base.y2, '#f97316', { lw: 3.2, label: 'AB' });
+    g.point(base.x1, base.y1, '#f472b6');
+    g.point(base.x2, base.y2, '#f97316');
+
+    const r = document.getElementById('ga23-read');
+    if (r) r.textContent = `Vetor: Δ = (${dx}, ${dy}) — cópias: ${_ga23.copies.length}`;
+  };
+
+  cv.onclick = (e) => {
+    const rect = cv.getBoundingClientRect();
+    const px = e.clientX - rect.left, py = e.clientY - rect.top;
+    const x = Math.round(g.fx(px) * 2) / 2;
+    const y = Math.round(g.fy(py) * 2) / 2;
+    _ga23.copies.push({ x, y });
+    upd();
+  };
+  _ga23.upd = upd;
+  upd();
+}
+function gaFillEqui23() {
+  if (!_ga23) return;
+  const presets = [
+    {x: 1.5, y: -3.5}, {x: 3, y: 0}, {x: -2, y: 3}, {x: 0.5, y: 1.5},
+    {x: -4, y: 2}, {x: 2.5, y: 3}, {x: -2.5, y: -3.5}, {x: 1, y: -1},
+    {x: 4, y: -2.5}, {x: -0.5, y: -2}
+  ];
+  _ga23.copies = presets;
+  _ga23.upd();
+}
+function gaClearEqui23() {
+  if (!_ga23) return;
+  _ga23.copies = [];
+  _ga23.upd();
+}
+
+// ─── 2.4 — Módulo, direção e sentido ──────────────────────────
+let _ga24 = null;
+function gaInit24() {
+  const cv = document.getElementById('ga24-cv'); if (!cv) return;
+  const g = _ga2D(cv, { lim: 6 });
+  _ga24 = { g, sense: 1 };
+
+  const upd = () => {
+    const m = +document.getElementById('ga24-m').value;
+    const ang = +document.getElementById('ga24-a').value;
+    document.getElementById('ga24-mv').textContent = m.toFixed(1);
+    document.getElementById('ga24-av').textContent = ang + '°';
+    const rad = ang * Math.PI / 180;
+    const s = _ga24.sense;
+    const x = s * m * Math.cos(rad);
+    const y = s * m * Math.sin(rad);
+
+    g.clear(); g.grid(false);
+    // Support line (full direction)
+    g.line(-6 * Math.cos(rad), -6 * Math.sin(rad), 6 * Math.cos(rad), 6 * Math.sin(rad),
+           '#5a6080', { dashed: true, alpha: 0.6 });
+    // The vector
+    g.arrow(0, 0, x, y, '#f97316', { lw: 3.2, label: 'v' });
+    // Angle arc (always positive sweep from +x)
+    const ctx = g.ctx;
+    ctx.strokeStyle = '#a892ff';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.arc(g.ox, g.oy, 28, 0, -rad, true);
+    ctx.stroke();
+    ctx.fillStyle = '#a892ff';
+    ctx.font = 'bold 12px JetBrains Mono, monospace';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText('θ = ' + ang + '°', g.ox + 34, g.oy - 12);
+
+    const senseArrow = s > 0 ? '→' : '←';
+    document.getElementById('ga24-read').textContent =
+      `|v| = ${m.toFixed(1)} · θ = ${ang}° · sentido ${senseArrow}`;
+  };
+  _ga24.upd = upd;
+  ['ga24-m', 'ga24-a'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+function gaInvert24() {
+  if (!_ga24) return;
+  _ga24.sense = -_ga24.sense;
+  _ga24.upd();
+}
+
+// ─── 2.5 — Vetor nulo, unitário e versor ─────────────────────
+let _ga25 = null;
+function gaInit25() {
+  const cv = document.getElementById('ga25-cv'); if (!cv) return;
+  const g = _ga2D(cv, { lim: 6 });
+  _ga25 = { g, show: false };
+
+  const upd = () => {
+    const x = +document.getElementById('ga25-x').value;
+    const y = +document.getElementById('ga25-y').value;
+    document.getElementById('ga25-xv').textContent = x.toFixed(1);
+    document.getElementById('ga25-yv').textContent = y.toFixed(1);
+    const mod = Math.sqrt(x * x + y * y);
+    document.getElementById('ga25-read').textContent =
+      `v = (${x.toFixed(1)}, ${y.toFixed(1)}) — |v| = ${mod.toFixed(2)}`;
+
+    g.clear(); g.grid(false);
+    // Unit circle
+    g.circle(0, 0, 1, '#5eebbe', { dashed: true, alpha: 0.7 });
+    // v
+    g.arrow(0, 0, x, y, '#f97316', { lw: 3, label: 'v' });
+
+    const out = document.getElementById('ga25-vout');
+    if (_ga25.show && mod > 1e-6) {
+      const ux = x / mod, uy = y / mod;
+      g.arrow(0, 0, ux, uy, '#5eebbe', { lw: 3.5 });
+      g.point(ux, uy, '#5eebbe', 'v̂', '#5eebbe');
+      if (out) {
+        out.style.display = '';
+        out.innerHTML = `<strong>v̂</strong> = (${ux.toFixed(2)}, ${uy.toFixed(2)}) — |v̂| = 1.00`;
+      }
+    } else if (mod <= 1e-6) {
+      if (out) {
+        out.style.display = '';
+        out.innerHTML = `<strong>v = 0</strong> — versor indefinido (módulo zero)`;
+      }
+    } else {
+      if (out) out.style.display = 'none';
+    }
+  };
+  _ga25.upd = upd;
+  ['ga25-x', 'ga25-y'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+function gaToggleVersor25() {
+  if (!_ga25) return;
+  _ga25.show = !_ga25.show;
+  const btn = document.getElementById('ga25-btn');
+  if (btn) btn.textContent = _ga25.show ? 'Ocultar versor' : 'Mostrar versor';
+  _ga25.upd();
+}
+
+// ─── 2.6 — Vetores opostos ───────────────────────────────────
+let _ga26 = null;
+function gaInit26() {
+  const cv = document.getElementById('ga26-cv'); if (!cv) return;
+  const g = _ga2D(cv, { lim: 6 });
+  _ga26 = { g, anim: null, animId: 0 };
+
+  const drawStatic = (x, y) => {
+    g.clear(); g.grid(false);
+    // Support line
+    const mod = Math.sqrt(x * x + y * y);
+    if (mod > 0.01) {
+      const ux = x / mod, uy = y / mod;
+      g.line(-6 * ux, -6 * uy, 6 * ux, 6 * uy, '#5a6080', { dashed: true, alpha: 0.55 });
+    }
+    g.arrow(0, 0, x, y, '#f97316', { lw: 3, label: 'v' });
+    g.arrow(0, 0, -x, -y, '#5eebbe', { lw: 3, label: '-v' });
+    document.getElementById('ga26-read').textContent =
+      `v = (${x.toFixed(1)}, ${y.toFixed(1)}) · -v = (${(-x).toFixed(1)}, ${(-y).toFixed(1)})`;
+  };
+
+  const upd = () => {
+    if (_ga26.anim) return; // animation owns the canvas
+    const x = +document.getElementById('ga26-x').value;
+    const y = +document.getElementById('ga26-y').value;
+    document.getElementById('ga26-xv').textContent = x.toFixed(1);
+    document.getElementById('ga26-yv').textContent = y.toFixed(1);
+    drawStatic(x, y);
+  };
+  _ga26.upd = upd;
+  _ga26.drawStatic = drawStatic;
+  ['ga26-x', 'ga26-y'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+function gaAnimSum26() {
+  if (!_ga26) return;
+  // Cancel any in-flight animation
+  if (_ga26.anim) { cancelAnimationFrame(_ga26.animId); _ga26.anim = null; }
+  const x = +document.getElementById('ga26-x').value;
+  const y = +document.getElementById('ga26-y').value;
+  const btn = document.getElementById('ga26-anim'); if (btn) btn.disabled = true;
+  const g = _ga26.g;
+
+  const t0 = performance.now();
+  const DUR = 2200; // ms
+  _ga26.anim = true;
+
+  const step = (now) => {
+    const t = Math.min(1, (now - t0) / DUR);
+    g.clear(); g.grid(false);
+    const mod = Math.sqrt(x * x + y * y);
+    if (mod > 0.01) {
+      const ux = x / mod, uy = y / mod;
+      g.line(-6 * ux, -6 * uy, 6 * ux, 6 * uy, '#5a6080', { dashed: true, alpha: 0.55 });
+    }
+    // Phase 1 (0..0.5): walk +v from origin
+    // Phase 2 (0.5..1): walk -v from end of +v back to origin
+    if (t <= 0.5) {
+      const k = t / 0.5;
+      g.arrow(0, 0, x * k, y * k, '#f97316', { lw: 3, label: k > 0.4 ? 'v' : '' });
+    } else {
+      g.arrow(0, 0, x, y, '#f97316', { lw: 3, alpha: 0.6 });
+      const k = (t - 0.5) / 0.5;
+      g.arrow(x, y, x * (1 - k), y * (1 - k), '#5eebbe', { lw: 3, label: k > 0.4 ? '-v' : '' });
+    }
+    if (t >= 1) {
+      // Final state: origin highlighted as "0"
+      const ctx = g.ctx;
+      ctx.fillStyle = '#a892ff';
+      ctx.beginPath(); ctx.arc(g.ox, g.oy, 7, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#e8ecf4';
+      ctx.font = 'bold 14px JetBrains Mono, monospace';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      ctx.fillText('0', g.ox + 12, g.oy - 12);
+      document.getElementById('ga26-read').textContent =
+        `v + (-v) = 0  →  voltamos à origem`;
+      _ga26.anim = null;
+      if (btn) btn.disabled = false;
+      // After a short pause, go back to static
+      setTimeout(() => { if (!_ga26.anim) _ga26.upd(); }, 1400);
+      return;
+    }
+    _ga26.animId = requestAnimationFrame(step);
+  };
+  _ga26.animId = requestAnimationFrame(step);
+}
+
+// ─── 2.7 — Galeria 2D / 3D ───────────────────────────────────
+let _ga27 = null;
+const GA27_2D = [
+  { name: 'v₁', color: '#ef4444', x1: -3,   y1:  1,   x2:  1,    y2:  2   },
+  { name: 'v₂', color: '#22c55e', x1:  1.5, y1: -2,   x2: -0.5,  y2:  1   },
+  { name: 'v₃', color: '#3b82f6', x1:  2,   y1:  2,   x2:  3,    y2:  0   },
+  { name: 'v₄', color: '#f472b6', x1: -2,   y1: -3,   x2:  1,    y2: -1   },
+];
+const GA27_3D = [
+  { name: 'v₁', color: 0xef4444, p: [0, 0, 0],    v: [3, 2, 2] },
+  { name: 'v₂', color: 0x22c55e, p: [-2, 0, 1],   v: [1, 3, 1] },
+  { name: 'v₃', color: 0x3b82f6, p: [1, -2, 0],   v: [-2, 1, 2] },
+  { name: 'v₄', color: 0xf472b6, p: [0, 1, -2],   v: [2, -1, 2] },
+];
+function gaInit27() {
+  const cv = document.getElementById('ga27-cv'); if (!cv) return;
+  if (_ga27 && _ga27.three) { try { _ga27.three.dispose(); } catch (e) {} }
+  _ga27 = { mode: '2d', active: 0, three: null, g: null };
+
+  _ga27.g = _ga2D(cv, { lim: 6, H: 380 });
+  cv.onclick = (e) => {
+    const rect = cv.getBoundingClientRect();
+    const px = e.clientX - rect.left, py = e.clientY - rect.top;
+    const mx = _ga27.g.fx(px), my = _ga27.g.fy(py);
+    // Pick closest by distance from segment midpoint
+    let best = -1, bd = 1e9;
+    GA27_2D.forEach((v, i) => {
+      const cx = (v.x1 + v.x2) / 2, cy = (v.y1 + v.y2) / 2;
+      const d = (cx - mx) * (cx - mx) + (cy - my) * (cy - my);
+      if (d < bd) { bd = d; best = i; }
+    });
+    if (best >= 0 && bd < 2.5) gaSelectVec27(best);
+  };
+  _gaRenderList27();
+  _ga27Draw();
+}
+function _gaRenderList27() {
+  const list = document.getElementById('ga27-list'); if (!list) return;
+  const arr = _ga27.mode === '2d' ? GA27_2D : GA27_3D;
+  list.innerHTML = arr.map((v, i) => {
+    let dx, dy, dz, mod, dim;
+    if (_ga27.mode === '2d') {
+      dx = v.x2 - v.x1; dy = v.y2 - v.y1; mod = Math.sqrt(dx * dx + dy * dy);
+      dim = `(${dx.toFixed(1)}, ${dy.toFixed(1)})`;
+    } else {
+      dx = v.v[0]; dy = v.v[1]; dz = v.v[2];
+      mod = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      dim = `(${dx}, ${dy}, ${dz})`;
+    }
+    const colorCss = (typeof v.color === 'number')
+      ? '#' + v.color.toString(16).padStart(6, '0') : v.color;
+    return `<div class="ga-vec-card${i === _ga27.active ? ' active' : ''}" onclick="gaSelectVec27(${i})">
+      <span class="ga-vec-name" style="color:${colorCss}">${v.name}</span>
+      <span class="ga-vec-info">Δ=${dim} · |v|=${mod.toFixed(2)}</span>
+    </div>`;
+  }).join('');
+}
+function _ga27Draw() {
+  if (_ga27.mode === '2d') {
+    const g = _ga27.g;
+    g.clear(); g.grid(false);
+    GA27_2D.forEach((v, i) => {
+      const opt = { lw: i === _ga27.active ? 3.4 : 2.2,
+                    alpha: i === _ga27.active ? 1 : 0.55,
+                    label: v.name };
+      g.arrow(v.x1, v.y1, v.x2, v.y2, v.color, opt);
+      g.point(v.x1, v.y1, v.color);
+    });
+    const v = GA27_2D[_ga27.active];
+    const dx = v.x2 - v.x1, dy = v.y2 - v.y1;
+    const mod = Math.sqrt(dx * dx + dy * dy);
+    const r = document.getElementById('ga27-read');
+    if (r) r.textContent = `${v.name}: A=(${v.x1}, ${v.y1}), B=(${v.x2}, ${v.y2}), |v|=${mod.toFixed(2)}`;
+  } else {
+    // 3D mode: rebuild scene group
+    const three = _ga27.three; if (!three) return;
+    while (three.dynamic.children.length) three.dynamic.remove(three.dynamic.children[0]);
+    GA27_3D.forEach((v, i) => {
+      const g = new THREE.Group();
+      const isActive = i === _ga27.active;
+      _gaFatArrow(g, v.p, [v.p[0] + v.v[0], v.p[1] + v.v[1], v.p[2] + v.v[2]], v.color);
+      // Origin point
+      const sphere = new THREE.Mesh(
+        new THREE.SphereGeometry(0.1, 12, 12),
+        new THREE.MeshPhongMaterial({ color: v.color })
+      );
+      sphere.position.set(v.p[0], v.p[1], v.p[2]);
+      g.add(sphere);
+      if (!isActive) g.traverse(o => { if (o.material) { o.material.transparent = true; o.material.opacity = 0.35; } });
+      three.dynamic.add(g);
+    });
+    const v = GA27_3D[_ga27.active];
+    const mod = Math.sqrt(v.v[0] ** 2 + v.v[1] ** 2 + v.v[2] ** 2);
+    const r = document.getElementById('ga27-read');
+    if (r) r.textContent = `${v.name}: aplic.=(${v.p.join(', ')}), Δ=(${v.v.join(', ')}), |v|=${mod.toFixed(2)}`;
+  }
+}
+function gaSelectVec27(i) {
+  if (!_ga27) return;
+  _ga27.active = i;
+  _gaRenderList27();
+  _ga27Draw();
+}
+function gaToggleDim27() {
+  if (!_ga27) return;
+  const cv = document.getElementById('ga27-cv');
+  const host = document.getElementById('ga27-host');
+  const btn = document.getElementById('ga27-btn');
+  if (!cv || !host) return;
+  if (_ga27.mode === '2d') {
+    _ga27.mode = '3d';
+    cv.style.display = 'none';
+    host.style.display = '';
+    if (btn) btn.textContent = 'Mostrar em 2D';
+    if (!_ga27.three) {
+      const ctx = _gaMake3D(host);
+      const dynamic = new THREE.Group(); ctx.scene.add(dynamic);
+      _ga27.three = { ctx, dynamic, dispose: () => ctx.dispose() };
+    }
+  } else {
+    _ga27.mode = '2d';
+    cv.style.display = '';
+    host.style.display = 'none';
+    if (btn) btn.textContent = 'Mostrar em 3D';
+  }
+  _gaRenderList27();
+  _ga27Draw();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//   Visualizações Interativas — Tópico 3
+// ═══════════════════════════════════════════════════════════════
+
+// Colors used throughout topic 3
+const GA3_COL = {
+  u: '#ef4444',   // red
+  v: '#22c55e',   // green
+  w: '#3b82f6',   // blue
+  sum: '#f97316', // orange (result)
+  alt: '#a892ff', // purple (alternative path)
+  ghost: '#5a6080'
+};
+
+// ─── 3.1 — Adição: Regra do Triângulo ────────────────────────
+let _ga31 = null;
+function gaInit31() {
+  const cv = document.getElementById('ga31-cv'); if (!cv) return;
+  const g = _ga2D(cv, { lim: 7 });
+  _ga31 = { g, anim: false, animId: 0 };
+
+  const drawStatic = (ux, uy, vx, vy) => {
+    g.clear(); g.grid(false);
+    const sx = ux + vx, sy = uy + vy;
+    // u from origin
+    g.arrow(0, 0, ux, uy, GA3_COL.u, { lw: 3, label: 'u' });
+    // v from end of u (triangle rule)
+    g.arrow(ux, uy, sx, sy, GA3_COL.v, { lw: 3, label: 'v' });
+    // sum from origin
+    g.arrow(0, 0, sx, sy, GA3_COL.sum, { lw: 3.4, label: 'u+v' });
+    // Mark A, B, C
+    g.point(0, 0, '#e8ecf4', 'A');
+    g.point(ux, uy, '#e8ecf4', 'B');
+    g.point(sx, sy, '#e8ecf4', 'C');
+    document.getElementById('ga31-read').textContent =
+      `u + v = (${sx.toFixed(1)}, ${sy.toFixed(1)}) — |u+v| = ${Math.sqrt(sx * sx + sy * sy).toFixed(2)}`;
+  };
+
+  const upd = () => {
+    if (_ga31.anim) return;
+    const ux = +document.getElementById('ga31-ux').value;
+    const uy = +document.getElementById('ga31-uy').value;
+    const vx = +document.getElementById('ga31-vx').value;
+    const vy = +document.getElementById('ga31-vy').value;
+    document.getElementById('ga31-uxv').textContent = ux.toFixed(1);
+    document.getElementById('ga31-uyv').textContent = uy.toFixed(1);
+    document.getElementById('ga31-vxv').textContent = vx.toFixed(1);
+    document.getElementById('ga31-vyv').textContent = vy.toFixed(1);
+    drawStatic(ux, uy, vx, vy);
+  };
+  _ga31.upd = upd;
+  _ga31.drawStatic = drawStatic;
+  ['ga31-ux', 'ga31-uy', 'ga31-vx', 'ga31-vy'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+
+function gaAnimSum31() {
+  if (!_ga31) return;
+  if (_ga31.anim) { cancelAnimationFrame(_ga31.animId); _ga31.anim = false; }
+  const ux = +document.getElementById('ga31-ux').value;
+  const uy = +document.getElementById('ga31-uy').value;
+  const vx = +document.getElementById('ga31-vx').value;
+  const vy = +document.getElementById('ga31-vy').value;
+  const btn = document.getElementById('ga31-anim'); if (btn) btn.disabled = true;
+  _ga31.anim = true;
+
+  const g = _ga31.g;
+  const t0 = performance.now();
+  const DUR = 2400;
+
+  const step = (now) => {
+    const t = Math.min(1, (now - t0) / DUR);
+    g.clear(); g.grid(false);
+    g.point(0, 0, '#e8ecf4', 'A');
+
+    if (t <= 0.33) {
+      const k = t / 0.33;
+      g.arrow(0, 0, ux * k, uy * k, GA3_COL.u, { lw: 3, label: k > 0.5 ? 'u' : '' });
+    } else if (t <= 0.7) {
+      g.arrow(0, 0, ux, uy, GA3_COL.u, { lw: 3, label: 'u' });
+      g.point(ux, uy, '#e8ecf4', 'B');
+      // v slides from origin to end of u
+      const k = (t - 0.33) / 0.37;
+      const sx0 = ux * k, sy0 = uy * k;          // start of v
+      const sx1 = sx0 + vx, sy1 = sy0 + vy;       // end of v
+      g.arrow(sx0, sy0, sx1, sy1, GA3_COL.v, { lw: 3, alpha: 0.85, label: 'v' });
+    } else {
+      g.arrow(0, 0, ux, uy, GA3_COL.u, { lw: 3, label: 'u' });
+      g.arrow(ux, uy, ux + vx, uy + vy, GA3_COL.v, { lw: 3, label: 'v' });
+      g.point(ux, uy, '#e8ecf4', 'B');
+      const k = (t - 0.7) / 0.3;
+      g.arrow(0, 0, (ux + vx) * k, (uy + vy) * k, GA3_COL.sum,
+              { lw: 3.4, label: k > 0.5 ? 'u+v' : '' });
+      if (t >= 1) g.point(ux + vx, uy + vy, '#e8ecf4', 'C');
+    }
+
+    if (t >= 1) {
+      _ga31.anim = false;
+      if (btn) btn.disabled = false;
+      setTimeout(() => { if (!_ga31.anim) _ga31.upd(); }, 1600);
+      return;
+    }
+    _ga31.animId = requestAnimationFrame(step);
+  };
+  _ga31.animId = requestAnimationFrame(step);
+}
+
+// ─── 3.2 — Adição: Regra do Paralelogramo ────────────────────
+let _ga32 = null;
+function gaInit32() {
+  const cv = document.getElementById('ga32-cv'); if (!cv) return;
+  const g = _ga2D(cv, { lim: 7 });
+  _ga32 = { g, showPara: true };
+
+  const upd = () => {
+    const ux = +document.getElementById('ga32-ux').value;
+    const uy = +document.getElementById('ga32-uy').value;
+    const vx = +document.getElementById('ga32-vx').value;
+    const vy = +document.getElementById('ga32-vy').value;
+    document.getElementById('ga32-uxv').textContent = ux.toFixed(1);
+    document.getElementById('ga32-uyv').textContent = uy.toFixed(1);
+    document.getElementById('ga32-vxv').textContent = vx.toFixed(1);
+    document.getElementById('ga32-vyv').textContent = vy.toFixed(1);
+    const sx = ux + vx, sy = uy + vy;
+
+    g.clear(); g.grid(false);
+    if (_ga32.showPara) {
+      // Parallelogram fill
+      const ctx = g.ctx;
+      ctx.fillStyle = 'rgba(168,146,255,.10)';
+      ctx.strokeStyle = 'rgba(168,146,255,.55)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(g.sx(0), g.sy(0));
+      ctx.lineTo(g.sx(ux), g.sy(uy));
+      ctx.lineTo(g.sx(sx), g.sy(sy));
+      ctx.lineTo(g.sx(vx), g.sy(vy));
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      // Equipolent copies (ghost arrows)
+      g.arrow(vx, vy, sx, sy, GA3_COL.u, { lw: 1.8, alpha: 0.45 });
+      g.arrow(ux, uy, sx, sy, GA3_COL.v, { lw: 1.8, alpha: 0.45 });
+    }
+    // Main vectors (from origin)
+    g.arrow(0, 0, ux, uy, GA3_COL.u, { lw: 3, label: 'u' });
+    g.arrow(0, 0, vx, vy, GA3_COL.v, { lw: 3, label: 'v' });
+    // Diagonal = u + v
+    g.arrow(0, 0, sx, sy, GA3_COL.sum, { lw: 3.4, label: 'u+v' });
+    g.point(0, 0, '#e8ecf4', 'A');
+
+    document.getElementById('ga32-read').textContent =
+      `u + v = (${sx.toFixed(1)}, ${sy.toFixed(1)}) — |u+v| = ${Math.sqrt(sx * sx + sy * sy).toFixed(2)}`;
+  };
+  _ga32.upd = upd;
+  ['ga32-ux', 'ga32-uy', 'ga32-vx', 'ga32-vy'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+function gaToggleParallelo32() {
+  if (!_ga32) return;
+  _ga32.showPara = !_ga32.showPara;
+  const btn = document.getElementById('ga32-btn');
+  if (btn) btn.textContent = _ga32.showPara ? 'Ocultar paralelogramo' : 'Mostrar paralelogramo';
+  _ga32.upd();
+}
+
+// ─── 3.3 — Propriedades da Adição ────────────────────────────
+let _ga33 = null;
+function gaInit33() {
+  const cv = document.getElementById('ga33-cv'); if (!cv) return;
+  const g = _ga2D(cv, { lim: 7 });
+  _ga33 = { g, prop: 0 };
+  _ga33Draw();
+}
+function _ga33Draw() {
+  const g = _ga33.g;
+  g.clear(); g.grid(false);
+  const u = { x: 3, y: 1 }, v = { x: 1, y: 3 }, w = { x: 2, y: -2 };
+
+  const setText = (read, formula) => {
+    const r = document.getElementById('ga33-read'); if (r) r.textContent = read;
+    const f = document.getElementById('ga33-formula');
+    if (f) {
+      f.innerHTML = formula;
+      if (typeof rerenderMath === 'function') rerenderMath(f);
+    }
+  };
+
+  if (_ga33.prop === 0) {
+    // Comutativa: u + v via triangle rule (top) vs v + u (bottom)
+    const sx = u.x + v.x, sy = u.y + v.y;
+    g.arrow(0, 0, u.x, u.y, GA3_COL.u, { lw: 2.6, label: 'u' });
+    g.arrow(u.x, u.y, sx, sy, GA3_COL.v, { lw: 2.6, label: 'v' });
+    g.arrow(0, 0, v.x, v.y, GA3_COL.v, { lw: 2.6, alpha: 0.65 });
+    g.arrow(v.x, v.y, sx, sy, GA3_COL.u, { lw: 2.6, alpha: 0.65 });
+    g.arrow(0, 0, sx, sy, GA3_COL.sum, { lw: 3.4, label: 'u+v=v+u' });
+    g.point(sx, sy, '#e8ecf4');
+    setText(`Comutativa: u + v = v + u = (${sx}, ${sy})`,
+            String.raw`$\vec{u} + \vec{v} = \vec{v} + \vec{u}$`);
+  } else if (_ga33.prop === 1) {
+    // Associativa: (u+v)+w  vs  u+(v+w)
+    const uv = { x: u.x + v.x, y: u.y + v.y };
+    const vw = { x: v.x + w.x, y: v.y + w.y };
+    const total = { x: u.x + v.x + w.x, y: u.y + v.y + w.y };
+    // Path 1: u, v, w (chain on top)
+    g.arrow(0, 0, u.x, u.y, GA3_COL.u, { lw: 2.4, label: 'u' });
+    g.arrow(u.x, u.y, uv.x, uv.y, GA3_COL.v, { lw: 2.4, label: 'v' });
+    g.arrow(uv.x, uv.y, total.x, total.y, GA3_COL.w, { lw: 2.4, label: 'w' });
+    g.arrow(0, 0, uv.x, uv.y, GA3_COL.alt, { lw: 2, alpha: 0.55, label: '(u+v)' });
+    // Path 2: v+w from origin (dashed) then u shifts result
+    g.line(0, 0, vw.x, vw.y, GA3_COL.alt, { dashed: true, alpha: 0.55, lw: 1.4 });
+    // The total result
+    g.arrow(0, 0, total.x, total.y, GA3_COL.sum, { lw: 3.6, label: 'u+v+w' });
+    setText(`Associativa: (u+v)+w = u+(v+w) = (${total.x}, ${total.y})`,
+            String.raw`$(\vec{u} + \vec{v}) + \vec{w} = \vec{u} + (\vec{v} + \vec{w})$`);
+  } else if (_ga33.prop === 2) {
+    // Elemento neutro: v + 0 = v
+    g.arrow(0, 0, u.x, u.y, GA3_COL.u, { lw: 3, label: 'v' });
+    // 0 vector shown as small dot
+    const ctx = g.ctx;
+    ctx.fillStyle = GA3_COL.ghost;
+    ctx.beginPath(); ctx.arc(g.sx(u.x), g.sy(u.y), 8, 0, Math.PI * 2); ctx.fill();
+    ctx.font = 'bold 12px JetBrains Mono, monospace';
+    ctx.fillStyle = '#e8ecf4';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText('0 (vetor nulo)', g.sx(u.x) + 14, g.sy(u.y));
+    g.arrow(0, 0, u.x, u.y, GA3_COL.sum, { lw: 1.6, alpha: 0.5 });
+    setText(`Elemento neutro: v + 0 = v`,
+            String.raw`$\vec{v} + \vec{0} = \vec{v}$`);
+  } else {
+    // Oposto: v + (-v) = 0
+    g.arrow(0, 0, u.x, u.y, GA3_COL.u, { lw: 3, label: 'v' });
+    g.arrow(u.x, u.y, 0, 0, GA3_COL.v, { lw: 3, label: '-v' });
+    const ctx = g.ctx;
+    ctx.fillStyle = GA3_COL.sum;
+    ctx.beginPath(); ctx.arc(g.ox, g.oy, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.font = 'bold 13px JetBrains Mono, monospace';
+    ctx.fillStyle = '#e8ecf4';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText('0 (origem)', g.ox + 14, g.oy + 14);
+    setText(`Elemento oposto: v + (-v) = 0`,
+            String.raw`$\vec{v} + (-\vec{v}) = \vec{0}$`);
+  }
+}
+function gaSelProp33(i) {
+  if (!_ga33) return;
+  _ga33.prop = i;
+  document.querySelectorAll('.ga-prop-tabs .ga-prop-tab').forEach(t =>
+    t.classList.toggle('active', +t.dataset.i === i));
+  _ga33Draw();
+}
+
+// ─── 3.4 — Subtração ─────────────────────────────────────────
+let _ga34 = null;
+function gaInit34() {
+  const cv = document.getElementById('ga34-cv'); if (!cv) return;
+  const g = _ga2D(cv, { lim: 7 });
+  _ga34 = { g, swap: false };
+
+  const upd = () => {
+    const ux = +document.getElementById('ga34-ux').value;
+    const uy = +document.getElementById('ga34-uy').value;
+    const vx = +document.getElementById('ga34-vx').value;
+    const vy = +document.getElementById('ga34-vy').value;
+    document.getElementById('ga34-uxv').textContent = ux.toFixed(1);
+    document.getElementById('ga34-uyv').textContent = uy.toFixed(1);
+    document.getElementById('ga34-vxv').textContent = vx.toFixed(1);
+    document.getElementById('ga34-vyv').textContent = vy.toFixed(1);
+
+    g.clear(); g.grid(false);
+    g.arrow(0, 0, ux, uy, GA3_COL.u, { lw: 3, label: 'u' });
+    g.arrow(0, 0, vx, vy, GA3_COL.v, { lw: 3, label: 'v' });
+    let dx, dy, fromX, fromY, toX, toY, lbl;
+    if (!_ga34.swap) {
+      dx = ux - vx; dy = uy - vy;
+      fromX = vx; fromY = vy; toX = ux; toY = uy;
+      lbl = 'u-v';
+    } else {
+      dx = vx - ux; dy = vy - uy;
+      fromX = ux; fromY = uy; toX = vx; toY = vy;
+      lbl = 'v-u';
+    }
+    g.arrow(fromX, fromY, toX, toY, GA3_COL.sum, { lw: 3.4, label: lbl });
+
+    const mod = Math.sqrt(dx * dx + dy * dy);
+    const sgn = _ga34.swap ? 'v - u' : 'u - v';
+    document.getElementById('ga34-read').textContent =
+      `${sgn} = (${dx.toFixed(1)}, ${dy.toFixed(1)}) — |${sgn}| = ${mod.toFixed(2)}`;
+  };
+  _ga34.upd = upd;
+  ['ga34-ux', 'ga34-uy', 'ga34-vx', 'ga34-vy'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+function gaSwapSub34() {
+  if (!_ga34) return;
+  _ga34.swap = !_ga34.swap;
+  const btn = document.getElementById('ga34-swap');
+  if (btn) btn.textContent = _ga34.swap ? 'Trocar para u - v' : 'Trocar para v - u';
+  _ga34.upd();
+}
+
+// ─── 3.5 — Multiplicação por escalar ─────────────────────────
+let _ga35 = null;
+function gaInit35() {
+  const cv = document.getElementById('ga35-cv'); if (!cv) return;
+  const g = _ga2D(cv, { lim: 6 });
+  _ga35 = { g };
+
+  const upd = () => {
+    const vx = +document.getElementById('ga35-vx').value;
+    const vy = +document.getElementById('ga35-vy').value;
+    const k  = +document.getElementById('ga35-k').value;
+    document.getElementById('ga35-vxv').textContent = vx.toFixed(1);
+    document.getElementById('ga35-vyv').textContent = vy.toFixed(1);
+    document.getElementById('ga35-kv').textContent  = k.toFixed(1);
+    const kx = k * vx, ky = k * vy;
+    const modV = Math.sqrt(vx * vx + vy * vy);
+    const modKV = Math.sqrt(kx * kx + ky * ky);
+
+    g.clear(); g.grid(false);
+    // Support line (reta direção)
+    if (modV > 0.01) {
+      const ux = vx / modV, uy = vy / modV;
+      g.line(-6 * ux, -6 * uy, 6 * ux, 6 * uy, GA3_COL.ghost, { dashed: true, alpha: 0.5 });
+    }
+    // Base v (faded)
+    g.arrow(0, 0, vx, vy, GA3_COL.v, { lw: 2.4, alpha: 0.65, label: 'v' });
+    // k·v (highlighted)
+    if (Math.abs(k) > 0.05) {
+      g.arrow(0, 0, kx, ky, GA3_COL.sum, { lw: 3.4, label: 'k·v' });
+    } else {
+      // k ≈ 0 → null vector
+      const ctx = g.ctx;
+      ctx.fillStyle = GA3_COL.sum;
+      ctx.beginPath(); ctx.arc(g.ox, g.oy, 7, 0, Math.PI * 2); ctx.fill();
+      ctx.font = 'bold 12px JetBrains Mono, monospace';
+      ctx.fillStyle = '#e8ecf4';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      ctx.fillText('0·v = 0', g.ox + 12, g.oy + 12);
+    }
+
+    const senseTxt = k > 0 ? 'mesmo sentido' : (k < 0 ? 'sentido oposto' : 'vetor nulo');
+    document.getElementById('ga35-read').textContent =
+      `k·v = ${k.toFixed(1)}·(${vx.toFixed(1)}, ${vy.toFixed(1)}) = (${kx.toFixed(1)}, ${ky.toFixed(1)}) · |kv|=${modKV.toFixed(2)} · ${senseTxt}`;
+  };
+  ['ga35-vx', 'ga35-vy', 'ga35-k'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+
+// ─── 3.6 — Propriedades da multiplicação por escalar ─────────
+let _ga36 = null;
+function gaInit36() {
+  const cv = document.getElementById('ga36-cv'); if (!cv) return;
+  const g = _ga2D(cv, { lim: 7 });
+  _ga36 = { g, prop: 0 };
+  const upd = () => {
+    document.getElementById('ga36-av').textContent =
+      (+document.getElementById('ga36-a').value).toFixed(1);
+    document.getElementById('ga36-bv').textContent =
+      (+document.getElementById('ga36-b').value).toFixed(1);
+    _ga36Draw();
+  };
+  _ga36.upd = upd;
+  ['ga36-a', 'ga36-b'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+function _ga36Draw() {
+  const g = _ga36.g;
+  g.clear(); g.grid(false);
+  const a = +document.getElementById('ga36-a').value;
+  const b = +document.getElementById('ga36-b').value;
+  const u = { x: 2, y: 1 }, v = { x: 1, y: 2 };
+
+  const setText = (read, formula) => {
+    const r = document.getElementById('ga36-read'); if (r) r.textContent = read;
+    const f = document.getElementById('ga36-formula');
+    if (f) {
+      f.innerHTML = formula;
+      if (typeof rerenderMath === 'function') rerenderMath(f);
+    }
+  };
+
+  if (_ga36.prop === 0) {
+    // Distrib. (vetores): a(u+v) vs au + av (triangle rule)
+    const sum = { x: u.x + v.x, y: u.y + v.y };
+    const lhs = { x: a * sum.x, y: a * sum.y };
+    const au = { x: a * u.x, y: a * u.y };
+    const av = { x: a * v.x, y: a * v.y };
+    // Show au and then av from end of au (path)
+    g.arrow(0, 0, au.x, au.y, GA3_COL.u, { lw: 2.4, label: 'a·u' });
+    g.arrow(au.x, au.y, au.x + av.x, au.y + av.y, GA3_COL.v, { lw: 2.4, label: 'a·v' });
+    g.arrow(0, 0, lhs.x, lhs.y, GA3_COL.sum, { lw: 3.4, label: 'a(u+v)' });
+    setText(`a(u+v) = au + av = (${lhs.x.toFixed(1)}, ${lhs.y.toFixed(1)})`,
+            String.raw`$a(\vec{u} + \vec{v}) = a\vec{u} + a\vec{v}$`);
+  } else if (_ga36.prop === 1) {
+    // Distrib. (escalares): (a+b)v vs av + bv
+    const av = { x: a * v.x, y: a * v.y };
+    const bv = { x: b * v.x, y: b * v.y };
+    const sum = { x: (a + b) * v.x, y: (a + b) * v.y };
+    // Support line through v
+    const m = Math.sqrt(v.x * v.x + v.y * v.y);
+    const ux = v.x / m, uy = v.y / m;
+    g.line(-7 * ux, -7 * uy, 7 * ux, 7 * uy, GA3_COL.ghost, { dashed: true, alpha: 0.55 });
+    g.arrow(0, 0, av.x, av.y, GA3_COL.u, { lw: 2.4, label: 'a·v' });
+    g.arrow(av.x, av.y, av.x + bv.x, av.y + bv.y, GA3_COL.v, { lw: 2.4, label: 'b·v' });
+    g.arrow(0, 0, sum.x, sum.y, GA3_COL.sum, { lw: 3.4, label: '(a+b)·v' });
+    setText(`(a+b)v = av + bv = (${sum.x.toFixed(1)}, ${sum.y.toFixed(1)})`,
+            String.raw`$(a + b)\vec{v} = a\vec{v} + b\vec{v}$`);
+  } else if (_ga36.prop === 2) {
+    // Associativa: a(b·v) vs (ab)·v
+    const bv = { x: b * v.x, y: b * v.y };
+    const abv = { x: a * b * v.x, y: a * b * v.y };
+    g.arrow(0, 0, v.x, v.y, GA3_COL.v, { lw: 2, alpha: 0.6, label: 'v' });
+    g.arrow(0, 0, bv.x, bv.y, GA3_COL.u, { lw: 2.4, label: 'b·v' });
+    g.arrow(0, 0, abv.x, abv.y, GA3_COL.sum, { lw: 3.4, label: 'a(b·v) = (ab)·v' });
+    setText(`a(b·v) = (ab)·v com ab = ${(a * b).toFixed(2)}`,
+            String.raw`$a(b\vec{v}) = (ab)\vec{v}$`);
+  } else {
+    // Identidade: 1·v = v
+    g.arrow(0, 0, v.x, v.y, GA3_COL.v, { lw: 3.4, label: '1·v = v' });
+    const ctx = g.ctx;
+    ctx.font = 'bold 14px JetBrains Mono, monospace';
+    ctx.fillStyle = '#a892ff';
+    ctx.textAlign = 'center';
+    ctx.fillText('Multiplicar por 1 não altera o vetor.', g.W / 2, g.H - 14);
+    setText(`Identidade: 1·v = v`,
+            String.raw`$1 \cdot \vec{v} = \vec{v}$`);
+  }
+}
+function gaSelProp36(i) {
+  if (!_ga36) return;
+  _ga36.prop = i;
+  document.querySelectorAll('.ga-prop-tabs .ga-prop-tab').forEach(t =>
+    t.classList.toggle('active', +t.dataset.i === i));
+  _ga36Draw();
+}
+
+// ─── 3.7 — Paralelos (colineares) ────────────────────────────
+let _ga37 = null;
+function gaInit37() {
+  const cv = document.getElementById('ga37-cv'); if (!cv) return;
+  const g = _ga2D(cv, { lim: 6 });
+  _ga37 = { g };
+
+  const upd = () => {
+    const ux = +document.getElementById('ga37-ux').value;
+    const uy = +document.getElementById('ga37-uy').value;
+    const vx = +document.getElementById('ga37-vx').value;
+    const vy = +document.getElementById('ga37-vy').value;
+    document.getElementById('ga37-uxv').textContent = ux.toFixed(1);
+    document.getElementById('ga37-uyv').textContent = uy.toFixed(1);
+    document.getElementById('ga37-vxv').textContent = vx.toFixed(1);
+    document.getElementById('ga37-vyv').textContent = vy.toFixed(1);
+
+    // Parallelism test: cross product u_x*v_y - u_y*v_x ≈ 0
+    const cross = ux * vy - uy * vx;
+    const mu = Math.sqrt(ux * ux + uy * uy);
+    const mv = Math.sqrt(vx * vx + vy * vy);
+    const tol = 0.04 * Math.max(mu * mv, 0.01);
+    const parallel = Math.abs(cross) <= tol && mv > 0.01 && mu > 0.01;
+    // k such that u = k·v (use non-zero v component)
+    let k = NaN;
+    if (parallel) {
+      if (Math.abs(vx) > Math.abs(vy)) k = ux / vx;
+      else                              k = uy / vy;
+    }
+
+    g.clear(); g.grid(false);
+    // Support line for v (when defined)
+    if (mv > 0.01) {
+      const sx = vx / mv, sy = vy / mv;
+      g.line(-6 * sx, -6 * sy, 6 * sx, 6 * sy, GA3_COL.ghost, { dashed: true, alpha: 0.5 });
+    }
+    g.arrow(0, 0, vx, vy, GA3_COL.v, { lw: 3, label: 'v' });
+    g.arrow(0, 0, ux, uy, parallel ? GA3_COL.sum : GA3_COL.u, { lw: 3, label: 'u' });
+
+    document.getElementById('ga37-read').textContent =
+      `u = (${ux.toFixed(1)}, ${uy.toFixed(1)}) · v = (${vx.toFixed(1)}, ${vy.toFixed(1)}) · det = ${cross.toFixed(2)}`;
+    const status = document.getElementById('ga37-status');
+    if (status) {
+      if (parallel) {
+        const sense = k >= 0 ? 'mesmo sentido' : 'sentidos opostos';
+        status.textContent = `PARALELOS · k ≈ ${k.toFixed(2)} · ${sense}`;
+        status.classList.add('on');
+        status.classList.remove('off');
+      } else {
+        status.textContent = `NÃO paralelos (det = ${cross.toFixed(2)})`;
+        status.classList.add('off');
+        status.classList.remove('on');
+      }
+    }
+  };
+  _ga37.upd = upd;
+  ['ga37-ux', 'ga37-uy', 'ga37-vx', 'ga37-vy'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.addEventListener('input', upd);
+  });
+  upd();
+}
+function gaSnap37() {
+  if (!_ga37) return;
+  const vx = +document.getElementById('ga37-vx').value;
+  const vy = +document.getElementById('ga37-vy').value;
+  const k = 2;
+  const newUx = Math.max(-5, Math.min(5, k * vx));
+  const newUy = Math.max(-5, Math.min(5, k * vy));
+  document.getElementById('ga37-ux').value = newUx.toFixed(1);
+  document.getElementById('ga37-uy').value = newUy.toFixed(1);
+  _ga37.upd();
+}
+

@@ -715,3 +715,40 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 .ga-hand-x{background:rgba(239,68,68,.13);color:#f87171}
 .ga-hand-y{background:rgba(34,197,94,.13);color:#4ade80}
 .ga-hand-z{background:rgba(59,130,246,.13);color:#60a5fa}
+
+/* ===== APRENDER — Tópico 2 (Vetores: Conceitos Fundamentais) ===== */
+/* ----- 2.1 split panel ----- */
+.ga-split2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:780px){.ga-split2{grid-template-columns:1fr}}
+.ga-svp{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;display:flex;flex-direction:column;gap:10px}
+.ga-svp-canvas{display:block;width:100%;height:240px;background:#0a0d14;border:1px solid var(--border);border-radius:var(--radius-sm)}
+.ga-panel-tag{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:2px}
+
+/* ----- 2.5 versor readout ----- */
+.ga-versor-out{background:var(--bg4);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;font-family:var(--mono);font-size:12px;color:var(--text2);line-height:1.55;text-align:center}
+.ga-versor-out strong{color:#5eebbe}
+
+/* ----- 2.7 gallery (2D / 3D toggle) ----- */
+.ga-gallery-host{position:relative;width:100%;height:380px;min-height:300px}
+.ga-gallery-canvas{display:block;width:100%;height:100%;background:#0a0d14;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer}
+.ga-gallery-3d{background:#0a0d14;border:1px solid var(--border);border-radius:var(--radius-sm);width:100%;height:100%;overflow:hidden;position:absolute;inset:0;cursor:grab}
+.ga-gallery-3d:active{cursor:grabbing}
+.ga-gallery-3d canvas{display:block;width:100%;height:100%}
+.ga-vec-list{display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto;padding-top:4px;border-top:1px dashed var(--border)}
+.ga-vec-card{display:flex;align-items:center;gap:10px;background:var(--bg4);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 10px;font-family:var(--mono);font-size:11.5px;cursor:pointer;transition:background .15s,border-color .15s}
+.ga-vec-card:hover{background:var(--bg2);border-color:var(--accent)}
+.ga-vec-card.active{background:var(--accent-soft);border-color:var(--accent)}
+.ga-vec-name{font-weight:700;width:32px;flex-shrink:0}
+.ga-vec-info{color:var(--text2);font-size:11px;line-height:1.4}
+
+/* ===== APRENDER — Tópico 3 (Operações Geométricas) ===== */
+.ga-prop-tabs{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.ga-prop-tab{background:var(--bg4);color:var(--text2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 8px;font-family:var(--font);font-size:11px;font-weight:600;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.ga-prop-tab:hover{background:var(--bg2);color:var(--text);border-color:var(--accent)}
+.ga-prop-tab.active{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.ga-prop-formula{background:var(--bg4);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;text-align:center;font-family:var(--mono);font-size:12.5px;color:var(--text)}
+.ga-prop-formula .katex{color:var(--text);font-size:1em}
+
+.ga-status{font-family:var(--mono);font-size:12px;font-weight:700;text-align:center;padding:8px 10px;border-radius:var(--radius-sm);border:1px solid;letter-spacing:.02em}
+.ga-status.on{background:rgba(94,235,190,.13);color:#5eebbe;border-color:rgba(94,235,190,.4)}
+.ga-status.off{background:rgba(120,128,150,.10);color:var(--text3);border-color:var(--border)}
